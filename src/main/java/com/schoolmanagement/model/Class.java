@@ -56,16 +56,10 @@ public class Class {
       inverseJoinColumns = @JoinColumn(name = "student_id"))
   private Set<Student> students = new HashSet<>();
 
-  @ManyToMany(
-      fetch = FetchType.EAGER,
-      cascade = CascadeType.ALL
-  )
-  @JoinTable(
-      name = "class_teacher_subject",
-      joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id", updatable = false, nullable = false),
-      inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false, nullable = false)
-  )
-  @MapKeyJoinColumn(name = "subject_id")
-  private Map<Subjects, User> teacherSubject = new HashMap<>();
-
+  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @JoinTable(name = "class_teacher_subject",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "subject_id"))
+  @MapKeyJoinColumn(name = "class_id")
+  private Map<Subjects, Class> teacherSubject = new HashMap<>();
 }

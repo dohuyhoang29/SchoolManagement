@@ -67,4 +67,11 @@ public class Student {
       joinColumns = @JoinColumn(name = "student_id"),
       inverseJoinColumns = @JoinColumn(name = "class_id"))
   private Set<Class> classes = new HashSet<>();
+
+  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "student_evaluate",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "class_id"))
+  private Set<Class> studentClass = new HashSet<>();
 }
