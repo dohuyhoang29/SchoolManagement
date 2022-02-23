@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <title>School Management</title>
+
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css" />
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+  <div class="loader">
+  </div>
+</div>
+
+<div id="main_content">
+  <!-- Start Main top header -->
+  <div id="header_top" class="header_top">
+    <div class="container">
+      <div class="hleft">
+        <a class="header-brand" href="index.html"><i class="fa fa-graduation-cap brand-logo"></i></a>
+        <div class="dropdown">
+          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
+              class="fe fe-align-center"></i></a>
+          <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fe fe-settings"></i></a>
+        </div>
+      </div>
+      <div class="hright">
+        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
+      </div>
+    </div>
+  </div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
+
+
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Teacher</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Teacher</li>
+            </ol>
+          </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Staff-all">List View</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Staff-grid">Grid View</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Staff-profile">Profile</a></li>
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Staff-add">Add</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section-body mt-4">
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-add">
+            <div class="row clearfix">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Basic Information</h3>
+                  </div>
+                  <div class="card-body">
+                    <form th:action="@{/admin/user/save}" method="post" th:object="${user}">
+                      <div class="row clearfix">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label>User Name</label>
+                            <input th:field="*{username}" type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Password</label>
+                            <input th:field="*{password}" type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Full Name</label>
+                            <input th:field="*{fullName}" type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Email</label>
+                            <input th:field="*{email}" type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input th:field="*{dob}" data-provide="datepicker" data-date-autoclose="true" class="form-control" placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <label>Phone</label>
+                          <input th:field="*{phone}" type="number" class="form-control">
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                          <div class="form-group">
+                            <label>Address</label>
+                            <input th:field="*{address}" type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Start Date</label>
+                            <input th:field="*{startDate}" data-provide="datepicker" data-date-autoclose="true" class="form-control" placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>End Date</label>
+                            <input th:field="*{endDate}" data-provide="datepicker" data-date-autoclose="true" class="form-control" placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <div class="form-group mt-2 mb-3">
+                            <label>Image</label>
+                            <input th:field="*{image}" type="file" class="dropify">
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                          <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-body d-flex">
+      <img style="width: 100%;" src="../assets/images/hu.jpg" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+</body>
+
+</html>
