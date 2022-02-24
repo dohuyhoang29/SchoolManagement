@@ -32,17 +32,17 @@ public class UserController {
 
     user.setCreatedDate(LocalDateTime.now());
     user.setUpdatedDate(LocalDateTime.now());
-    user.setDeleted(false);
     Role role = entityManager.find(Role.class, 2);
     user.addRole(role);
-    User teacher = user;
-    userService.saveUser(teacher);
+    userService.saveUser(user);
 
     return "redirect:/admin/user/user_management";
   }
 
   @GetMapping("/admin/user/user_management")
-  public String listTeacher(){
+  public String listTeacher(Model model){
+    model.addAttribute("listUser", userService.getAllUser());
+
 
     return "/admin/user/user_management";
   }

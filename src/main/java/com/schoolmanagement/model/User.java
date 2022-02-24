@@ -55,7 +55,7 @@ public class User {
   private String phone;
 
   @Column(name = "dob")
-  @NotEmpty(message = "Enter date of birth")
+  @NotNull(message = "Enter date of birth")
   private Date dob;
 
   @Column(name = "address")

@@ -143,6 +143,19 @@
                             <input th:field="*{endDate}" data-provide="datepicker" data-date-autoclose="true" class="form-control" placeholder="">
                           </div>
                         </div>
+                        <div class="col-md-12 col-sm-12">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" id="false" name="false" class="custom-control-input" value="false" th:field="*{deleted}">
+                              <label for="false" class="custom-control-label">Working</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" id="true" name="true" value="true" class="custom-control-input" th:field="*{deleted}">
+                              <label for="true" class="custom-control-label">Retirement</label>
+                            </div>
+                          </div>
+                        </div>
                         <div class="col-sm-12">
                           <div class="form-group mt-2 mb-3">
                             <label>Image</label>
