@@ -7,6 +7,7 @@ import com.schoolmanagement.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,77 +27,91 @@ public class SubjectController {
   private UserService userService;
 
   //index
-  @GetMapping("/admin/subject")
+  @GetMapping("/admin/subjects/subjects_management")
   public String SubjectManage(Model model) {
-//        Iterable<Subjects> listSubject = subjectService.FindAllSubject();
-//
-//        model.addAttribute("listSubject" , listSubject);
-//
-//        return "/admin/subject/manage_subject";
-    return SubjectPage(model, "", 1);
+
+    return listSubjectByPage(model, 1, "subjectName", "asc", "");
   }
 
   //index page and search
-  @GetMapping("/admin/subject/page/{pagenumber}")
-  public String SubjectPage(Model model, @RequestParam("datafind") String datafind,
-      @PathVariable("pagenumber") int currentpage) {
-    Page<Subjects> page = subjectService.subjectsPage(currentpage, datafind);
+  @GetMapping("/admin/subjects/subjects_management/page/{page}")
+  public String listSubjectByPage(Model model,
+      @PathVariable("page") int currentPage,
+      @Param("sortField") String sortField,
+      @Param("sortDir") String sortDir,
+      @Param("search") String search) {
+    Page<Subjects> page;
+    if (search.equalsIgnoreCase("")) {
+      page = subjectService.getAllSubjectByPage(currentPage, sortField, sortDir);
+    } else {
+      page = subjectService.findSubjectByName(search, currentPage, sortField, sortDir);
+    }
     long totalItems = page.getTotalElements();
-    int totalPage = page.getTotalPages();
+    int totalPages = page.getTotalPages();
     Iterable<Subjects> listSubject = page.getContent();
-    model.addAttribute("find", datafind);
-    model.addAttribute("currentPage", currentpage);
+    model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalItems", totalItems);
-    model.addAttribute("totalPages", totalPage);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("sortField", sortField);
+    model.addAttribute("sortDir", sortDir);
+    model.addAttribute("search", search);
     model.addAttribute("listSubject", listSubject);
 
-    return "/admin/subject/manage_subject";
+    String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
+    model.addAttribute("reverseSortDir", reverseSortDir);
+
+    return "/admin/subjects/subjects_management";
+  }
+
+  @GetMapping("/admin/subjects/subjects_management/search")
+  public String searchSubject(Model model, @RequestParam(value = "search") String search) {
+    return listSubjectByPage(model, 1, "subjectName", "asc", search);
   }
 
   //New
-  @GetMapping("/admin/subject/insert")
-  public String SubjectIndexAdd(Model model, Subjects subject) {
+  @GetMapping("/admin/subjects/insert")
+  public String SubjectIndexAdd(Model model) {
     Iterable<User> listUser = userService.getAllUser();
     model.addAttribute("listUser", listUser);
-    model.addAttribute("subject", subject);
+    model.addAttribute("subjects", new Subjects());
 
-    return "/admin/subject/form_subject";
+    return "/admin/subjects/form_subject";
   }
 
   // Edit
-  @GetMapping("/admin/subject/edit/{id}")
+  @GetMapping("/admin/subjects/edit/{id}")
   public String SubjectEdit(Model model, @PathVariable("id") int id) {
     Subjects subjects = subjectService.findBySubjectID(id);
     Iterable<User> listUser = userService.getAllUser();
     model.addAttribute("listUser", listUser);
-    model.addAttribute("subject", subjects);
+    model.addAttribute("subjects", subjects);
 
-    return "/admin/subject/form_subject";
+    return "/admin/subjects/form_subject";
   }
 
   //Post add , save
-  @PostMapping("/admin/subject/save")
+  @PostMapping("/admin/subjects/save")
   public String SaveSubject(@Valid Subjects subjects, BindingResult result) {
 
     if (result.hasErrors()) {
-      return "admin/subject/form_subject";
+      return "/admin/subjects/form_subject";
     }
 
     subjectService.SaveSubject(subjects);
-    return "redirect:/admin/subject";
+    return "redirect:/admin/subjects/subjects_management";
   }
 
   //Detail
-  @GetMapping("/admin/subject/detail/{id}")
+  @GetMapping("/admin/subjects/details/{id}")
   public String DetailSubject(Model model, @PathVariable("id") int id) {
     Subjects subjects = subjectService.findBySubjectID(id);
     model.addAttribute("subject", subjects);
     model.addAttribute("listUser", subjects.getUsers());
 
-    return "/admin/subject/detail_subject";
+    return "/admin/subjects/subjects_details";
   }
 
-  @GetMapping("/admin/subject/detail/{id}/{userid}")
+  @GetMapping("/admin/subjects/details/{id}/{userid}")
   public String DetailSubjectDelete(Model model, @PathVariable("id") int id,
       @PathVariable("userid") int userid) {
     Subjects subjects = subjectService.findBySubjectID(id);
@@ -106,7 +121,6 @@ public class SubjectController {
 
     subjectService.SaveSubject(subjects);
 
-    return "redirect:/admin/subject/detail/" + subjects.getId();
-
+    return "redirect:/admin/subjects/detail/" + subjects.getId();
   }
 }

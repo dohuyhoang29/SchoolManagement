@@ -14,14 +14,15 @@ import org.springframework.test.annotation.Rollback;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(value = false)
 public class TestSubject {
+
   @Autowired
   private SubjectRepositories repo;
 
   @Test
-  public void getSubject(){
-    Subjects subjects = repo.findById(1).get();
+  public void getSubject() {
+    Subjects subjects = repo.findById(1);
 
-    for(User user : subjects.getUsers()){
+    for (User user : subjects.getUsers()) {
       System.out.println(user.getFullName());
     }
     System.out.println(subjects.getUsers().size());

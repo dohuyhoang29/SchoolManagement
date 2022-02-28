@@ -1,43 +1,47 @@
 package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Subjects;
-import com.schoolmanagement.repositories.SubjectReponsitory;
+import com.schoolmanagement.repositories.SubjectRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SubjectService {
 
   @Autowired
-  private SubjectReponsitory subjectReponsitory;
+  private SubjectRepositories subjectRepositories;
 
   public Iterable<Subjects> FindAllSubject() {
-    return subjectReponsitory.findAll();
+    return subjectRepositories.findAll();
   }
 
   public void SaveSubject(Subjects subjects) {
-    subjectReponsitory.save(subjects);
+    subjectRepositories.save(subjects);
   }
 
   public Subjects findBySubjectID(int id) {
-    return subjectReponsitory.findById(id);
+    return subjectRepositories.findById(id);
   }
 
-  public Page<Subjects> subjectsPage(int page, String find) {
-    Pageable pageable = PageRequest.of(page - 1, 2);
-    if (find != "") {
+  public Page<Subjects> getAllSubjectByPage(int pageNumber, String sortField, String sortDir) {
+    Sort sort = Sort.by(sortField);
+    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
 
-      return subjectReponsitory.subjectFind("%" + find + "%", pageable);
-    }
-
-    return subjectReponsitory.findAll(pageable);
+    return subjectRepositories.findAll(page);
   }
 
-  public Subjects findBySubjectName(String name) {
-    return subjectReponsitory.findByName(name);
+  public Page<Subjects> findSubjectByName(String name, int pageNumber, String sortField,
+      String sortDir) {
+    Sort sort = Sort.by(sortField);
+    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
+
+    return subjectRepositories.subjectFind(name, page);
   }
 
 

@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
   <title>School Management</title>
 
   <!-- Bootstrap Core and vandor -->
@@ -40,7 +39,7 @@
         </div>
       </div>
       <div class="hright">
-        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
+        <a class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
       </div>
     </div>
   </div>
@@ -59,18 +58,17 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">Teacher</h1>
+            <h1 class="page-title">subject</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">List Teacher</li>
+              <li class="breadcrumb-item active" aria-current="page">List Subject</li>
             </ol>
           </div>
           <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item">
-              <a th:href="@{/admin/user/user_management}" class="nav-link active">List View</a>
-            </li>
-            <li class="nav-item">
-              <a th:href="@{/admin/user/insert}" class="nav-link">Add</a>
+            <li class="nav-item"><a class="nav-link active"
+                                    th:href="@{/admin/subjects/subjects_management}">List
+              View</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/subjects/insert}">Add</a>
             </li>
           </ul>
         </div>
@@ -82,7 +80,7 @@
           <div class="tab-pane active" id="Staff-all">
             <div class="card">
               <div class="card-body">
-                <form th:action="@{/admin/user/user_management/search}" method="get">
+                <form th:action="@{/admin/subjects/subjects_management/search}" method="get">
                   <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-12">
                       <div class="input-group">
@@ -91,39 +89,8 @@
                                placeholder="Name">
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-group mt-2">
-                        <label class="mr-2">Status</label>
-                        <div class="custom-control custom-radio custom-control-inline">
-                          <input type="radio" id="false" name="status"
-                                 class="custom-control-input" value="false"
-                                 th:checked="${status.equalsIgnoreCase('false') ? true : false}">
-                          <label for="false" class="custom-control-label">Working</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                          <input type="radio" id="true" name="status" value="true"
-                                 class="custom-control-input"
-                                 th:checked="${status.equalsIgnoreCase('true') ? true : false}">
-                          <label for="true" class="custom-control-label">Retirement</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                          <input type="radio" id="all" name="status" value="all"
-                                 class="custom-control-input"
-                                 th:checked="${status.equalsIgnoreCase('all') ? true : false}">
-                          <label for="all" class="custom-control-label">All</label>
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
                       <button type="submit" class="btn btn-sm btn-primary btn-block">Search</button>
-                    </div>
-                    <div class="col-lg-1 col-md-4 col-sm-12">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-secondary btn-block"
-                         title="">Import</a>
-                    </div>
-                    <div class="col-lg-1 col-md-4 col-sm-12">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-success btn-block"
-                         title="">Export</a>
                     </div>
                   </div>
                 </form>
@@ -134,69 +101,36 @@
                 <thead>
                 <tr>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/admin/subjects/subjects_management/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
                       #
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      Full Name
+                    <a th:href="@{'/admin/subjects/subjects_management/page/' + ${currentPage} + '?sortField=subjectName&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Subject Name
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      Email
+                    <a th:href="@{'/admin/subjects/subjects_management/page/' + ${currentPage} + '?sortField=users&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Teachers
                     </a>
                   </th>
-                  <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=phone&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      Phone Number
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      Address
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=startDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      Start Date
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=endDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
-                      End Date
-                    </a>
-                  </th>
-                  <th><a href="#">Status</a></th>
                   <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="users : ${listUser}">
+                <th:block th:each="subjects : ${listSubject}">
                   <tr>
-                    <td class="w60">
-                      <img class="avatar" th:src="@{${users.getUserImagePath}}" alt="">
-                    </td>
+                    <td>[[${subjects.id}]]</td>
+                    <td>[[${subjects.subjectName}]]</td>
+                    <td>[[${subjects.users.size()}]]</td>
                     <td>
-                      <div class="font-15">[[${users.fullName}]]</div>
-                    </td>
-                    <td>[[${users.email}]]</td>
-                    <td>[[${users.phone}]]</td>
-                    <td>[[${users.address}]]</td>
-                    <td>[[${users.startDate}]]</td>
-                    <td>[[${users.endDate}]]</td>
-                    <td th:if="${users.deleted}"><span class="tag tag-danger">Retirement</span>
-                    </td>
-                    <td th:if="${!users.deleted}"><span class="tag tag-success">Working</span>
-                    </td>
-                    <td>
-                      <a th:href="@{/admin/user/details/{id}(id=${users.id})}">
+                      <a th:href="@{/admin/subjects/details/{id}(id=${subjects.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
                           <i class="fa fa-eye"></i>
                         </button>
                       </a>
-                      <a th:href="@{/admin/user/edit/{id}(id=${users.id})}">
+                      <a th:href="@{/admin/subjects/edit/{id}(id=${subjects.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="Edit">
                           <i class="fa fa-edit"></i>
                         </button>
@@ -215,14 +149,14 @@
                     <ul class="pagination justify-content-end">
                       <li class="page-item" th:if="${currentPage > 1}">
                         <a class="page-link"
-                           th:href="@{'/admin/user/user_management/' + 1 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">First</a>
+                           th:href="@{'/admin/user/user_management/' + 1 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">First</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == 1}">
                         <a class="page-link">First</a>
                       </li>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage > 1}"
-                           th:href="@{'/admin/user/user_management/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Previous</a>
+                           th:href="@{'/admin/user/user_management/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Previous</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == 1}">
                         <a class="page-link">Previous</a>
@@ -230,7 +164,7 @@
                       <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
                         <li class="page-item" th:if="${i != currentPage}">
                           <a class="page-link"
-                             th:href="@{'/admin/user/user_management/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">[[${i}]]
+                             th:href="@{'/admin/user/user_management/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">[[${i}]]
                           </a>
                         </li>
                         <li th:if="${i == currentPage}" class="page-item active"><a
@@ -239,14 +173,14 @@
                       </th:block>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage < totalPages}"
-                           th:href="@{'/admin/user/user_management/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Next</a>
+                           th:href="@{'/admin/user/user_management/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Next</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == totalPages}">
                         <a class="page-link">Next</a>
                       </li>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage < totalPages}"
-                           th:href="@{'/admin/user/user_management/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Last</a>
+                           th:href="@{'/admin/user/user_management/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Last</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == totalPages}">
                         <a class="page-link">Last</a>
@@ -262,7 +196,6 @@
     </div>
   </div>
 </div>
-
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
 
@@ -276,5 +209,4 @@
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
 </body>
-
 </html>

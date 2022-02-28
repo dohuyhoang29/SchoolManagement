@@ -43,13 +43,21 @@ public class UserService {
     return repo.findById(id).get();
   }
 
-  public Iterable<User> searchUserByFullName(String fullName) {
+  public Page<User> searchUserByFullName(String fullName, int pageNumber, String sortField,
+      String sortDir) {
+    Sort sort = Sort.by(sortField);
+    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
 
-    return repo.searchUsersByFullName(fullName);
+    return repo.searchUsersByFullName(fullName, page);
   }
 
-  public Iterable<User> searchUserByFullNameAndDeleted(String fullName, Boolean deleted) {
+  public Page<User> searchUserByFullNameAndDeleted(String fullName, Boolean deleted, int pageNumber,
+      String sortField, String sortDir) {
+    Sort sort = Sort.by(sortField);
+    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
 
-    return repo.searchUsersByEmailAndDeleted(fullName, deleted);
+    return repo.searchUsersByFullNameAndDeleted(fullName, deleted, page);
   }
 }

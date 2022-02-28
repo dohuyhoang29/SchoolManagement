@@ -1,5 +1,6 @@
 package com.schoolmanagement.model;
 
+import com.schoolmanagement.validation.UniqueSubjectName;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,13 +37,14 @@ public class Subjects {
 
   @NotEmpty(message = "Enter subject name")
   @Column(name = "subject_name")
+  @UniqueSubjectName(message = "Such subject name already exist!")
   private String subjectName;
-
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "teacher_subjects",
       joinColumns = @JoinColumn(name = "subject_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
+  @NotNull(message = "Choose teachers")
   private Set<User> users = new HashSet<>();
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

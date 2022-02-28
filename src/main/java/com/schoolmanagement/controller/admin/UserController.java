@@ -85,15 +85,27 @@ public class UserController {
 
   @GetMapping("/admin/user/user_management")
   public String listTeacher(Model model) {
-    return listTeacherByPage(model, 1, "fullName", "asc");
+    return listTeacherByPage(model, 1, "fullName", "asc", "", "all");
   }
 
   @GetMapping("/admin/user/user_management/{page}")
   public String listTeacherByPage(Model model,
       @PathVariable("page") int currentPage,
       @Param("sortField") String sortField,
-      @Param("sortDir") String sortDir) {
-    Page<User> page = userService.getAllUserByPage(currentPage, sortField, sortDir);
+      @Param("sortDir") String sortDir,
+      @Param("search") String search,
+      @Param("status") String status) {
+    Page<User> page;
+
+    if (status.equalsIgnoreCase("all")) {
+      page = userService.searchUserByFullName(search, currentPage, sortField, sortDir);
+    } else if (status.equalsIgnoreCase("true")) {
+      page = userService.searchUserByFullNameAndDeleted(search, true, currentPage, sortField,
+          sortDir);
+    } else {
+      page = userService.searchUserByFullNameAndDeleted(search, false, currentPage, sortField,
+          sortDir);
+    }
     long totalItems = page.getTotalElements();
     int totalPages = page.getTotalPages();
     List<User> listUser = page.getContent();
@@ -104,8 +116,8 @@ public class UserController {
     model.addAttribute("totalPages", totalPages);
     model.addAttribute("sortField", sortField);
     model.addAttribute("sortDir", sortDir);
-    model.addAttribute("search", "");
-    model.addAttribute("status", "all");
+    model.addAttribute("search", search);
+    model.addAttribute("status", status);
 
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
@@ -129,19 +141,7 @@ public class UserController {
   @GetMapping("/admin/user/user_management/search")
   public String searchTeacher(@RequestParam(value = "search") String search,
       @RequestParam(value = "status") String status, Model model) {
-    Iterable<User> listUser = null;
-    if (status.equalsIgnoreCase("all")) {
-      listUser = userService.searchUserByFullName(search);
-    } else if (status.equalsIgnoreCase("true")) {
-      listUser = userService.searchUserByFullNameAndDeleted(search, true);
-    } else {
-      listUser = userService.searchUserByFullNameAndDeleted(search, false);
-    }
 
-    model.addAttribute("search", search);
-    model.addAttribute("status", status);
-    model.addAttribute("listUser", listUser);
-
-    return "/admin/user/user_management";
+    return listTeacherByPage(model, 1, "fullName", "asc", search, status);
   }
 }
