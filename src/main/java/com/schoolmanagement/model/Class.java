@@ -21,6 +21,11 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "class")
@@ -30,12 +35,16 @@ public class Class {
   @Column(name = "id")
   private Integer id;
 
+  @NotEmpty(message = "Enter Class Name")
+  @Length(min = 3 , max = 10 , message = "Class Name more than 3 and less than 10")
   @Column(name = "class_name")
   private String className;
 
+  @NotNull(message = "Enter Grade")
   @Column(name = "grade")
   private Integer grade;
 
+  @NotNull(message = "Enter School Year")
   @Column(name = "school_year")
   private Integer schoolYear;
 

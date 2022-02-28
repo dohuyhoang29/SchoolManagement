@@ -23,6 +23,7 @@ public class Mark {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+
   @Column(name = "type")
   private Integer type;
 
