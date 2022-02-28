@@ -10,28 +10,35 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SubjectService {
-    @Autowired
-    private SubjectReponsitory subjectReponsitory;
 
-    public Iterable<Subjects> FindAllSubject(){
-        return subjectReponsitory.findAll();
+  @Autowired
+  private SubjectReponsitory subjectReponsitory;
+
+  public Iterable<Subjects> FindAllSubject() {
+    return subjectReponsitory.findAll();
+  }
+
+  public void SaveSubject(Subjects subjects) {
+    subjectReponsitory.save(subjects);
+  }
+
+  public Subjects findBySubjectID(int id) {
+    return subjectReponsitory.findById(id);
+  }
+
+  public Page<Subjects> subjectsPage(int page, String find) {
+    Pageable pageable = PageRequest.of(page - 1, 2);
+    if (find != "") {
+
+      return subjectReponsitory.subjectFind("%" + find + "%", pageable);
     }
 
-    public void SaveSubject(Subjects subjects){ subjectReponsitory.save(subjects);}
+    return subjectReponsitory.findAll(pageable);
+  }
 
-    public Subjects findBySubjectID(int id){ return subjectReponsitory.findById(id);}
-
-    public Page<Subjects> subjectsPage(int  page , String find){
-        Pageable pageable =  PageRequest.of(page -1 , 2);
-        if(find != ""){
-
-            return  subjectReponsitory.subjectFind("%"+find+"%",pageable);
-        }
-
-        return subjectReponsitory.findAll(pageable);
-    }
-
-    public Subjects findBySubjectName(String name){ return subjectReponsitory.findByName(name);}
+  public Subjects findBySubjectName(String name) {
+    return subjectReponsitory.findByName(name);
+  }
 
 
 }

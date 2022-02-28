@@ -1,7 +1,8 @@
 package com.schoolmanagement.model;
 
+import com.schoolmanagement.validation.UniqueEmail;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -17,11 +18,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "user")
@@ -29,67 +32,70 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Integer userID;
+  private Integer id;
 
   @NotEmpty(message = "Enter full name")
-  @Column(name = "full_name")
+  @Column(name = "full_name", nullable = false)
   private String fullName;
 
   @NotEmpty(message = "Enter username")
-  @Column(name = "username")
+  @Column(name = "username", nullable = false)
   private String username;
 
-  @Column(name = "password")
+  @Column(name = "password", nullable = false)
   @NotEmpty(message = "Enter password")
   private String password;
 
-  @Column(name = "email")
+  @Column(name = "email", nullable = false)
   @NotEmpty(message = "Enter email")
+  @UniqueEmail(message = "Such email already exist!")
   private String email;
 
-  @Column(name = "phone")
+  @Column(name = "phone", nullable = false)
   @NotEmpty(message = "Enter phone number")
   private String phone;
 
-  @Column(name = "dob")
+  @Column(name = "dob", nullable = false)
   @NotNull(message = "Enter date of birth")
-  private Date dob;
+  @DateTimeFormat(pattern = "MM/dd/yyyy")
+  private LocalDate dob;
 
-  @Column(name = "address")
+  @Column(name = "address", nullable = false)
   @NotEmpty(message = "Enter address")
   private String address;
 
-  @Column(name = "start_date")
+  @Column(name = "start_date", nullable = false)
   @NotNull(message = "Enter start date")
-  private Date startDate;
+  @DateTimeFormat(pattern = "MM/dd/yyyy")
+  private LocalDate startDate;
 
-  @Column(name = "end_date")
+  @Column(name = "end_date", nullable = false)
   @NotNull(message = "Enter end date")
-  private Date endDate;
+  @DateTimeFormat(pattern = "MM/dd/yyyy")
+  private LocalDate endDate;
 
-  @Column(name = "deleted")
+  @Column(name = "deleted", nullable = false)
+  @NotNull(message = "Choose status")
   private Boolean deleted;
 
-  @Column(name = "created_date")
+  @Column(name = "created_date", nullable = false)
   private LocalDateTime createdDate;
 
-  @Column(name = "updated_date")
+  @Column(name = "updated_date", nullable = false)
   private LocalDateTime updatedDate;
 
-  @Column(name = "image")
-  @NotEmpty(message = "Choose a image")
+  @Column(name = "image", nullable = true)
   private String image;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "user_role",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
-
-
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Blog> blogs = new HashSet<>();
@@ -109,7 +115,22 @@ public class User {
   @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
-  public void addRole(Role role){
+  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @JoinTable(name = "teacher_subjects",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "subject_id"))
+  private Set<Subjects> subjects = new HashSet<>();
+
+  public void addRole(Role role) {
     this.roles.add(role);
+  }
+
+  @Transient
+  public String getUserImagePath() {
+    if (image == null || id == null) {
+      return null;
+    }
+
+    return "/images/user-images/" + image;
   }
 }

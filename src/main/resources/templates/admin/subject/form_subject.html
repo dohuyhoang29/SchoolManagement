@@ -2,130 +2,139 @@
 <html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title>School Management</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>School Management</title>
 
-    <!-- Bootstrap Core and vandor -->
-    <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
-    <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
-    <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
-    <!--selectPickercss-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css">
-    <!-- Core css -->
-    <link rel="stylesheet" href="/css/style.min.css" />
-    <style>
-        .error{
-            color: red;
-        }
-    </style>
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+  <!--selectPickercss-->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css">
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css"/>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
 </head>
 
 <body class="font-muli theme-cyan gradient">
 <!-- Page Loader -->
 <div class="page-loader-wrapper">
-    <div class="loader">
-    </div>
+  <div class="loader">
+  </div>
 </div>
 
 <div id="main_content">
-    <!-- Start Main top header -->
-    <div id="header_top" class="header_top">
-        <div class="container">
-            <div class="hleft">
-                <a class="header-brand" href="index.html"><i class="fa fa-graduation-cap brand-logo"></i></a>
-                <div class="dropdown">
-                    <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
-                            class="fe fe-align-center"></i></a>
-                    <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fe fe-settings"></i></a>
-                </div>
-            </div>
-            <div class="hright">
-                <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
-            </div>
+  <!-- Start Main top header -->
+  <div id="header_top" class="header_top">
+    <div class="container">
+      <div class="hleft">
+        <a class="header-brand" href="index.html"><i
+            class="fa fa-graduation-cap brand-logo"></i></a>
+        <div class="dropdown">
+          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
+              class="fe fe-align-center"></i></a>
+          <a href="javascript:void(0)" class="nav-link icon settingbar"><i
+              class="fe fe-settings"></i></a>
         </div>
+      </div>
+      <div class="hright">
+        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
+      </div>
     </div>
-    <!-- Start Rightbar setting panel -->
-    <div th:include="partials/rightbar"></div>
-    <!-- Start Main leftbar navigation -->
-    <div th:include="partials/leftbar"></div>
+  </div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
 
 
-    <!-- Start project content area -->
-    <div class="page">
-        <!-- Start Page header -->
-        <div th:include="partials/navbar"></div>
-        <!-- Start Page title and tab -->
-        <div class="section-body">
-            <div class="container-fluid">
-                <div class="d-flex justify-content-between align-items-center ">
-                    <div class="header-action">
-                        <h1 class="page-title">Teacher</h1>
-                        <ol class="breadcrumb page-breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Add Teacher</li>
-                        </ol>
-                    </div>
-                    <ul class="nav nav-tabs page-header-tab">
-                        <li class="nav-item"><a class="nav-link " th:href="@{/admin/subject}">List View</a></li>
-                        <li class="nav-item"><a class="nav-link active" th:href="@{/admin/subject/insert}">Add</a></li>
-                    </ul>
-                </div>
-            </div>
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Teacher</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Teacher</li>
+            </ol>
+          </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link " th:href="@{/admin/subject}">List View</a></li>
+            <li class="nav-item"><a class="nav-link active"
+                                    th:href="@{/admin/subject/insert}">Add</a></li>
+          </ul>
         </div>
-        <div class="section-body mt-4">
-            <div class="container-fluid">
-                <div class="tab-content">
-                    <div class="tab-pane active" id="Staff-add">
-                        <div class="row clearfix">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Basic Information</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <form th:action="@{/admin/subject/save}" method="post" th:object="${subject}">
-                                            <div class="row clearfix">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <input th:field="*{id}" type="hidden" class="form-control">
-                                                    </div>
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <label>Subject Name</label>
-                                                        <input th:field="*{subjectName}" type="text" class="form-control">
-                                                        <span th:if="${#fields.hasErrors('subjectName')}" th:errorclass="error"  th:errors="*{subjectName}" ></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="multi_select_box">
-                                                        <select id="multi_select" class="form-select w-100" multiple th:field="*{users}">
-                                                            <option th:each="user : ${listUser}"
-                                                                    th:value="${user.userID}"
-                                                                    th:utext="${user.fullName}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                    <a th:href="@{/admin/subject}" class="btn btn-outline-secondary">Cancel</a>
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+      </div>
+    </div>
+    <div class="section-body mt-4">
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-add">
+            <div class="row clearfix">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Basic Information</h3>
+                  </div>
+                  <div class="card-body">
+                    <form th:action="@{/admin/subject/save}" method="post" th:object="${subject}">
+                      <div class="row clearfix">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <input th:field="*{id}" type="hidden" class="form-control">
+                          </div>
+                          <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                              <label>Subject Name</label>
+                              <input th:field="*{subjectName}" type="text"
+                                     th:classappend="${#fields.hasErrors('subjectName') ? 'form-control error-input' : 'form-control'}">
+                              <p class="error-message" th:if="${#fields.hasErrors('subjectName')}"
+                                 th:errors="*{subjectName}"></p>
                             </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="multi_select_box">
+                              <!--                              <select id="multi_select" class="form-select w-100" multiple-->
+                              <!--                                      th:field="*{users}">-->
+                              <!--                                <option th:each="user : ${listUser}"-->
+                              <!--                                        th:value="${user.id}"-->
+                              <!--                                        th:utext="${user.fullName}"></option>-->
+                              <!--                              </select>-->
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a th:href="@{/admin/subject}"
+                               class="btn btn-outline-secondary">Cancel</a>
+                          </div>
                         </div>
-                    </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-
+      </div>
     </div>
+
+  </div>
 </div>
 
 <!-- Start Main project js, jQuery, Bootstrap -->
@@ -136,8 +145,10 @@
 <script src="/plugins/dropify/js/dropify.min.js"></script>
 <script src="/bundles/summernote.bundle.js"></script>
 <!--selectPicker-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="/SelectPicker.js"></script>
 <!-- Start project main js  and page js -->
 <script src="/js/core.js"></script>

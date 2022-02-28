@@ -14,10 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.validation.constraints.*;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,21 +33,25 @@ public class Subjects {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @NotEmpty(message = "Enter subject name")
   @Column(name = "subject_name")
-  @NotBlank(message = "Not empty")
   private String subjectName;
 
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "teacher_subjects",
-          joinColumns = @JoinColumn(name = "subject_id"),
-          inverseJoinColumns = @JoinColumn(name = "user_id"))
+      joinColumns = @JoinColumn(name = "subject_id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<User> users = new HashSet<>();
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "mark",
-    joinColumns = @JoinColumn(name = "subject_id"),
-    inverseJoinColumns = @JoinColumn(name = "student_id"))
+      joinColumns = @JoinColumn(name = "subject_id"),
+      inverseJoinColumns = @JoinColumn(name = "student_id"))
   @MapKeyJoinColumn(name = "class_id")
   private Map<Class, Student> studentClass = new HashMap<>();
+
+  public void addUser(User user) {
+    this.users.add(user);
+  }
 }

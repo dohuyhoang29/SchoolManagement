@@ -14829,6 +14829,14 @@ a.tag-addon:hover {
     margin: -3px .75rem -3px -5px
 }
 
+.error-message{
+    color: red;
+}
+
+.error-input{
+    border: 1px solid red;
+}
+
 .wizard .content {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
