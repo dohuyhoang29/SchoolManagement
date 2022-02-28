@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>School Management</title>
+
+    <!-- Bootstrap Core and vandor -->
+    <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+    <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
+    <!-- Core css -->
+    <link rel="stylesheet" href="/css/style.min.css" />
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+    </div>
+</div>
+
+<div id="main_content">
+    <!-- Start Main top header -->
+    <div id="header_top" class="header_top">
+        <div class="container">
+            <div class="hleft">
+                <a class="header-brand" href="index.html"><i class="fa fa-graduation-cap brand-logo"></i></a>
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
+                            class="fe fe-align-center"></i></a>
+                    <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fe fe-settings"></i></a>
+                </div>
+            </div>
+            <div class="hright">
+                <a class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- Start Rightbar setting panel -->
+    <div th:include="partials/rightbar"></div>
+    <!-- Start Main leftbar navigation -->
+    <div th:include="partials/leftbar"></div>
+
+
+    <!-- Start project content area -->
+    <div class="page">
+        <!-- Start Page header -->
+        <div th:include="partials/navbar"></div>
+        <!-- Start Page title and tab -->
+        <div class="section-body">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center ">
+                    <div class="header-action">
+                        <h1 class="page-title">subject</h1>
+                        <ol class="breadcrumb page-breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Subject Detail</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-body mt-4">
+            <div class="container-fluid">
+                <div>
+                    <label>Name Subject: </label>
+                    <span th:text="${subject.subjectName}"></span>
+                </div>
+                <div class="tab-content">
+                    <div class="card">
+                        <div>
+                            <table class="table">
+                                <thead>
+                                    <th>Name teacher</th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="list : ${listUser}">
+                                    <td th:text="${list.fullName}"></td>
+                                    <td><a class="btn btn-warning text-white">Edit</a></td>
+                                    <td><a class="btn btn-secondary text-white">Detail</a></td>
+                                    <td><a th:href="@{'/admin/subject/detail/'+ ${subject.id}+'/'+${list.userID}}" class="btn btn-danger text-white">Remove</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div align="center">
+                        <a th:href="@{/admin/subject/edit/{id}(id=${subject.id})}" class="btn btn-warning">Edit</a>
+                        <a th:href="@{/admin/subject}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+</body>
+</html>

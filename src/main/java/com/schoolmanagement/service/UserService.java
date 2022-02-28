@@ -14,6 +14,8 @@ public class UserService {
     repo.save(user);
   }
 
+  public  User findbyUserid(int id ){ return repo.findById(id);}
+
   public Iterable<User> getAllUser(){
     return repo.findAll();
   }
