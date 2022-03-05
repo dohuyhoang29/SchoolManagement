@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>School Management</title>
+  <title>Subject Detail</title>
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
@@ -58,10 +58,10 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">subject</h1>
+            <h1 class="page-title">Blog</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Subject Detail</li>
+              <li class="breadcrumb-item active" aria-current="page">Blog Detail</li>
             </ol>
           </div>
         </div>
@@ -69,35 +69,23 @@
     </div>
     <div class="section-body mt-4">
       <div class="container-fluid">
-        <div>
-          <label>Name Subject: </label>
-          <span th:text="${subject.subjectName}"></span>
-        </div>
         <div class="tab-content">
-          <div class="card">
-            <div>
-              <table class="table">
-                <thead>
-                <th>Name teacher</th>
-                </thead>
-                <tbody>
-                <tr th:each="list : ${listUser}">
-                  <td th:text="${list.fullName}"></td>
-                  <td><a class="btn btn-warning text-white">Edit</a></td>
-                  <td><a class="btn btn-secondary text-white">Detail</a></td>
-                  <td><a th:href="@{'/show/subject/detail/'+ ${subject.id}+'/'+${list.id}}"
-                         class="btn btn-danger text-white">Remove</a></td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-          <div align="center">
-            <a th:href="@{/admin/subjects/edit/{id}(id=${subject.id})}"
-               class="btn btn-warning">Edit</a>
-            <a th:href="@{/admin/subjects/subjects_management}" class="btn btn-secondary">Cancel</a>
-          </div>
+         	<div>
+         		<label>Header: <span th:text="${blogs.header}"></span></label>
+         	</div>
+         	<div>
+         		<label>Author: <span th:text="${blogs.user.fullName}"></span></label>
+         	</div>
+         	<div>
+         		<label>Create Date <span th:text="${blogs.getDate()}"></span></label>
+         	</div>
+         	<div>
+         		<label>Content: </label>
+         		<div th:utext="${blogs.content}"></div>
+         	</div>
+         	<br>
+         	<a class="btn btn-warning" th:href="@{/edit/blog/{id}(id=${blogs.id})}" >Edit</a>
+         	<a class="btn btn-secondary text-whie" th:href="@{/show/blog}" >Cancel</a>
         </div>
       </div>
     </div>

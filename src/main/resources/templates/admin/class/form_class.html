@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
   <title>School Management</title>
 
   <!-- Bootstrap Core and vandor -->
@@ -35,29 +36,11 @@
 
 <div id="main_content">
   <!-- Start Main top header -->
-  <div id="header_top" class="header_top">
-    <div class="container">
-      <div class="hleft">
-        <a class="header-brand" href="index.html"><i
-            class="fa fa-graduation-cap brand-logo"></i></a>
-        <div class="dropdown">
-          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
-              class="fe fe-align-center"></i></a>
-          <a href="javascript:void(0)" class="nav-link icon settingbar"><i
-              class="fe fe-settings"></i></a>
-        </div>
-      </div>
-      <div class="hright">
-        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
-      </div>
-    </div>
-  </div>
+  <div th:include="partials/header"></div>
   <!-- Start Rightbar setting panel -->
   <div th:include="partials/rightbar"></div>
   <!-- Start Main leftbar navigation -->
   <div th:include="partials/leftbar"></div>
-
-
   <!-- Start project content area -->
   <div class="page">
     <!-- Start Page header -->
@@ -67,17 +50,27 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">Teacher</h1>
+            <h1 class="page-title">Student</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Add Teacher</li>
+              <li th:if="${class.id == null}" class="breadcrumb-item active" aria-current="page">
+                Add
+                Student
+              </li>
+              <li th:if="${class.id != null}" class="breadcrumb-item active" aria-current="page">
+                Edit
+                Student
+              </li>
             </ol>
           </div>
           <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item"><a class="nav-link " th:href="@{/show/subjects}">List
-              View</a></li>
-            <li class="nav-item"><a class="nav-link active"
-                                    th:href="@{/insert/subjects}">Add</a></li>
+            <li class="nav-item">
+              <a th:href="@{/show/class}" class="nav-link">List View</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/insert/class}"
+                 th:classappend="${class.id == null ? 'nav-link active' : 'nav-link'}">Add</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -93,34 +86,59 @@
                     <h3 class="card-title">Basic Information</h3>
                   </div>
                   <div class="card-body">
-                    <form th:action="@{/subjects/save}" method="post" th:object="${subjects}"
+                    <form id="classInsertForm" th:action="@{/save/class}" method="post"
+                          th:object="${class}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
                       <div class="row clearfix">
-                        <div class="col-sm-12">
+                        <div class="col-md-12 col-sm-12">
                           <div class="form-group">
-                            <label>Subject Name</label>
-                            <input th:field="*{subjectName}" type="text"
-                                   th:classappend="${#fields.hasErrors('subjectName') ? 'form-control error-input' : 'form-control'}">
-                            <p class="error-message" th:if="${#fields.hasErrors('subjectName')}"
-                               th:errors="*{subjectName}"></p>
+                            <label>Class Name</label>
+                            <input th:field="*{className}" type="text"
+                                   th:classappend="${#fields.hasErrors('className') ? 'form-control error-input' : 'form-control'}">
+                            <p class="error-message" th:if="${#fields.hasErrors('className')}"
+                               th:errors="*{className}"></p>
                           </div>
                         </div>
-                        <div class="col-sm-12">
-                          <div class="form-group multi_select_box mt-2 mb-3">
-                            <label>Teachers</label>
-                            <select id="multi_select" class="form-select w-100" multiple
-                                    th:field="*{users}">
-                              <option th:each="user : ${listUser}"
-                                      th:field="*{users}"
-                                      th:value="${user.id}"
-                                      th:utext="${user.fullName}"></option>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group">
+                            <label>Grade</label>
+                            <select class="form-control input-height" name="department"
+                                    th:field="*{grade}">
+                              <option th:field="*{grade}" value="10">10</option>
+                              <option th:field="*{grade}" value="11">11</option>
+                              <option th:field="*{grade}" value="12">12</option>
                             </select>
+                            <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
+                               th:errors="*{schoolYear}"></p>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group">
+                            <label>School Year</label>
+                            <input th:field="*{schoolYear}" name="start-date"
+                                   class="yearpicker" data-date-autoclose="true"
+                                   th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">
+                            <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
+                               th:errors="*{schoolYear}"></p>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group">
+                            <label>Homeroom Teacher</label>
+                            <select class="form-control input-height" name="department"
+                                    th:field="*{user}">
+                              <option th:each="user : ${userList}" th:field="*{user}"
+                                      th:value="${user.id}" th:utext="${user.fullName}"></option>
+                            </select>
+                            <p class="error-message" th:if="${#fields.hasErrors('user')}"
+                               th:errors="*{user}"></p>
                           </div>
                         </div>
                         <div class="col-sm-12">
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                          <a th:href="@{/show/subjects}">
+                          <button type="submit" class="btn btn-primary">Submit
+                          </button>
+                          <a th:href="@{/admin/user/user_management}">
                             <button type="button" class="btn btn-outline-secondary">Cancel</button>
                           </a>
                         </div>
@@ -134,15 +152,18 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
+<script>
+
+</script>
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
 
 <!-- Start Plugin Js -->
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/bootstrap-yearpicker/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/dropify/js/dropify.min.js"></script>
 <script src="/bundles/summernote.bundle.js"></script>
 <!--selectPicker-->
@@ -155,6 +176,17 @@
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.yearpicker').datepicker({
+      format: "yyyy",
+      viewMode: "years",
+      minViewMode: "years",
+      autoclose: true
+    });
+  });
+</script>
 </body>
 
 </html>

@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,7 +43,6 @@ public class Subjects {
   @JoinTable(name = "teacher_subjects",
       joinColumns = @JoinColumn(name = "subject_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
-  @NotNull(message = "Choose teachers")
   private Set<User> users = new HashSet<>();
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,23 +18,27 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "class")
 public class Class {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Integer id;
 
   @NotEmpty(message = "Enter Class Name")
-  @Length(min = 3 , max = 10 , message = "Class Name more than 3 and less than 10")
+  @Length(min = 3, max = 10, message = "Class Name more than 3 and less than 10")
   @Column(name = "class_name")
   private String className;
 
@@ -47,7 +49,6 @@ public class Class {
   @NotNull(message = "Enter School Year")
   @Column(name = "school_year")
   private Integer schoolYear;
-
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -67,8 +68,8 @@ public class Class {
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "class_teacher_subject",
-      joinColumns = @JoinColumn(name = "user_id"),
+      joinColumns = @JoinColumn(name = "class_id"),
       inverseJoinColumns = @JoinColumn(name = "subject_id"))
-  @MapKeyJoinColumn(name = "class_id")
-  private Map<Subjects, Class> teacherSubject = new HashMap<>();
+  @MapKeyJoinColumn(name = "user_id")
+  private Map<User, Subjects> teacherSubjects = new HashMap<>();
 }

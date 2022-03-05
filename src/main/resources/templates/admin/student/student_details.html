@@ -59,24 +59,24 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">Teacher</h1>
+            <h1 class="page-title">Student</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Teacher Details</li>
+              <li class="breadcrumb-item active" aria-current="page">Student Details</li>
             </ol>
           </div>
           <ul class="nav nav-tabs page-header-tab">
             <li class="nav-item">
-              <a th:href="@{/show/user}" class="nav-link">List View</a>
+              <a th:href="@{/show/student}" class="nav-link">List View</a>
             </li>
             <li class="nav-item">
-              <a th:href="@{/admin/user/insert}" class="nav-link">Add</a>
+              <a th:href="@{/insert/student/insert}" class="nav-link">Add</a>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="section-body mt-4" th:object="${user}">
+    <div class="section-body mt-4" th:object="${student}">
       <div class="container-fluid">
         <div class="tab-content">
           <div class="tab-pane active" id="Staff-all">
@@ -85,57 +85,56 @@
                 <div class="card">
                   <div class="card-body w_user">
                     <div class="user_avtar col-xl-2">
-                      <img class="" th:src="@{${user.getUserImagePath}}" alt="">
+                      <img class="" th:src="@{${student.getStudentImagePath}}" alt="">
                     </div>
                     <div class="wid-u-info col-xl-10">
-                      <h5>[[${user.username}]]</h5>
-                      <p class="text-muted m-b-0">[[${user.address}]]</p>
-                      <p class="text-muted m-b-0">[[${user.email}]]</p>
-                      <p class="text-muted m-b-0">[[${user.phone}]]</p>
+                      <h5>[[${student.username}]]</h5>
+                      <p class="text-muted m-b-0">[[${student.address}]]</p>
                     </div>
                   </div>
                   <div class="card-body">
                     <ul class="list-group">
                       <li class="list-group-item">
                         <b>Full Name </b>
-                        <div>[[${user.fullName}]]</div>
+                        <div>[[${student.fullName}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>Password </b>
-                        <div>[[${user.password}]]</div>
+                        <div>[[${student.password}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>Date of Birth</b>
-                        <div>[[${user.dob}]]</div>
+                        <div>[[${student.dob}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>Status </b>
-                        <div th:if="${user.deleted}"><span class="tag tag-danger">Retirement</span>
+                        <div th:if="${student.status == 1}">
+                          <span class="tag tag-success">Studying</span>
                         </div>
-                        <div th:if="${!user.deleted}"><span class="tag tag-success">Working</span>
+                        <div th:if="${student.status == 2}">
+                          <span class="tag tag-warning">Absent</span>
+                        </div>
+                        <div th:if="${student.status == 3}">
+                          <span class="tag tag-secondary">Graduate</span>
                         </div>
                       </li>
                       <li class="list-group-item">
                         <b>Start Date</b>
-                        <div>[[${user.startDate}]]</div>
+                        <div>[[${student.admissionYear}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>End Date</b>
-                        <div>[[${user.endDate}]]</div>
-                      </li>
-                      <li class="list-group-item">
-                        <b>Subjects</b>
-                        <div th:if="${user.subjects.size() > 0}">[[${user.subjects}]]</div>
+                        <div>[[${student.graduateYear}]]</div>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
               <div class="col-xl-12 col-md-12">
-                <a th:href="@{/edit/user/{id}(id=${user.id})}">
+                <a th:href="@{/edit/student/{id}(id=${student.id})}">
                   <button type="button" class="btn btn-primary">Edit</button>
                 </a>
-                <a th:href="@{/show/user}">
+                <a th:href="@{/show/student}">
                   <button type="button" class="btn btn-outline-secondary">Cancel</button>
                 </a>
               </div>

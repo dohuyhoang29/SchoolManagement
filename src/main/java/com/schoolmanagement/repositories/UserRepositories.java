@@ -13,11 +13,14 @@ public interface UserRepositories extends PagingAndSortingRepository<User, Integ
 
   Iterable<User> findUserByEmail(String email);
 
-  @Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:email%")
-  Page<User> searchUsersByFullName(@Param("email") String search, Pageable pageable);
+  @Query(value = "SELECT u FROM User u WHERE u.username = :username")
+  User findUserByUsername(String username);
 
-  @Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:email% AND u.deleted = :deleted")
-  Page<User> searchUsersByFullNameAndDeleted(@Param("email") String search,
+  @Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:fullName%")
+  Page<User> searchUsersByFullName(@Param("fullName") String fullName, Pageable pageable);
+
+  @Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:fullName% AND u.deleted = :deleted")
+  Page<User> searchUsersByFullNameAndDeleted(@Param("fullName") String fullName,
       @Param("deleted") Boolean deleted, Pageable pageable);
 
   User findById(int integer);

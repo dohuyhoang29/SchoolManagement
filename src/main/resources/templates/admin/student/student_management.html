@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>School Management</title>
+
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css"/>
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+  <div class="loader">
+  </div>
+</div>
+
+<div id="main_content">
+  <!-- Start Main top header -->
+  <div th:include="partials/header"></div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
+
+
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Student</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Student List</li>
+            </ol>
+          </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link active"
+                                    th:href="@{/show/student}">List
+              View</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/insert/student}">Add</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section-body mt-4">
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+              <div class="card-body">
+                <form th:action="@{/show/student/search}" method="get">
+                  <div class="row">
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <input type="text" id="search" name="search"
+                               class="form-control" th:value="${search}"
+                               placeholder="Name">
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <select class="form-control input-height" name="department">
+                          <option value="">Grade</option>
+                          <option value="Category 1">Computer</option>
+                          <option value="Category 2">Mechanical</option>
+                          <option value="Category 3">Mathematics</option>
+                          <option value="Category 3">Commerce</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <select class="form-control input-height" name="department">
+                          <option value="">Class</option>
+                          <option value="Category 1">Computer</option>
+                          <option value="Category 2">Mechanical</option>
+                          <option value="Category 3">Mathematics</option>
+                          <option value="Category 3">Commerce</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <select class="form-control input-height" name="department">
+                          <option value="">School Year</option>
+                          <option value="Category 1">Computer</option>
+                          <option value="Category 2">Mechanical</option>
+                          <option value="Category 3">Mathematics</option>
+                          <option value="Category 3">Commerce</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="input-group mt-2">
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="1" name="status"
+                                 class="custom-control-input" value="1"
+                                 th:checked="${status == '1' ? true : false}">
+                          <label for="1" class="custom-control-label">Studying</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="2" name="status" value="2"
+                                 class="custom-control-input"
+                                 th:checked="${status == '2' ? true : false}">
+                          <label for="2" class="custom-control-label">Absent</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="3" name="status" value="3"
+                                 class="custom-control-input"
+                                 th:checked="${status == '3' ? true : false}">
+                          <label for="3" class="custom-control-label">Graduate</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="all" name="status" value="all"
+                                 class="custom-control-input"
+                                 th:checked="${status == 'all' ? true : false}">
+                          <label for="all" class="custom-control-label">All</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <button type="submit" class="btn btn-sm btn-primary btn-block">Search</button>
+                    </div>
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <a href="javascript:void(0);" class="btn btn-sm btn-secondary btn-block"
+                         title="">Import</a>
+                    </div>
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <a href="javascript:void(0);" class="btn btn-sm btn-success btn-block"
+                         title="">Export</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="table-responsive card">
+              <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
+                <thead>
+                <tr>
+                  <th>
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      #
+                    </a>
+                  </th>
+                  <th>
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Student Name
+                    </a>
+                  </th>
+
+                  <th class="pr-20">
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Address
+                    </a>
+                  </th>
+                  <th>
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=dob&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Date of Birth
+                    </a>
+                  </th>
+                  <th>
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=status&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Status
+                    </a>
+                  </th>
+                  <th class="text-center">
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=admissionYear&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Admission Year
+                    </a>
+                  </th>
+                  <th class="text-center">
+                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=graduateYear&sortDir=' + ${reverseSortDir} + '&search=' + ${search}}">
+                      Graduate Year
+                    </a>
+                  </th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="student : ${studentList}">
+                  <tr>
+                    <td>[[${student.id}]]</td>
+                    <td class="w60">
+                      <img class="avatar" th:src="${student.getStudentImagePath}" alt="">
+                      <span class="font-16">[[${student.fullName}]]</span>
+                    </td>
+                    <td class="pr-20">[[${student.address}]]</td>
+                    <td>[[${student.dob}]]</td>
+                    <td th:if="${student.status == 1}">
+                      <span class="tag tag-success">Studying</span>
+                    </td>
+                    <td th:if="${student.status == 2}">
+                      <span class="tag tag-warning">Absent</span>
+                    </td>
+                    <td th:if="${student.status == 3}">
+                      <span class="tag tag-secondary">Graduate</span>
+                    </td>
+                    <td class="text-center">[[${student.admissionYear}]]</td>
+                    <td class="text-center">[[${student.graduateYear}]]</td>
+                    <td class="text-center">
+                      <a th:href="@{/show/student/details/{id}(id=${student.id})}">
+                        <button type="button" class="btn btn-icon btn-sm" title="View">
+                          <i class="fa fa-address-card text-success"></i>
+                        </button>
+                      </a>
+                      <a th:href="@{/show/student/edit/{id}(id=${student.id})}">
+                        <button type="button" class="btn btn-icon btn-sm" title="Edit">
+                          <i class="fa fa-edit text-warning"></i>
+                        </button>
+                      </a>
+                      <button sec:authorize="hasAnyAuthority('TEACHER')"
+                              type="button" class="btn btn-icon btn-sm js-sweetalert"
+                              title="Add Marks" data-type="confirm"><i
+                          class="fe fe-file-plus text-danger"></i></button>
+                      <button sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')"
+                              type="button" class="btn btn-icon btn-sm js-sweetalert"
+                              title="Add Evaluate" data-type="confirm"><i
+                          class="fa fa-comment-o text-danger"></i></button>
+                      <button sec:authorize="hasAnyAuthority('ADMIN', 'HOMEROOM_TEACHER')"
+                              type="button" class="btn btn-icon btn-sm js-sweetalert"
+                              title="Marks Details" data-type="confirm"><i
+                          class="fa fa-info-circle text-danger"></i></button>
+                    </td>
+                  </tr>
+                </th:block>
+                </tbody>
+              </table>
+              <div class="card-body">
+                <div class="bd-example">
+                  <nav aria-label="...">
+                    <ul class="pagination justify-content-end">
+                      <li class="page-item">
+                        <a class="page-link" th:if="${currentPage > 1}"
+                           th:href="@{'/show/student/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Previous</a>
+                      </li>
+                      <li class="page-item disabled" th:if="${currentPage == 1}">
+                        <a class="page-link">Previous</a>
+                      </li>
+                      <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <li class="page-item" th:if="${i != currentPage}">
+                          <a class="page-link"
+                             th:href="@{'/show/student/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">[[${i}]]
+                          </a>
+                        </li>
+                        <li th:if="${i == currentPage}" class="page-item active"><a
+                            class="page-link">[[${i}]]</a>
+                        </li>
+                      </th:block>
+                      <li class="page-item">
+                        <a class="page-link" th:if="${currentPage < totalPages}"
+                           th:href="@{'/show/student/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Next</a>
+                      </li>
+                      <li class="page-item disabled" th:if="${currentPage == totalPages}">
+                        <a class="page-link">Next</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+</body>
+</html>

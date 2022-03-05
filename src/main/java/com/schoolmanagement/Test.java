@@ -1,16 +1,30 @@
 package com.schoolmanagement;
 
+import com.schoolmanagement.model.Student;
+import com.schoolmanagement.repositories.StudentRepositories;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class Test {
 
+  @Autowired
+  private static StudentRepositories repositories;
+
   public static void main(String[] args) {
-    String text = "image. adf .adfasdf. .jpg";
-    System.out.println(text.substring(text.lastIndexOf('.')));
-    System.out.println(randomString(text));
+    String text = "image.jpg";
+    int num = text.lastIndexOf('.');
+    System.out.println(num);
+    System.out.println(text.substring(num));
+    String str_filename = UUID.randomUUID().toString() + text.substring(text.lastIndexOf('.'));
+
+    System.out.println(str_filename);
   }
 
-  public static String randomString(String text) {
+  public static int randomString(String text) {
     int leftLimit = 48; // numeral '0'
     int rightLimit = 122; // letter 'z'
     int targetStringLength = 20;
@@ -21,7 +35,8 @@ public class Test {
         .limit(targetStringLength)
         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
+    List<Student> list = (List<Student>) repositories.findAllByAdmissionYear(2022);
 
-    return generatedString + text.substring(text.lastIndexOf('.'));
+    return list.size();
   }
 }

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>School Management</title>
+  <title>Subject Management</title>
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
@@ -58,45 +58,64 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">subject</h1>
+            <h1 class="page-title">Blog</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Subject Detail</li>
+              <li class="breadcrumb-item active" aria-current="page">Add Blog</li>
             </ol>
           </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link active" th:href="@{/show/blog}">List View</a></li>
+            <li class="nav-item"><a class="nav-link"th:href="@{/insert/blog}">Add</a></li>
+          </ul>
         </div>
       </div>
     </div>
     <div class="section-body mt-4">
       <div class="container-fluid">
-        <div>
-          <label>Name Subject: </label>
-          <span th:text="${subject.subjectName}"></span>
-        </div>
         <div class="tab-content">
-          <div class="card">
-            <div>
-              <table class="table">
+          <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+              <div class="card-body">
+                <form th:action="@{/admin/subjects/subjects_management/search}" method="get">
+                  <div class="row">
+                    <div class="col-lg-9 col-md-6 col-sm-12">
+                      <div class="input-group">
+	                      	<input type="text" id="search" name="search" class="form-control w-75" th:value="${search}" placeholder="What you want to find ?">
+	                     	<input type="date" id="dateStart"  class="form-control w-50" name="dateStart" min="2012-01-01" th:max="${datenow}">
+		                    <input type="date" id="dateStart"  class="form-control w-50" name="dateStart" min="2012-01-01" th:max="${datenow}">
+	                   </div>
+                    </div>
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <button type="submit" class="btn btn-sm btn-primary btn-block" style="width: 100px;height: 30px; margin-top: 4px">Search</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="table-responsive card">
+              <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
                 <thead>
-                <th>Name teacher</th>
+                <tr>
+                  <th>ID</th>
+                  <th>Header</th>
+                  <th>Author</th>
+                  <th>CreateDate</th>
+                  <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                <tr th:each="list : ${listUser}">
-                  <td th:text="${list.fullName}"></td>
-                  <td><a class="btn btn-warning text-white">Edit</a></td>
-                  <td><a class="btn btn-secondary text-white">Detail</a></td>
-                  <td><a th:href="@{'/show/subject/detail/'+ ${subject.id}+'/'+${list.id}}"
-                         class="btn btn-danger text-white">Remove</a></td>
-                </tr>
+                  <tr th:each="listBlog : ${blogs}" >
+                  	<td th:text="${listBlog.id}"></td>
+                    <td th:text="${listBlog.header}"></td>
+                    <td th:text="${listBlog.user.fullName}"></td>
+                    <td th:text="${listBlog.getDate()}"></td> 
+                    <td><a th:href="@{/detail/blog/{id}(id=${listBlog.id})}" class="btn btn-icon btn-sm"><i class="fa fa-eye"></i></a></td>
+                    <td><a th:href="@{/edit/blog/{id}(id=${listBlog.id})}" class="btn btn-icon btn-sm text-warning" ><i class="fa fa-edit"></i></a></td> 
+                  </tr>
                 </tbody>
               </table>
             </div>
-
-          </div>
-          <div align="center">
-            <a th:href="@{/admin/subjects/edit/{id}(id=${subject.id})}"
-               class="btn btn-warning">Edit</a>
-            <a th:href="@{/admin/subjects/subjects_management}" class="btn btn-secondary">Cancel</a>
           </div>
         </div>
       </div>

@@ -67,10 +67,10 @@
           </div>
           <ul class="nav nav-tabs page-header-tab">
             <li class="nav-item">
-              <a th:href="@{/admin/user/user_management}" class="nav-link active">List View</a>
+              <a th:href="@{/show/user}" class="nav-link active">List View</a>
             </li>
             <li class="nav-item">
-              <a th:href="@{/admin/user/insert}" class="nav-link">Add</a>
+              <a th:href="@{/insert/user}" class="nav-link">Add</a>
             </li>
           </ul>
         </div>
@@ -82,7 +82,7 @@
           <div class="tab-pane active" id="Staff-all">
             <div class="card">
               <div class="card-body">
-                <form th:action="@{/admin/user/user_management/search}" method="get">
+                <form th:action="@{/show/user/search}" method="get">
                   <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-12">
                       <div class="input-group">
@@ -134,37 +134,37 @@
                 <thead>
                 <tr>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       #
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Full Name
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Email
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=phone&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=phone&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Phone Number
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Address
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=startDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=startDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Start Date
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/admin/user/user_management/' + ${currentPage} + '?sortField=endDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/user/' + ${currentPage} + '?sortField=endDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       End Date
                     </a>
                   </th>
@@ -191,12 +191,12 @@
                     <td th:if="${!users.deleted}"><span class="tag tag-success">Working</span>
                     </td>
                     <td>
-                      <a th:href="@{/admin/user/details/{id}(id=${users.id})}">
+                      <a th:href="@{/show/user/details/{id}(id=${users.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
                           <i class="fa fa-eye"></i>
                         </button>
                       </a>
-                      <a th:href="@{/admin/user/edit/{id}(id=${users.id})}">
+                      <a th:href="@{/edit/user/{id}(id=${users.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="Edit">
                           <i class="fa fa-edit"></i>
                         </button>
@@ -215,14 +215,14 @@
                     <ul class="pagination justify-content-end">
                       <li class="page-item" th:if="${currentPage > 1}">
                         <a class="page-link"
-                           th:href="@{'/admin/user/user_management/' + 1 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">First</a>
+                           th:href="@{'/show/user/' + 1 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">First</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == 1}">
                         <a class="page-link">First</a>
                       </li>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage > 1}"
-                           th:href="@{'/admin/user/user_management/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Previous</a>
+                           th:href="@{'/show/user/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Previous</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == 1}">
                         <a class="page-link">Previous</a>
@@ -230,7 +230,7 @@
                       <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
                         <li class="page-item" th:if="${i != currentPage}">
                           <a class="page-link"
-                             th:href="@{'/admin/user/user_management/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">[[${i}]]
+                             th:href="@{'/show/user/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">[[${i}]]
                           </a>
                         </li>
                         <li th:if="${i == currentPage}" class="page-item active"><a
@@ -239,14 +239,14 @@
                       </th:block>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage < totalPages}"
-                           th:href="@{'/admin/user/user_management/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Next</a>
+                           th:href="@{'/show/user/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Next</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == totalPages}">
                         <a class="page-link">Next</a>
                       </li>
                       <li class="page-item">
                         <a class="page-link" th:if="${currentPage < totalPages}"
-                           th:href="@{'/admin/user/user_management/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Last</a>
+                           th:href="@{'/show/user/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} + '&search=' + ${search}}">Last</a>
                       </li>
                       <li class="page-item disabled" th:if="${currentPage == totalPages}">
                         <a class="page-link">Last</a>

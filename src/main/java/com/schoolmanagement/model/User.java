@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -125,12 +124,11 @@ public class User {
     this.roles.add(role);
   }
 
-  @Transient
   public String getUserImagePath() {
-    if (image == null || id == null) {
+    if (image == null && id == null) {
       return null;
     }
 
-    return "/images/user-images/" + image;
+    return "/upload/image/user_image/" + image;
   }
 }

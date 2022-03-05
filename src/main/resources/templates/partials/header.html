@@ -1,0 +1,20 @@
+<div id="header_top" class="header_top">
+  <div class="container">
+    <div class="hleft">
+      <a class="header-brand" href="index.html"><i
+          class="fa fa-graduation-cap brand-logo"></i></a>
+      <div class="dropdown">
+        <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
+            class="fe fe-align-center"></i></a>
+        <a href="javascript:void(0)" class="nav-link icon settingbar"><i
+            class="fe fe-settings"></i></a>
+      </div>
+    </div>
+    <div class="hright">
+      <form th:action="@{/logout}" method="post">
+        <button type="submit"
+                class="btn nav-link settingbar "><i class="fe fe-power"></i></button>
+      </form>
+    </div>
+  </div>
+</div>

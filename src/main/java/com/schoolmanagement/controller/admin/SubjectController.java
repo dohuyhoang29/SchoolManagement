@@ -27,14 +27,14 @@ public class SubjectController {
   private UserService userService;
 
   //index
-  @GetMapping("/admin/subjects/subjects_management")
+  @GetMapping("/show/subjects")
   public String SubjectManage(Model model) {
 
-    return listSubjectByPage(model, 1, "subjectName", "asc", "");
+    return listSubjectByPage(model, 1, "id", "asc", "");
   }
 
   //index page and search
-  @GetMapping("/admin/subjects/subjects_management/page/{page}")
+  @GetMapping("/show/subjects/page/{page}")
   public String listSubjectByPage(Model model,
       @PathVariable("page") int currentPage,
       @Param("sortField") String sortField,
@@ -63,13 +63,13 @@ public class SubjectController {
     return "/admin/subjects/subjects_management";
   }
 
-  @GetMapping("/admin/subjects/subjects_management/search")
+  @GetMapping("/show/subjects/search")
   public String searchSubject(Model model, @RequestParam(value = "search") String search) {
     return listSubjectByPage(model, 1, "subjectName", "asc", search);
   }
 
   //New
-  @GetMapping("/admin/subjects/insert")
+  @GetMapping("/insert/subjects")
   public String SubjectIndexAdd(Model model) {
     Iterable<User> listUser = userService.getAllUser();
     model.addAttribute("listUser", listUser);
@@ -79,7 +79,7 @@ public class SubjectController {
   }
 
   // Edit
-  @GetMapping("/admin/subjects/edit/{id}")
+  @GetMapping("/edit/subjects/{id}")
   public String SubjectEdit(Model model, @PathVariable("id") int id) {
     Subjects subjects = subjectService.findBySubjectID(id);
     Iterable<User> listUser = userService.getAllUser();
@@ -90,7 +90,7 @@ public class SubjectController {
   }
 
   //Post add , save
-  @PostMapping("/admin/subjects/save")
+  @PostMapping("/subjects/save")
   public String SaveSubject(@Valid Subjects subjects, BindingResult result) {
 
     if (result.hasErrors()) {
@@ -98,11 +98,11 @@ public class SubjectController {
     }
 
     subjectService.SaveSubject(subjects);
-    return "redirect:/admin/subjects/subjects_management";
+    return "redirect:/show/subjects";
   }
 
   //Detail
-  @GetMapping("/admin/subjects/details/{id}")
+  @GetMapping("/show/subjects/details/{id}")
   public String DetailSubject(Model model, @PathVariable("id") int id) {
     Subjects subjects = subjectService.findBySubjectID(id);
     model.addAttribute("subject", subjects);
@@ -111,7 +111,7 @@ public class SubjectController {
     return "/admin/subjects/subjects_details";
   }
 
-  @GetMapping("/admin/subjects/details/{id}/{userid}")
+  @GetMapping("/show/subjects/details/{id}/{userid}")
   public String DetailSubjectDelete(Model model, @PathVariable("id") int id,
       @PathVariable("userid") int userid) {
     Subjects subjects = subjectService.findBySubjectID(id);
@@ -121,6 +121,6 @@ public class SubjectController {
 
     subjectService.SaveSubject(subjects);
 
-    return "redirect:/admin/subjects/detail/" + subjects.getId();
+    return "redirect:/show/subjects/detail/" + subjects.getId();
   }
 }

@@ -1,6 +1,7 @@
 package com.schoolmanagement.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,9 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "student")
@@ -24,6 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Student {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -39,7 +43,8 @@ public class Student {
   private String password;
 
   @Column(name = "dob")
-  private Date dob;
+  @DateTimeFormat(pattern = "MM/dd/yyyy")
+  private LocalDate dob;
 
   @Column(name = "address")
   private String address;
@@ -57,10 +62,10 @@ public class Student {
   private Integer graduateYear;
 
   @Column(name = "created_date")
-  private Date createdDate;
+  private LocalDateTime createdDate;
 
   @Column(name = "updated_date")
-  private Date updatedDate;
+  private LocalDateTime updatedDate;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "student_class",
@@ -74,4 +79,13 @@ public class Student {
       joinColumns = @JoinColumn(name = "student_id"),
       inverseJoinColumns = @JoinColumn(name = "class_id"))
   private Set<Class> studentClass = new HashSet<>();
+
+  @Transient
+  public String getStudentImagePath() {
+    if (image == null || id == null) {
+      return null;
+    }
+
+    return "/images/student-images/" + image;
+  }
 }

@@ -15,7 +15,7 @@ public class SubjectService {
   @Autowired
   private SubjectRepositories subjectRepositories;
 
-  public Iterable<Subjects> FindAllSubject() {
+  public Iterable<Subjects> getAllSubject() {
     return subjectRepositories.findAll();
   }
 
@@ -30,7 +30,7 @@ public class SubjectService {
   public Page<Subjects> getAllSubjectByPage(int pageNumber, String sortField, String sortDir) {
     Sort sort = Sort.by(sortField);
     sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
+    Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
 
     return subjectRepositories.findAll(page);
   }
@@ -39,7 +39,7 @@ public class SubjectService {
       String sortDir) {
     Sort sort = Sort.by(sortField);
     sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-    Pageable page = PageRequest.of(pageNumber - 1, 2, sort);
+    Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
 
     return subjectRepositories.subjectFind(name, page);
   }

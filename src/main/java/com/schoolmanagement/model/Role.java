@@ -16,6 +16,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "role")
 public class Role {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -24,10 +25,10 @@ public class Role {
   @Column(name = "role_name")
   private String roleName;
 
-  public Role(String roleName){
+  public Role(String roleName) {
     this.roleName = roleName;
   }
-
+  
   @Override
   public String toString() {
     return roleName;
