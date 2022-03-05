@@ -15,6 +15,10 @@ public class ClassService {
     classRepositories.save(aClass);
   }
 
+  public Class getClassById(Integer id) {
+    return classRepositories.findById(id).get();
+  }
+
   public Iterable<Class> getAllClass() {
     return classRepositories.findAll();
   }

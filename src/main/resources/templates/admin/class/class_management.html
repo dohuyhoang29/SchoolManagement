@@ -111,9 +111,11 @@
                           <i class="fa fa-edit text-warning"></i>
                         </button>
                       </a>
-                      <button type="button" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Update Teacher" data-type="confirm"><i
-                          class="fa fa-plus-circle text-danger"></i></button>
+                      <a th:href="@{/update/teacher/{id}(id=${class.id})}">
+                        <button type="button" class="btn btn-icon btn-sm js-sweetalert"
+                                title="Update Teacher" data-type="confirm"><i
+                            class="fa fa-plus-circle text-danger"></i></button>
+                      </a>
                     </td>
                   </tr>
                 </th:block>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -36,8 +37,6 @@ public class ClassController {
   @GetMapping("/insert/class")
   public String insertClass(Model model) {
     model.addAttribute("class", new Class());
-    model.addAttribute("studentList", studentService.getAllStudent());
-    model.addAttribute("subjectList", subjectService.getAllSubject());
     model.addAttribute("userList", userService.getAllUser());
 
     return "/admin/class/form_class";
@@ -48,5 +47,15 @@ public class ClassController {
     classService.saveClass(aClass);
 
     return "redirect:/show/class";
+  }
+
+  @GetMapping("/update/teacher/{id}")
+  public String updateTeacher(@PathVariable("id") Integer id, Model model) {
+    model.addAttribute("class", classService.getClassById(id));
+    model.addAttribute("studentList", studentService.getAllStudent());
+    model.addAttribute("subjectList", subjectService.getAllSubject());
+    model.addAttribute("userList", userService.getAllUser());
+
+    return "/admin/class/update_teacher";
   }
 }

@@ -1,10 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <title>School Management</title>
 
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+  <!--selectPickercss-->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css">
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css"/>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+  <div class="loader">
+  </div>
+</div>
+
+<div id="main_content">
+  <!-- Start Main top header -->
+  <div th:include="partials/header"></div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Student</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li th:if="${class.id == null}" class="breadcrumb-item active" aria-current="page">
+                Add
+                Student
+              </li>
+              <li th:if="${class.id != null}" class="breadcrumb-item active" aria-current="page">
+                Edit
+                Student
+              </li>
+            </ol>
+          </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item">
+              <a th:href="@{/show/class}" class="nav-link">List View</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/insert/class}"
+                 th:classappend="${class.id == null ? 'nav-link active' : 'nav-link'}">Add</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section-body mt-4">
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-add">
+            <div class="row clearfix">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Basic Information</h3>
+                  </div>
+                  <div class="card-body">
+                    <form id="classInsertForm" th:action="@{/save/class}" method="post"
+                          th:object="${class}"
+                          enctype="multipart/form-data">
+                      <input type="hidden" th:field="*{id}">
+                      <div class="row clearfix">
+                        <div class="col-md-12 col-sm-12">
+                          <div class="form-group">
+                            <label>Class Name</label>
+                            <input disabled th:field="*{className}" type="text"
+                                   th:classappend="${#fields.hasErrors('className') ? 'form-control error-input' : 'form-control'}">
+                            <p class="error-message" th:if="${#fields.hasErrors('className')}"
+                               th:errors="*{className}"></p>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group">
+                            <label>Teacher</label>
+                            <div class="form-group row" th:each="subject : ${subjectList}">
+                              <label
+                                  class="col-md-3 col-form-label">[[${subject.subjectName}]]</label>
+                              <select class="col-md-5 form-control input-height" name="teacher">
+                                <option th:each="teacher : ${userList}"
+                                        th:value="${teacher.id}"
+                                        th:utext="${teacher.fullName}"></option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <button type="submit" class="btn btn-primary">Submit
+                          </button>
+                          <a th:href="@{/admin/user/user_management}">
+                            <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                          </a>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/bootstrap-yearpicker/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+<!--selectPicker-->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/SelectPicker.js"></script>
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.yearpicker').datepicker({
+      format: "yyyy",
+      viewMode: "years",
+      minViewMode: "years",
+      autoclose: true
+    });
+  });
+</script>
 </body>
+
 </html>
