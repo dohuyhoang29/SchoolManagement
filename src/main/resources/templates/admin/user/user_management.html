@@ -76,6 +76,46 @@
         </div>
       </div>
     </div>
+    <!-- Modal: modalAbandonedCart-->
+    <div class="modal fade right" id="modalAbandonedCart" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="false">
+      <div class="modal-dialog modal-side modal-bottom-right modal-notify modal-info"
+           role="document">
+        <!--Content-->
+        <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+            <p class="heading">Import Teacher From Excel
+            </p>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" class="white-text">&times;</span>
+            </button>
+          </div>
+
+          <!--Body-->
+          <form th:action="@{/import/teacher}" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+
+              <div class="row">
+                <input name="fileImage" id="fileImage" type="file" class="dropify"
+                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+              </div>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+              <input type="submit" class="btn btn-info" value="Import">
+              <a type="button" class="btn btn-outline-info waves-effect"
+                 data-dismiss="modal">Cancel</a>
+            </div>
+          </form>
+        </div>
+        <!--/.Content-->
+      </div>
+    </div>
+    <!-- Modal: modalAbandonedCart-->
     <div class="section-body mt-4">
       <div class="container-fluid">
         <div class="tab-content">
@@ -96,7 +136,7 @@
                         <label class="mr-2">Status</label>
                         <div class="custom-control custom-radio custom-control-inline">
                           <input type="radio" id="false" name="status"
-                                 class="custom-control-input" value="false"
+                                 class="custom-control-input" v alue="false"
                                  th:checked="${status.equalsIgnoreCase('false') ? true : false}">
                           <label for="false" class="custom-control-label">Working</label>
                         </div>
@@ -118,11 +158,11 @@
                       <button type="submit" class="btn btn-sm btn-primary btn-block">Search</button>
                     </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-secondary btn-block"
-                         title="">Import</a>
+                      <a th:href="@{/import/teacher}" class="btn btn-sm btn-secondary btn-block"
+                         title="" data-toggle="modal" data-target="#modalAbandonedCart">Import</a>
                     </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-success btn-block"
+                      <a th:href="@{/export/teacher}" class="btn btn-sm btn-success btn-block"
                          title="">Export</a>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 package com.schoolmanagement.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,10 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +20,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "blog")
 public class Blog {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -41,8 +39,8 @@ public class Blog {
   private User user;
 
   @Column(name = "created_date")
-  private Date createdDate;
+  private LocalDateTime createdDate;
 
   @Column(name = "updated_date")
-  private Date updatedDate;
+  private LocalDateTime updatedDate;
 }

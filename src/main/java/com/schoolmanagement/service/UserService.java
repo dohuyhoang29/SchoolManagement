@@ -26,6 +26,10 @@ public class UserService {
     return repo.save(user);
   }
 
+  public Iterable<User> saveAllUser(Iterable<User> list) {
+    return repo.saveAll(list);
+  }
+
   public List<User> getAllUser() {
     List<User> list = new ArrayList<>();
 

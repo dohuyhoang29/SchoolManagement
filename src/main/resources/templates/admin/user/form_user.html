@@ -201,8 +201,7 @@
                           <div class="form-group mt-2 mb-3">
                             <label>Image</label>
                             <input name="fileImage" id="fileImage" type="file" class="dropify"
-                                   accept="image/png, image/jpeg"
-                                   th:value="${user.getUserImagePath()}">
+                                   accept="image/png, image/jpeg">
                           </div>
                           <p class="error-message" th:if="${#fields.hasErrors('image')}"
                              th:errors="*{image}"></p>

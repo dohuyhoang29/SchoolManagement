@@ -131,4 +131,21 @@ public class User {
 
     return "/upload/image/user_image/" + image;
   }
+
+  public User(String fullName, String username, String password, String email, String phone,
+      LocalDate dob, String address, LocalDate startDate, LocalDate endDate, boolean deleted,
+      LocalDateTime createdDate, LocalDateTime updatedDate) {
+    this.fullName = fullName;
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.phone = phone;
+    this.dob = dob;
+    this.address = address;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.deleted = deleted;
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
+  }
 }

@@ -1,5 +1,6 @@
 package com.schoolmanagement.controller.admin;
 
+import com.schoolmanagement.helper.UserExcelExporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.UserService;
@@ -7,12 +8,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +31,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -64,10 +74,6 @@ public class UserController {
           listUser.add(user);
         }
       }
-    }
-
-    for (User user : list) {
-      System.out.println(user.getUserImagePath());
     }
 
     model.addAttribute("listUser", listUser);
@@ -155,5 +161,71 @@ public class UserController {
       @RequestParam(value = "status") String status, Model model) {
 
     return listTeacherByPage(model, 1, "fullName", "asc", search, status);
+  }
+
+  @RequestMapping("/export/teacher")
+  @ResponseBody
+  public void exportToExcel(HttpServletResponse response) throws IOException {
+    response.setContentType("application/octet-stream");
+    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    String currentDateTime = dateFormatter.format(new Date());
+
+    String headerKey = "Content-Disposition";
+    String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+    response.setHeader(headerKey, headerValue);
+
+    List<User> listUsers = userService.getAllUser();
+
+    UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
+
+    excelExporter.export(response);
+  }
+
+  @RequestMapping("/import/teacher")
+  @ResponseBody
+  public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile)
+      throws IOException {
+//    if (multipartFile != null) {
+//      UserExcelImporter excelImporter = new UserExcelImporter();
+//      Iterable<User> listUser = excelImporter.excelImport(multipartFile);
+//      userService.saveAllUser(listUser);
+//    }
+
+    try {
+      List<User> lstUser = new ArrayList<>();
+      int i = 0;
+      // Creates a workbook object from the uploaded excelfile
+      XSSFWorkbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
+      // Creates a worksheet object representing the first sheet
+      XSSFSheet worksheet = workbook.getSheetAt(0);
+      // Reads the data in excel file until last row is encountered
+      while (i <= worksheet.getLastRowNum()) {
+        // Creates an object for the UserInfo Model
+        User user = new User();
+        // Creates an object representing a single row in excel
+        XSSFRow row = worksheet.getRow(i++);
+        // Sets the Read data to the model class
+        user.setFullName(row.getCell(0).getStringCellValue());
+        user.setUsername(row.getCell(1).getStringCellValue());
+        user.setPassword(row.getCell(2).getStringCellValue());
+        user.setEmail(row.getCell(3).getStringCellValue());
+        user.setPhone(row.getCell(4).getStringCellValue());
+        user.setDob(row.getCell(5).getLocalDateTimeCellValue().toLocalDate());
+        user.setAddress(row.getCell(6).getStringCellValue());
+        user.setStartDate(row.getCell(7).getLocalDateTimeCellValue().toLocalDate());
+        user.setEndDate(row.getCell(8).getLocalDateTimeCellValue().toLocalDate());
+        user.setDeleted(row.getCell(9).getBooleanCellValue());
+
+        // persist data into database in here
+        lstUser.add(user);
+      }
+      workbook.close();
+      System.out.println(lstUser.size());
+//      userService.saveAllUser(lstUser);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return "redirect:/show/user";
   }
 }

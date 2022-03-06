@@ -128,7 +128,7 @@
                             <label>Homeroom Teacher</label>
                             <select class="form-control input-height" name="department"
                                     th:field="*{user}">
-                              <option th:each="user : ${userList}" th:field="*{user}"
+                              <option th:each="user : ${userList}"
                                       th:value="${user.id}" th:utext="${user.fullName}"></option>
                             </select>
                             <p class="error-message" th:if="${#fields.hasErrors('user')}"
