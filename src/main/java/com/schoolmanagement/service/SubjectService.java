@@ -2,6 +2,7 @@ package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.repositories.SubjectRepositories;
+import com.schoolmanagement.validation.FieldValueExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SubjectService {
+public class SubjectService implements FieldValueExists {
 
   @Autowired
   private SubjectRepositories subjectRepositories;
@@ -45,4 +46,18 @@ public class SubjectService {
   }
 
 
+  @Override
+  public boolean fieldValueExists(Object value, String fieldName)
+      throws UnsupportedOperationException {
+
+    if (!fieldName.equals("subjectName")) {
+      throw new UnsupportedOperationException("Field name not supported");
+    }
+
+    if (value == null) {
+      return false;
+    }
+
+    return !this.subjectRepositories.findByName(value.toString()).isPresent() && fieldName != null;
+  }
 }

@@ -86,7 +86,7 @@ public class SubjectController {
     model.addAttribute("listUser", listUser);
     model.addAttribute("subjects", subjects);
 
-    return "/admin/subjects/form_subject";
+    return "/admin/subjects/update_subjects";
   }
 
   //Post add , save
@@ -98,6 +98,19 @@ public class SubjectController {
     }
 
     subjectService.SaveSubject(subjects);
+    return "redirect:/show/subjects";
+  }
+
+  @PostMapping("/subjects/update/{id}")
+  public String updateSubjects(@PathVariable("id") Integer id, @Valid Subjects subjects,
+      BindingResult result) {
+    if (result.hasErrors()) {
+      subjects.setId(id);
+      return "/admin/subjects/update_subjects";
+    }
+
+    subjectService.SaveSubject(subjects);
+
     return "redirect:/show/subjects";
   }
 

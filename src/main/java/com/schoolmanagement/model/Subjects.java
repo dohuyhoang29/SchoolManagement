@@ -53,7 +53,7 @@ public class Subjects {
   private Map<Class, Student> studentClass = new HashMap<>();
 
   @Override
-  public String toString () {
+  public String toString() {
     return subjectName;
   }
 }
