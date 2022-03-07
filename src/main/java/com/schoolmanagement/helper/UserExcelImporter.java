@@ -1,24 +1,32 @@
 package com.schoolmanagement.helper;
 
+import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.repositories.RoleRepositories;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserExcelImporter {
+  @Autowired
+  private RoleRepositories roleRepositories;
 
-  public List<User> excelImport(MultipartFile multipartFile) throws IOException {
+  public List<User> excelImport(MultipartFile multipartFile, Role role) throws IOException {
+
     List<User> listUser = new ArrayList<>();
 
     String fullName = "";
@@ -41,6 +49,8 @@ public class UserExcelImporter {
       Iterator<Cell> cellIterator = nextRow.cellIterator();
       while (cellIterator.hasNext()) {
         Cell nextCell = cellIterator.next();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 //        DataFormatter formatter = new DataFormatter();
 //        formatter.formatCellValue(nextCell);
         int columnIndex = nextCell.getColumnIndex();
@@ -52,9 +62,8 @@ public class UserExcelImporter {
             username = nextCell.getStringCellValue();
             break;
           case 2:
-            password = nextCell.getStringCellValue();
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String encoderPass = encoder.encode(password);
+            password = encoder.encode((String)nextCell.getStringCellValue());
             break;
           case 3:
             email = nextCell.getStringCellValue();
@@ -63,23 +72,26 @@ public class UserExcelImporter {
             phone = nextCell.getStringCellValue();
             break;
           case 5:
-            dob = nextCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
+            String dateDob = nextCell.getStringCellValue();
+            dob = LocalDate.parse(dateDob, formatter);
             break;
           case 6:
             address = nextCell.getStringCellValue();
             break;
           case 7:
-            startDate = nextCell.getLocalDateTimeCellValue().toLocalDate();
+            String dateStart = nextCell.getStringCellValue();
+            startDate = LocalDate.parse(dateStart, formatter);
             break;
           case 8:
-            endDate = nextCell.getLocalDateTimeCellValue().toLocalDate();
+            String dateEnd = nextCell.getStringCellValue();
+            endDate = LocalDate.parse(dateEnd, formatter);
             break;
         }
-        listUser.add(
-            new User(fullName, username, password, email, phone, dob, address, startDate,
-                endDate, false, LocalDateTime.now(), LocalDateTime.now()));
       }
+      User user = new User(fullName, username, password, email, phone, dob, address, startDate,
+          endDate, false, LocalDateTime.now(), LocalDateTime.now());
+      user.addRole(role);
+      listUser.add(user);
     }
     workbook.close();
     return listUser;

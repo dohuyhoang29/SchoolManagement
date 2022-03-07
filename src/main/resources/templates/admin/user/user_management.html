@@ -209,7 +209,7 @@
                     </a>
                   </th>
                   <th><a href="#">Status</a></th>
-                  <th>Actions</th>
+                  <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -230,20 +230,23 @@
                     </td>
                     <td th:if="${!users.deleted}"><span class="tag tag-success">Working</span>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <a th:href="@{/show/user/details/{id}(id=${users.id})}">
-                        <button type="button" class="btn btn-icon btn-sm" title="View">
-                          <i class="fa fa-eye"></i>
-                        </button>
+                        <button type="button" class="btn btn-success btn-sm">View</button>
                       </a>
                       <a th:href="@{/edit/user/{id}(id=${users.id})}">
-                        <button type="button" class="btn btn-icon btn-sm" title="Edit">
-                          <i class="fa fa-edit"></i>
-                        </button>
+                        <button type="button" class="btn btn-warning btn-sm">Edit</button>
                       </a>
-                      <button type="button" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Delete" data-type="confirm"><i
-                          class="fa fa-trash-o text-danger"></i></button>
+                      <a  th:if="${!users.deleted}"
+                          th:href="@{/update/user/retired/{id}(id = ${users.id})}">
+                        <button type="button" class="btn btn-danger btn-sm js-sweetalert"
+                              title="Delete" data-type="confirm">Make Retired</button>
+                      </a>
+                      <a  th:if="${users.deleted}"
+                          th:href="@{/update/user/working/{id}(id = ${users.id})}">
+                        <button type="button" class="btn btn-danger btn-sm js-sweetalert"
+                                title="Delete" data-type="confirm">Make Retired</button>
+                      </a>
                     </td>
                   </tr>
                 </th:block>

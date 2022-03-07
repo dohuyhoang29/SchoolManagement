@@ -1,6 +1,7 @@
 package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.helper.UserExcelExporter;
+import com.schoolmanagement.helper.UserExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.UserService;
@@ -10,14 +11,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -92,7 +99,7 @@ public class UserController {
 
   @GetMapping("/show/user")
   public String listTeacher(Model model) {
-    return listTeacherByPage(model, 1, "fullName", "asc", "", "all");
+    return listTeacherByPage(model, 1, "id", "asc", "", "all");
   }
 
   @GetMapping("/show/user/details/{id}")
@@ -124,7 +131,7 @@ public class UserController {
     String folder = "upload/image/user_image/";
     String org_filename = multipartFile.getOriginalFilename();
     String str_filename = "";
-    if (org_filename != null) {
+    if (org_filename != null && !org_filename.isEmpty()) {
       str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
 
       if (!Files.exists(Paths.get(root + folder))) {
@@ -153,7 +160,7 @@ public class UserController {
   public String editTeacher(@PathVariable("id") Integer id, Model model) {
     model.addAttribute("user", userService.getUserById(id));
 
-    return "/admin/user/form_user";
+    return "/admin/user/edit_user";
   }
 
   @GetMapping("/show/user/search")
@@ -181,50 +188,57 @@ public class UserController {
     excelExporter.export(response);
   }
 
-  @RequestMapping("/import/teacher")
-  @ResponseBody
+  @PostMapping("/import/teacher")
   public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile)
       throws IOException {
-//    if (multipartFile != null) {
-//      UserExcelImporter excelImporter = new UserExcelImporter();
-//      Iterable<User> listUser = excelImporter.excelImport(multipartFile);
-//      userService.saveAllUser(listUser);
-//    }
-
-    try {
-      List<User> lstUser = new ArrayList<>();
-      int i = 0;
-      // Creates a workbook object from the uploaded excelfile
-      XSSFWorkbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
-      // Creates a worksheet object representing the first sheet
-      XSSFSheet worksheet = workbook.getSheetAt(0);
-      // Reads the data in excel file until last row is encountered
-      while (i <= worksheet.getLastRowNum()) {
-        // Creates an object for the UserInfo Model
-        User user = new User();
-        // Creates an object representing a single row in excel
-        XSSFRow row = worksheet.getRow(i++);
-        // Sets the Read data to the model class
-        user.setFullName(row.getCell(0).getStringCellValue());
-        user.setUsername(row.getCell(1).getStringCellValue());
-        user.setPassword(row.getCell(2).getStringCellValue());
-        user.setEmail(row.getCell(3).getStringCellValue());
-        user.setPhone(row.getCell(4).getStringCellValue());
-        user.setDob(row.getCell(5).getLocalDateTimeCellValue().toLocalDate());
-        user.setAddress(row.getCell(6).getStringCellValue());
-        user.setStartDate(row.getCell(7).getLocalDateTimeCellValue().toLocalDate());
-        user.setEndDate(row.getCell(8).getLocalDateTimeCellValue().toLocalDate());
-        user.setDeleted(row.getCell(9).getBooleanCellValue());
-
-        // persist data into database in here
-        lstUser.add(user);
-      }
-      workbook.close();
-      System.out.println(lstUser.size());
-//      userService.saveAllUser(lstUser);
-    } catch (Exception e) {
-      e.printStackTrace();
+    if (multipartFile != null) {
+      UserExcelImporter excelImporter = new UserExcelImporter();
+      Role role = entityManager.find(Role.class, 2);
+      Iterable<User> listUser = excelImporter.excelImport(multipartFile, role);
+      userService.saveAllUser(listUser);
     }
+
+    return "redirect:/show/user";
+  }
+
+  @GetMapping("/update/user/retired/{id}")
+  public String makeTeacherRetired(@PathVariable("id") Integer id) {
+    userService.makeRetired(id);
+
+    return "redirect:/show/user";
+  }
+
+  @GetMapping("/update/user/working/{id}")
+  public String makeTeacherWorking(@PathVariable("id") Integer id) {
+    userService.makeWorking(id);
+
+    return "redirect:/show/user";
+  }
+
+  @PostMapping("/update/save/user")
+  public String updateTeacher (@Valid User user, BindingResult result,
+      @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+    String root = "src/main/";
+    String folder = "upload/image/user_image/";
+    String org_filename = multipartFile.getOriginalFilename();
+    String str_filename = "";
+    if (org_filename != null && !org_filename.isEmpty()) {
+      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
+
+      if (!Files.exists(Paths.get(root + folder))) {
+        Files.createDirectories(Paths.get(root + folder));
+      }
+      Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
+          StandardCopyOption.REPLACE_EXISTING);
+
+      user.setImage(str_filename);
+    }
+    Role role = entityManager.find(Role.class, 2);
+    user.addRole(role);
+
+    user.setUpdatedDate(LocalDateTime.now());
+
+    userService.saveUser(user);
 
     return "redirect:/show/user";
   }

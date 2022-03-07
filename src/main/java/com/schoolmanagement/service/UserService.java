@@ -80,4 +80,12 @@ public class UserService {
   public User getUserById(Integer id) {
     return repo.findById(id).get();
   }
+
+  public void makeRetired(Integer id) {
+    repo.changeDeleted(true, id);
+  }
+
+  public void makeWorking(Integer id) {
+    repo.changeDeleted(false, id);
+  }
 }

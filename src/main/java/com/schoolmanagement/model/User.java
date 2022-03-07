@@ -87,7 +87,7 @@ public class User {
   @Column(name = "updated_date", nullable = false)
   private LocalDateTime updatedDate;
 
-  @Column(name = "image", nullable = true)
+  @Column(name = "image")
   private String image;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -148,4 +148,5 @@ public class User {
     this.createdDate = createdDate;
     this.updatedDate = updatedDate;
   }
+
 }

@@ -101,10 +101,6 @@
                         <div>[[${user.fullName}]]</div>
                       </li>
                       <li class="list-group-item">
-                        <b>Password </b>
-                        <div>[[${user.password}]]</div>
-                      </li>
-                      <li class="list-group-item">
                         <b>Date of Birth</b>
                         <div>[[${user.dob}]]</div>
                       </li>
@@ -123,9 +119,14 @@
                         <b>End Date</b>
                         <div>[[${user.endDate}]]</div>
                       </li>
-                      <li class="list-group-item">
+                      <li class="list-group-item" th:if="${user.subjects.size() > 0}">
                         <b>Subjects</b>
-                        <div th:if="${user.subjects.size() > 0}">[[${user.subjects}]]</div>
+                        <div>
+                          <span th:each="subject : ${user.subjects}">
+                            <span>[[${subject.getSubjectName}]] &nbsp;</span>
+
+                          </span>
+                        </div>
                       </li>
                     </ul>
                   </div>

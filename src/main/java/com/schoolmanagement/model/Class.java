@@ -70,6 +70,7 @@ public class Class {
   @JoinTable(name = "class_teacher_subject",
       joinColumns = @JoinColumn(name = "class_id"),
       inverseJoinColumns = @JoinColumn(name = "subject_id"))
+
   @MapKeyJoinColumn(name = "user_id")
   private Map<User, Subjects> teacherSubjects = new HashMap<>();
 }

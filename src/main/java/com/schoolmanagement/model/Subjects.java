@@ -52,7 +52,8 @@ public class Subjects {
   @MapKeyJoinColumn(name = "class_id")
   private Map<Class, Student> studentClass = new HashMap<>();
 
-  public void addUser(User user) {
-    this.users.add(user);
+  @Override
+  public String toString () {
+    return subjectName;
   }
 }
