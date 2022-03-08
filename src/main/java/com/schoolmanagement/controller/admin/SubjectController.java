@@ -74,6 +74,7 @@ public class SubjectController {
     Iterable<User> listUser = userService.getAllUser();
     model.addAttribute("listUser", listUser);
     model.addAttribute("subjects", new Subjects());
+    model.addAttribute("listSubject", subjectService.getAllSubject());
 
     return "/admin/subjects/form_subject";
   }

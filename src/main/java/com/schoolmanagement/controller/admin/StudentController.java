@@ -1,6 +1,7 @@
 package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.SchoolManagementApplication;
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.ClassService;
@@ -12,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
@@ -81,7 +83,16 @@ public class StudentController {
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
     model.addAttribute("student", new Student());
-    model.addAttribute("classList", classService.getAllClass());
+
+    List<Class> classList = new ArrayList<>();
+
+    for (Class c : (List<Class>) classService.getAllClass()) {
+      if (c.getSchoolYear() == 2022) {
+        classList.add(c);
+      }
+    }
+
+    model.addAttribute("classList", classList);
 
     return "/admin/student/form_student";
   }
