@@ -23,7 +23,6 @@ public class Subjects {
 
 	@NotEmpty(message = "Enter subject name")
 	@Column(name = "subject_name")
-	@UniqueSubjectName(message = "Such subject name already exist!")
 	private String subjectName;
 
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

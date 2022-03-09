@@ -1,12 +1,5 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.helper.UserExcelExporter;
-import com.schoolmanagement.helper.UserExcelImporter;
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.model.request.EditUserRequest;
-import com.schoolmanagement.service.implement.UserServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,9 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -37,6 +32,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.schoolmanagement.helper.UserExcelExporter;
+import com.schoolmanagement.helper.UserExcelImporter;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 @Controller
 public class TeacherController {

@@ -93,14 +93,14 @@ public class ClassController {
 		
 	}
 
-	@GetMapping("/details/class/{classId}/{id}")
+	@GetMapping("/details/class/{classId}/{page}")
 	public String DetailsClassPage(Model model , @PathVariable("classId") int id 
-			, @PathVariable("id") int currentPage , @Param("search") String search) {
+			, @PathVariable("page") int currentPage , @Param("search") String search) {
 		Iterable<ClassTeacherSubject> cts = classTeacherSubjectServiceImp.findAllByClassId(id);
 		
 		Page<Student> studentPage = studentServiceImp.findStudentByClassId(id,search, currentPage);
 		
-		int totalPages = studentPage.getSize();
+		int totalPages = studentPage.getTotalPages();
 		
 		List<Student> listStudent = studentPage.getContent();
 		

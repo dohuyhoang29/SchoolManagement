@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               8.0.28 - MySQL Community Server - GPL
+-- Server version:               10.4.22-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
@@ -14,17 +14,15 @@
 
 
 -- Dumping database structure for school_management
-DROP DATABASE IF EXISTS `school_management`;
-CREATE DATABASE IF NOT EXISTS `school_management` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `school_management` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `school_management`;
 
 -- Dumping structure for table school_management.attacment
-DROP TABLE IF EXISTS `attacment`;
 CREATE TABLE IF NOT EXISTS `attacment` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table school_management.attacment: ~0 rows (approximately)
 DELETE FROM `attacment`;
@@ -32,40 +30,40 @@ DELETE FROM `attacment`;
 /*!40000 ALTER TABLE `attacment` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.blog
-DROP TABLE IF EXISTS `blog`;
 CREATE TABLE IF NOT EXISTS `blog` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
   `header` varchar(255) DEFAULT NULL,
-  `updated_date` datetime(6) DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKpxk2jtysqn41oop7lvxcp6dqq` (`user_id`),
   CONSTRAINT `FKpxk2jtysqn41oop7lvxcp6dqq` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.blog: ~0 rows (approximately)
+-- Dumping data for table school_management.blog: ~1 rows (approximately)
 DELETE FROM `blog`;
 /*!40000 ALTER TABLE `blog` DISABLE KEYS */;
+INSERT INTO `blog` (`id`, `content`, `created_date`, `header`, `updated_date`, `user_id`) VALUES
+	(1, '<p style="text-align: center; "><img src="/upload/image/blog_image/09ba593d-3d8b-437e-bdaf-0a874d89c79eroad-1072821__340.jpg" style="width: 500px; height: 250px; float: none;"></p><p style="text-align: center; ">Inther end Sumber</p><p style="text-align: center; "><br></p>', '2022-03-07 17:24:12', 'BackDor', '2022-03-07 17:24:12', 20);
 /*!40000 ALTER TABLE `blog` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.class
-DROP TABLE IF EXISTS `class`;
 CREATE TABLE IF NOT EXISTS `class` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `class_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) DEFAULT NULL,
-  `grade` int DEFAULT NULL,
-  `school_year` int DEFAULT NULL,
+  `grade` int(11) DEFAULT NULL,
+  `school_year` int(11) DEFAULT NULL,
   `updated_date` datetime(6) DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKhjtee0w5l26pivuxosvmxv0ff` (`user_id`),
   CONSTRAINT `FKhjtee0w5l26pivuxosvmxv0ff` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.class: ~12 rows (approximately)
+-- Dumping data for table school_management.class: ~13 rows (approximately)
 DELETE FROM `class`;
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
 INSERT INTO `class` (`id`, `class_name`, `created_date`, `grade`, `school_year`, `updated_date`, `user_id`) VALUES
@@ -85,38 +83,72 @@ INSERT INTO `class` (`id`, `class_name`, `created_date`, `grade`, `school_year`,
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.class_teacher_subject
-DROP TABLE IF EXISTS `class_teacher_subject`;
 CREATE TABLE IF NOT EXISTS `class_teacher_subject` (
-  `class_id` int NOT NULL,
-  `subject_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`class_id`,`user_id`),
+  `id` int(11) NOT NULL,
+  `subject_id` int(11) DEFAULT NULL,
+  `class_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `FKg3aq3ycx05p3qhmsg84vomes8` (`subject_id`),
+  KEY `FKfmjly5l6h5baj18gppqmti2ud` (`class_id`),
   KEY `FKcyuugr3nif17s8hgifhrom8b7` (`user_id`),
   CONSTRAINT `FKcyuugr3nif17s8hgifhrom8b7` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKfmjly5l6h5baj18gppqmti2ud` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`),
   CONSTRAINT `FKg3aq3ycx05p3qhmsg84vomes8` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.class_teacher_subject: ~0 rows (approximately)
+-- Dumping data for table school_management.class_teacher_subject: ~21 rows (approximately)
 DELETE FROM `class_teacher_subject`;
 /*!40000 ALTER TABLE `class_teacher_subject` DISABLE KEYS */;
+INSERT INTO `class_teacher_subject` (`id`, `subject_id`, `class_id`, `user_id`) VALUES
+	(1, 1, 1, 28),
+	(2, 5, 1, 36),
+	(3, 2, 1, 29),
+	(4, 6, 1, 37),
+	(5, 4, 1, 34),
+	(6, 3, 1, 32),
+	(7, 7, 1, 41),
+	(8, 5, 2, 36),
+	(9, 6, 2, 37),
+	(10, 2, 2, 29),
+	(11, 4, 2, 33),
+	(12, 3, 2, 32),
+	(13, 1, 2, 28),
+	(14, 7, 2, 40),
+	(15, 5, 3, 35),
+	(16, 3, 3, 31),
+	(17, 1, 3, 27),
+	(18, 6, 3, 37),
+	(19, 4, 3, 34),
+	(20, 2, 3, 29),
+	(21, 7, 3, 42);
 /*!40000 ALTER TABLE `class_teacher_subject` ENABLE KEYS */;
 
+-- Dumping structure for table school_management.hibernate_sequence
+CREATE TABLE IF NOT EXISTS `hibernate_sequence` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Dumping data for table school_management.hibernate_sequence: ~1 rows (approximately)
+DELETE FROM `hibernate_sequence`;
+/*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
+INSERT INTO `hibernate_sequence` (`next_val`) VALUES
+	(22);
+/*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
+
 -- Dumping structure for table school_management.mark
-DROP TABLE IF EXISTS `mark`;
 CREATE TABLE IF NOT EXISTS `mark` (
-  `id` int NOT NULL,
-  `coefficient` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `coefficient` int(11) DEFAULT NULL,
   `created_date` datetime(6) DEFAULT NULL,
-  `semester` int DEFAULT NULL,
-  `type` int DEFAULT NULL,
+  `semester` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
   `updated_date` datetime(6) DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
-  `updated_by` int DEFAULT NULL,
-  `subject_id` int NOT NULL AUTO_INCREMENT,
-  `student_id` int NOT NULL,
-  `class_id` int NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `subject_id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
   PRIMARY KEY (`subject_id`,`class_id`),
   KEY `FKkinjhmdsofm3luu3s61riey70` (`created_by`),
   KEY `FKf0ptqhygubgskvp43qv990yem` (`updated_by`),
@@ -127,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `mark` (
   CONSTRAINT `FKiwes878sbpomvpdnmem5lu3wc` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`),
   CONSTRAINT `FKkinjhmdsofm3luu3s61riey70` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`),
   CONSTRAINT `FKshsgnpl9oe52tc445e1in7g1a` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table school_management.mark: ~0 rows (approximately)
 DELETE FROM `mark`;
@@ -135,14 +167,13 @@ DELETE FROM `mark`;
 /*!40000 ALTER TABLE `mark` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.role
-DROP TABLE IF EXISTS `role`;
 CREATE TABLE IF NOT EXISTS `role` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.role: ~3 rows (approximately)
+-- Dumping data for table school_management.role: ~4 rows (approximately)
 DELETE FROM `role`;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`id`, `role_name`) VALUES
@@ -151,71 +182,152 @@ INSERT INTO `role` (`id`, `role_name`) VALUES
 	(3, 'STUDENT'),
 	(4, 'HOMEROOM_TEACHER');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
+
 -- Dumping structure for table school_management.student
-DROP TABLE IF EXISTS `student`;
 CREATE TABLE IF NOT EXISTS `student` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
-  `admission_year` int DEFAULT NULL,
+  `admission_year` int(11) DEFAULT NULL,
   `created_date` datetime(6) DEFAULT NULL,
   `dob` date DEFAULT NULL,
   `full_name` varchar(255) DEFAULT NULL,
-  `graduate_year` int DEFAULT NULL,
+  `graduate_year` int(11) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `status` int DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
   `updated_date` datetime(6) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `class_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKdwhkib64u47wc4yo4hk0cub90` (`class_id`),
+  CONSTRAINT `FKdwhkib64u47wc4yo4hk0cub90` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.student: ~5 rows (approximately)
+-- Dumping data for table school_management.student: ~106 rows (approximately)
 DELETE FROM `student`;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` (`id`, `address`, `admission_year`, `created_date`, `dob`, `full_name`, `graduate_year`, `image`, `password`, `status`, `updated_date`, `username`) VALUES
-	(1, 'HN-VN', 2021, '2022-03-02 16:32:36.670633', '2022-03-16', 'Student 1', 2023, NULL, '$2a$10$3qyV/7b2OeOAzbcRz93l7.hgwqnh.Em3r8LAt/b3BhpH4.lVMJ45G', 2, '2022-03-02 16:32:36.670633', 'student1'),
-	(2, 'HN-VN', 2022, '2022-03-02 16:45:04.025696', '2022-03-16', 'Student 2', 2024, NULL, '$2a$10$Lm/fA6KRT5UmbykAoPoyZ.CwvUb/esjqgPSgT3GtXcTN2.CsyNVY.', 1, '2022-03-02 16:45:04.025696', 'student2'),
-	(3, 'HN-VN', 2022, '2022-03-02 16:48:55.822554', '2022-03-08', 'Student 3', 2024, NULL, '$2a$10$BFE1LX2XauwO6ydcKkaM5OdNZoP5hfMw4nXfVjexCaIo.GFqbwi8q', 3, '2022-03-02 16:48:55.822554', 'student3'),
-	(4, 'HN-VN', 2022, '2022-03-02 16:50:28.076353', '2022-03-08', 'Student 4', 2023, NULL, '$2a$10$8rosf0aIEQPqZyreyoGIiuizJiOGwcmfJ1eKH1MtrUl1o20KIcfSW', 2, '2022-03-02 16:50:28.076353', 'student4'),
-	(5, 'HN-VN', 2022, '2022-03-02 17:52:04.949196', '2022-03-12', 'Student 6', 2024, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$Guu9m2Lwsyu3AGtukainFOAs2j9.uDHM7P6e5JI5bYh8zXJeQQny6', 1, '2022-03-02 17:52:04.949196', 'std_2022_4');
+INSERT INTO `student` (`id`, `address`, `admission_year`, `created_date`, `dob`, `full_name`, `graduate_year`, `image`, `password`, `status`, `updated_date`, `username`, `class_id`) VALUES
+	(1, 'HN-VN', 2021, '2022-03-02 16:32:36.670633', '2022-03-16', 'Student 1', 2023, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$3qyV/7b2OeOAzbcRz93l7.hgwqnh.Em3r8LAt/b3BhpH4.lVMJ45G', 2, '2022-03-02 16:32:36.670633', 'student1', 1),
+	(2, 'HN-VN', 2022, '2022-03-02 16:45:04.025696', '2022-03-16', 'Student 2', 2024, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$Lm/fA6KRT5UmbykAoPoyZ.CwvUb/esjqgPSgT3GtXcTN2.CsyNVY.', 1, '2022-03-02 16:45:04.025696', 'student2', 1),
+	(3, 'HN-VN', 2022, '2022-03-02 16:48:55.822554', '2022-03-08', 'Student 3', 2024, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$BFE1LX2XauwO6ydcKkaM5OdNZoP5hfMw4nXfVjexCaIo.GFqbwi8q', 2, '2022-03-02 16:48:55.822554', 'student3', 1),
+	(4, 'HN-VN', 2022, '2022-03-02 16:50:28.076353', '2022-03-08', 'Student 4', 2023, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$8rosf0aIEQPqZyreyoGIiuizJiOGwcmfJ1eKH1MtrUl1o20KIcfSW', 2, '2022-03-02 16:50:28.076353', 'student4', 1),
+	(5, 'HN-VN', 2022, '2022-03-02 17:52:04.949196', '2022-03-12', 'Student 6', 2024, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '$2a$10$Guu9m2Lwsyu3AGtukainFOAs2j9.uDHM7P6e5JI5bYh8zXJeQQny6', 1, '2022-03-02 17:52:04.949196', 'std_2022_4', 1),
+	(6, '7329 Weeping Birch Center', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Ceciley Camis', 1978, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Hu0tQY94ZMl', 1, '2022-03-02 16:32:36.670633', 'ccamis0', 2),
+	(7, '29 Sugar Junction', 2012, '2022-03-02 16:32:36.670633', '2002-06-08', 'Trefor Gorce', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'vlQP1gCr', 1, '2022-03-02 16:32:36.670633', 'tgorce1', 1),
+	(8, '3 Bluestem Crossing', 2010, '2022-03-02 16:32:36.670633', '2002-06-08', 'Alisa Rangell', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ExFcXs3mBtm', 1, '2022-03-02 16:32:36.670633', 'arangell2', 1),
+	(9, '0 Banding Parkway', 2005, '2022-03-02 16:32:36.670633', '2002-06-08', 'Davide Checketts', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '64To7e', 1, '2022-03-02 16:32:36.670633', 'dchecketts3', 1),
+	(10, '1 Myrtle Plaza', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Val Corker', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'U43obf17EU', 1, '2022-03-02 16:32:36.670633', 'vcorker4', 1),
+	(11, '19 East Trail', 1969, '2022-03-02 16:32:36.670633', '2002-06-08', 'Ranna Thynn', 1993, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ME4MfOdVC', 1, '2022-03-02 16:32:36.670633', 'rthynn5', 1),
+	(12, '51447 Lillian Court', 1993, '2022-03-02 16:32:36.670633', '2002-06-08', 'Ronna Sandland', 1999, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'sLbQtZwik3O', 1, '2022-03-02 16:32:36.670633', 'rsandland6', 1),
+	(13, '080 Miller Place', 1987, '2022-03-02 16:32:36.670633', '2002-06-08', 'Cale Bayle', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'TXdV03Fu', 1, '2022-03-02 16:32:36.670633', 'cbayle7', 1),
+	(14, '6 Porter Center', 1994, '2022-03-02 16:32:36.670633', '2002-06-08', 'Adina Somerset', 2003, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'RYMBGKLEm', 1, '2022-03-02 16:32:36.670633', 'asomerset8', 1),
+	(15, '5371 Hermina Trail', 2004, '2022-03-02 16:32:36.670633', '2002-06-08', 'Matilda Faers', 1992, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'KKCaIuqFMb', 1, '2022-03-02 16:32:36.670633', 'mfaers9', 1),
+	(16, '02835 Judy Court', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Dulcine Bowhay', 2010, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'JjXJlAmwW', 1, '2022-03-02 16:32:36.670633', 'dbowhaya', 1),
+	(17, '13 Northwestern Terrace', 1998, '2022-03-02 16:32:36.670633', '2002-06-08', 'Bamby Bucknell', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'x4mlHUuaQq7', 1, '2022-03-02 16:32:36.670633', 'bbucknellb', 1),
+	(18, '8815 Sachtjen Avenue', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Kally Ruddlesden', 2000, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Njh21wj3', 1, '2022-03-02 16:32:36.670633', 'kruddlesdenc', 1),
+	(19, '1 Reinke Court', 1994, '2022-03-02 16:32:36.670633', '2002-06-08', 'Lexi Martignoni', 2012, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'oy8vBpcTQ2', 1, '2022-03-02 16:32:36.670633', 'lmartignonid', 1),
+	(20, '23 Harbort Street', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Lockwood Crookshanks', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'DfGeAI2u', 1, '2022-03-02 16:32:36.670633', 'lcrookshankse', 1),
+	(21, '0 Utah Avenue', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Meagan Gummoe', 1994, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'caNZiqcSzZd', 1, '2022-03-02 16:32:36.670633', 'mgummoef', 1),
+	(22, '62261 Springs Park', 1995, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tobiah Kisby', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'x18sQXeH', 1, '2022-03-02 16:32:36.670633', 'tkisbyg', 1),
+	(23, '03 Judy Park', 1984, '2022-03-02 16:32:36.670633', '2002-06-08', 'Trish Legg', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'YXhHIz', 1, '2022-03-02 16:32:36.670633', 'tleggh', 1),
+	(24, '80 Homewood Drive', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Odo Halt', 1991, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '3OsoHSLSt', 1, '2022-03-02 16:32:36.670633', 'ohalti', 1),
+	(25, '18 Thompson Road', 2005, '2022-03-02 16:32:36.670633', '2002-06-08', 'Elihu Schulke', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '5gFhw1', 1, '2022-03-02 16:32:36.670633', 'eschulkej', 1),
+	(26, '96358 Sutherland Circle', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Brenna Northridge', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'GV0oXzdW4Lr', 1, '2022-03-02 16:32:36.670633', 'bnorthridgek', 1),
+	(27, '310 Beilfuss Lane', 1995, '2022-03-02 16:32:36.670633', '2002-06-08', 'Clarke Code', 2005, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'JSvK7O3', 1, '2022-03-02 16:32:36.670633', 'ccodel', 1),
+	(28, '15529 Reinke Hill', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Daniella Climar', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'REyTjQzjqa5', 1, '2022-03-02 16:32:36.670633', 'dclimarm', 1),
+	(29, '06 Hintze Lane', 2008, '2022-03-02 16:32:36.670633', '2002-06-08', 'Karleen Foot', 2000, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '5Htilaa1zECw', 1, '2022-03-02 16:32:36.670633', 'kfootn', 2),
+	(30, '4 Di Loreto Place', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tremayne Slarke', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'uSavwrc', 1, '2022-03-02 16:32:36.670633', 'tslarkeo', 2),
+	(31, '90 Bluejay Avenue', 2000, '2022-03-02 16:32:36.670633', '2002-06-08', 'Malvina Bubeer', 2009, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'kL7bxIxE', 1, '2022-03-02 16:32:36.670633', 'mbubeerp', 2),
+	(32, '953 Arizona Terrace', 2000, '2022-03-02 16:32:36.670633', '2002-06-08', 'Erena Churchyard', 2000, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'mVB0Ad', 1, '2022-03-02 16:32:36.670633', 'echurchyardq', 2),
+	(33, '80 Londonderry Alley', 1987, '2022-03-02 16:32:36.670633', '2002-06-08', 'Nickola Gumary', 2000, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '6RSSkinD3Q9z', 1, '2022-03-02 16:32:36.670633', 'ngumaryr', 2),
+	(34, '29 Menomonie Court', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tyson Ganley', 2005, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'NXfBz2W2HCGd', 1, '2022-03-02 16:32:36.670633', 'tganleys', 2),
+	(35, '83 Luster Road', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Adriano McGinney', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'gKWSE4xwLu', 1, '2022-03-02 16:32:36.670633', 'amcginneyt', 2),
+	(36, '40668 Sommers Lane', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Aimil Martill', 1994, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'UiP16VPPiTc', 1, '2022-03-02 16:32:36.670633', 'amartillu', 2),
+	(37, '58 Golf View Street', 2010, '2022-03-02 16:32:36.670633', '2002-06-08', 'Dennie Eassom', 1998, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'U4CU0JfBhKC1', 1, '2022-03-02 16:32:36.670633', 'deassomv', 2),
+	(38, '0 Lakeland Place', 2009, '2022-03-02 16:32:36.670633', '2002-06-08', 'Sergio Maryet', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ykcr5Dc', 1, '2022-03-02 16:32:36.670633', 'smaryetw', 2),
+	(39, '0927 Clarendon Center', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Lucilia Gregoli', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '8iuDxJoxGLX', 1, '2022-03-02 16:32:36.670633', 'lgregolix', 2),
+	(40, '39 Basil Pass', 2002, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tiebout Wolfindale', 2011, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'o51i9OJIHWmj', 1, '2022-03-02 16:32:36.670633', 'twolfindaley', 2),
+	(41, '65458 Corry Plaza', 2002, '2022-03-02 16:32:36.670633', '2002-06-08', 'Elfrieda Ferrie', 1998, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'xILiKiXR', 1, '2022-03-02 16:32:36.670633', 'eferriez', 2),
+	(42, '161 La Follette Drive', 2004, '2022-03-02 16:32:36.670633', '2002-06-08', 'Hubey Mizen', 1986, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '7G8bOsDek', 1, '2022-03-02 16:32:36.670633', 'hmizen10', 2),
+	(43, '57 Comanche Parkway', 2002, '2022-03-02 16:32:36.670633', '2002-06-08', 'Rube Vittel', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'K5XALAy0xo', 1, '2022-03-02 16:32:36.670633', 'rvittel11', 2),
+	(44, '964 Westerfield Pass', 2012, '2022-03-02 16:32:36.670633', '2002-06-08', 'Hilarius Prop', 1992, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Uvq3i1', 1, '2022-03-02 16:32:36.670633', 'hprop12', 2),
+	(45, '06 Bartelt Way', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Glynda Swaysland', 1994, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Bvw2tvp91w4', 1, '2022-03-02 16:32:36.670633', 'gswaysland13', 2),
+	(46, '45280 Golf View Hill', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Dudley Domingues', 1987, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'KcWPIR5cDwA', 1, '2022-03-02 16:32:36.670633', 'ddomingues14', 2),
+	(47, '07390 Arapahoe Court', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tally Vautier', 1985, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 's3Vi2G9j82c', 1, '2022-03-02 16:32:36.670633', 'tvautier15', 2),
+	(48, '777 Park Meadow Parkway', 1986, '2022-03-02 16:32:36.670633', '2002-06-08', 'Vail Grestie', 1994, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'plXao1', 1, '2022-03-02 16:32:36.670633', 'vgrestie16', 2),
+	(49, '14612 Killdeer Trail', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Abel Harradine', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'OkNGF5LwfLdN', 1, '2022-03-02 16:32:36.670633', 'aharradine17', 2),
+	(50, '1908 Melrose Parkway', 2010, '2022-03-02 16:32:36.670633', '2002-06-08', 'Valli Moncreiffe', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '49Z0gZ', 1, '2022-03-02 16:32:36.670633', 'vmoncreiffe18', 2),
+	(51, '97583 Buhler Drive', 1998, '2022-03-02 16:32:36.670633', '2002-06-08', 'Jobye Grimestone', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'd0asTT', 1, '2022-03-02 16:32:36.670633', 'jgrimestone19', 2),
+	(52, '60981 Fairview Trail', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Amabelle Riccetti', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'VKh6BcXNP', 1, '2022-03-02 16:32:36.670633', 'ariccetti1a', 2),
+	(53, '7 Corry Parkway', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Lacee Lortz', 1994, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'pMoO5sWDZj2p', 1, '2022-03-02 16:32:36.670633', 'llortz1b', 3),
+	(54, '34296 Esch Road', 2005, '2022-03-02 16:32:36.670633', '2002-06-08', 'Yovonnda Beebis', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'VOll96AFOA', 1, '2022-03-02 16:32:36.670633', 'ybeebis1c', 3),
+	(55, '531 Sheridan Drive', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Moises Ames', 1992, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'SuUtz1Sa', 1, '2022-03-02 16:32:36.670633', 'mames1d', 3),
+	(56, '3104 Little Fleur Road', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Madelin Weepers', 1993, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'TOWQoK2', 1, '2022-03-02 16:32:36.670633', 'mweepers1e', 3),
+	(57, '0684 Dexter Trail', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Berny Pllu', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Y0yxVLIsH', 1, '2022-03-02 16:32:36.670633', 'bpllu1f', 3),
+	(58, '5101 Heath Avenue', 2000, '2022-03-02 16:32:36.670633', '2002-06-08', 'Suzanne Cobby', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ZUHXrToXQ', 1, '2022-03-02 16:32:36.670633', 'scobby1g', 3),
+	(59, '0053 Declaration Drive', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Adore O\'Hoolahan', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'LKjudKkF6iNv', 1, '2022-03-02 16:32:36.670633', 'aohoolahan1h', 3),
+	(60, '6 Marcy Circle', 1997, '2022-03-02 16:32:36.670633', '2002-06-08', 'Wyatt Berthelet', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'wnQiyn4AS33', 1, '2022-03-02 16:32:36.670633', 'wberthelet1i', 3),
+	(61, '2 Petterle Drive', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Gnni Murty', 2005, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 't91EqXdAZTVb', 1, '2022-03-02 16:32:36.670633', 'gmurty1j', 3),
+	(62, '7873 Vidon Center', 2009, '2022-03-02 16:32:36.670633', '2002-06-08', 'Carolann Renon', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'zH4Yfv', 1, '2022-03-02 16:32:36.670633', 'crenon1k', 3),
+	(63, '8519 Troy Plaza', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Sabrina Hurran', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ibfHe31d', 1, '2022-03-02 16:32:36.670633', 'shurran1l', 3),
+	(64, '156 Claremont Drive', 2002, '2022-03-02 16:32:36.670633', '2002-06-08', 'Faun McClay', 2011, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'C6meUKh', 1, '2022-03-02 16:32:36.670633', 'fmcclay1m', 3),
+	(65, '4589 Merrick Center', 2005, '2022-03-02 16:32:36.670633', '2002-06-08', 'Shelba Humphery', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'JcVLFeetL', 1, '2022-03-02 16:32:36.670633', 'shumphery1n', 3),
+	(66, '79 Linden Avenue', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Nicolea Winterbotham', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'gwFxbmvKHHEQ', 1, '2022-03-02 16:32:36.670633', 'nwinterbotham1o', 3),
+	(67, '640 Lien Place', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Bethanne Reedshaw', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'WgsxSO', 1, '2022-03-02 16:32:36.670633', 'breedshaw1p', 3),
+	(68, '09945 Eagle Crest Circle', 2012, '2022-03-02 16:32:36.670633', '2002-06-08', 'Vinson Knappett', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'AR6T3f6UIqhZ', 1, '2022-03-02 16:32:36.670633', 'vknappett1q', 3),
+	(69, '82740 Village Green Drive', 1998, '2022-03-02 16:32:36.670633', '2002-06-08', 'Reinhard McDermid', 2011, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'BbZvtyzML9x', 1, '2022-03-02 16:32:36.670633', 'rmcdermid1r', 3),
+	(70, '66 Buhler Street', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Rufus Conaghan', 1992, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'bbQspWdls', 1, '2022-03-02 16:32:36.670633', 'rconaghan1s', 3),
+	(71, '1134 Waywood Center', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Quincy Leavold', 2009, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'yvnHxk', 1, '2022-03-02 16:32:36.670633', 'qleavold1t', 3),
+	(72, '0034 Logan Alley', 2009, '2022-03-02 16:32:36.670633', '2002-06-08', 'Krystyna Tourville', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'P1ygYI2M', 1, '2022-03-02 16:32:36.670633', 'ktourville1u', 3),
+	(73, '842 Toban Junction', 1998, '2022-03-02 16:32:36.670633', '2002-06-08', 'Shannan Abilowitz', 2007, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'ysvtG5JqH', 1, '2022-03-02 16:32:36.670633', 'sabilowitz1v', 3),
+	(74, '88 Linden Pass', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Shaylah Branscombe', 1992, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'lVO5eL', 1, '2022-03-02 16:32:36.670633', 'sbranscombe1w', 3),
+	(75, '3344 Becker Circle', 1993, '2022-03-02 16:32:36.670633', '2002-06-08', 'Reeba Rappport', 2009, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'X1yZmsGaZ', 1, '2022-03-02 16:32:36.670633', 'rrappport1x', 3),
+	(76, '38 Loeprich Park', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Cordelia McGrail', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '4j6zPri', 1, '2022-03-02 16:32:36.670633', 'cmcgrail1y', 3),
+	(77, '3 Barby Road', 1993, '2022-03-02 16:32:36.670633', '2002-06-08', 'Cecile Adamski', 1996, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'GOFUShJc3', 1, '2022-03-02 16:32:36.670633', 'cadamski1z', 3),
+	(78, '279 Fulton Circle', 1997, '2022-03-02 16:32:36.670633', '2002-06-08', 'Janie Shury', 2010, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'FTCQ7VQr', 1, '2022-03-02 16:32:36.670633', 'jshury20', 3),
+	(79, '533 Monument Road', 1993, '2022-03-02 16:32:36.670633', '2002-06-08', 'Fanchette Haggish', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Wj1vqzeki5', 1, '2022-03-02 16:32:36.670633', 'fhaggish21', 3),
+	(80, '01 Anhalt Street', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Kahaleel Branch', 1991, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'E8XOYBD', 1, '2022-03-02 16:32:36.670633', 'kbranch22', 3),
+	(81, '38142 Rockefeller Terrace', 1976, '2022-03-02 16:32:36.670633', '2002-06-08', 'Katherine Eddy', 2011, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'UAin7g4U', 1, '2022-03-02 16:32:36.670633', 'keddy23', 4),
+	(82, '6214 Eagle Crest Street', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Geordie MacAlpine', 1999, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'tbx7cgFr', 1, '2022-03-02 16:32:36.670633', 'gmacalpine24', 4),
+	(83, '3165 Badeau Circle', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Peadar Mathys', 2011, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'Sq7vQLdDYU3', 1, '2022-03-02 16:32:36.670633', 'pmathys25', 4),
+	(84, '59 Eggendart Avenue', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tisha Medd', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'H6TFIVbw', 1, '2022-03-02 16:32:36.202200', 'tmedd26', 4),
+	(85, '41034 Hintze Street', 1980, '2022-03-02 16:32:36.670633', '2002-06-08', 'Tabbitha Borge', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'BDnwXihH', 1, '2022-03-02 16:32:36.670633', 'tborge27', 4),
+	(86, '122 Mayer Parkway', 1992, '2022-03-02 16:32:36.670633', '2002-06-08', 'Chaunce Gianelli', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'knnjhPKS', 1, '2022-03-02 16:32:36.670633', 'cgianelli28', 4),
+	(87, '5 Mockingbird Alley', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Rhett McCrainor', 1970, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'gn3w8S7GQT', 1, '2022-03-02 16:32:36.670633', 'rmccrainor29', 4),
+	(88, '01006 Merrick Terrace', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Meier Saleway', 1995, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'DPrvtaEX', 1, '2022-03-02 16:32:36.670633', 'msaleway2a', 4),
+	(89, '67 Schmedeman Court', 1995, '2022-03-02 16:32:36.670633', '2002-06-08', 'Yurik Winslade', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'fBJeNa1', 1, '2022-03-02 16:32:36.670633', 'ywinslade2b', 4),
+	(90, '67413 High Crossing Street', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Suzanna McDermott', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'uK7ByuQIbXyw', 1, '2022-03-02 16:32:36.670633', 'smcdermott2c', 4),
+	(91, '3209 Morrow Terrace', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Deborah Towson', 2008, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'UayaKybIwxG', 1, '2022-03-02 16:32:36.670633', 'dtowson2d', 4),
+	(92, '72 Scott Way', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Terrance Garretson', 2009, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'NC2GfwXh', 1, '2022-03-02 16:32:36.670633', 'tgarretson2e', 4),
+	(93, '64 Johnson Trail', 2012, '2022-03-02 16:32:36.670633', '2002-06-08', 'Turner Titterington', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'r2iopNW62', 1, '2022-03-02 16:32:36.670633', 'ttitterington2f', 4),
+	(94, '733 Oak Valley Trail', 1996, '2022-03-02 16:32:36.670633', '2002-06-08', 'Liva Clinton', 1996, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'z3OxmGPMm', 1, '2022-03-02 16:32:36.670633', 'lclinton2g', 4),
+	(95, '1 Roth Parkway', 2008, '2022-03-02 16:32:36.670633', '2002-06-08', 'Nonah Escale', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'SECXZMO5HqpN', 1, '2022-03-02 16:32:36.670633', 'nescale2h', 4),
+	(96, '6 Shasta Trail', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Cirillo Merrick', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '5rWK777f', 1, '2022-03-02 16:32:36.670633', 'cmerrick2i', 4),
+	(97, '4 Lake View Terrace', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Harris Pimm', 1993, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'BQck8IrqMJJ', 1, '2022-03-02 16:32:36.670633', 'hpimm2j', 4),
+	(98, '34439 Shopko Parkway', 2006, '2022-03-02 16:32:36.670633', '2002-06-08', 'Georgetta Leaburn', 1986, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'FbsX5McZT', 1, '2022-03-02 16:32:36.670633', 'gleaburn2k', 4),
+	(99, '6699 Lunder Point', 1999, '2022-03-02 16:32:36.670633', '2002-06-08', 'Town Trahair', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '2REvDK', 1, '2022-03-02 16:32:36.670633', 'ttrahair2l', 4),
+	(100, '34 Village Crossing', 2007, '2022-03-02 16:32:36.670633', '2002-06-08', 'Arthur Digman', 1998, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'QVbsAxF', 1, '2022-03-02 16:32:36.670633', 'adigman2m', 4),
+	(101, '62314 Warrior Court', 1993, '2022-03-02 16:32:36.670633', '2002-06-08', 'Zahara Harbard', 2004, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'cqm7ZtoLA', 1, '2022-03-02 16:32:36.670633', 'zharbard2n', 4),
+	(102, '6 Moland Street', 2012, '2022-03-02 16:32:36.670633', '2002-06-08', 'Krystle Shead', 2001, 'yPQ0ROjAsM9BFz9xpsJl.jpg', '0RJjdPqkkngW', 1, '2022-03-02 16:32:36.670633', 'kshead2o', 4),
+	(103, '4 Toban Street', 2001, '2022-03-02 16:32:36.670633', '2002-06-08', 'Myrle Eayres', 1996, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'U8phWMEH7', 1, '2022-03-02 16:32:36.670633', 'meayres2p', 4),
+	(104, '42 Laurel Plaza', 2011, '2022-03-02 16:32:36.670633', '2002-06-08', 'Maighdiln Darwood', 2006, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'SMhpQye', 1, '2022-03-02 16:32:36.670633', 'mdarwood2q', 4),
+	(105, '1044 Schurz Circle', 2003, '2022-03-02 16:32:36.670633', '2002-06-08', 'Raffaello Routley', 1984, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'FCXPlYG', 1, '2022-03-02 16:32:36.670633', 'rroutley2r', 4),
+	(106, '59123 Ruskin Park', 2010, '2022-03-02 16:32:36.670633', '2021-06-03', 'Terra Humpatch', 1997, 'yPQ0ROjAsM9BFz9xpsJl.jpg', 'aPZZSuaT', 1, '2022-03-02 16:32:36.670633', 'thumpatch0', 4);
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 
--- Dumping structure for table school_management.student_class
-DROP TABLE IF EXISTS `student_class`;
-CREATE TABLE IF NOT EXISTS `student_class` (
-  `student_id` int NOT NULL,
-  `class_id` int NOT NULL,
-  PRIMARY KEY (`class_id`,`student_id`),
-  KEY `FK2f81ovfviq7rv4jhpdr46dk3e` (`student_id`),
-  CONSTRAINT `FK2f81ovfviq7rv4jhpdr46dk3e` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
-  CONSTRAINT `FKfyryxclt2okb0bxjfhct0pv5u` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table school_management.student_class: ~0 rows (approximately)
-DELETE FROM `student_class`;
-/*!40000 ALTER TABLE `student_class` DISABLE KEYS */;
-INSERT INTO `student_class` (`student_id`, `class_id`) VALUES
-	(1, 1),
-	(2, 1),
-	(3, 1),
-	(4, 1),
-	(5, 1);
-/*!40000 ALTER TABLE `student_class` ENABLE KEYS */;
-
 -- Dumping structure for table school_management.student_evaluate
-DROP TABLE IF EXISTS `student_evaluate`;
 CREATE TABLE IF NOT EXISTS `student_evaluate` (
-  `id` int NOT NULL,
-  `academic_ability` int DEFAULT NULL,
-  `conduct` int DEFAULT NULL,
-  `created_date` datetime(6) DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `academic_ability` int(11) DEFAULT NULL,
+  `conduct` int(11) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
   `evaluate` varchar(255) DEFAULT NULL,
-  `semester` int DEFAULT NULL,
-  `updated_date` datetime(6) DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
-  `updated_by` int DEFAULT NULL,
-  `student_id` int NOT NULL AUTO_INCREMENT,
-  `class_id` int NOT NULL,
+  `semester` int(11) DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `student_id` int(11) NOT NULL AUTO_INCREMENT,
+  `class_id` int(11) NOT NULL,
   PRIMARY KEY (`student_id`,`class_id`),
   KEY `FK7uyfqp7ix83nb096c55oqnr3y` (`created_by`),
   KEY `FK7r0pnaycxkc9v6hsjsblq9v51` (`updated_by`),
@@ -224,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `student_evaluate` (
   CONSTRAINT `FK73jn5ijl2plb5g4qegcuk5889` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
   CONSTRAINT `FK7r0pnaycxkc9v6hsjsblq9v51` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`),
   CONSTRAINT `FK7uyfqp7ix83nb096c55oqnr3y` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table school_management.student_evaluate: ~0 rows (approximately)
 DELETE FROM `student_evaluate`;
@@ -232,12 +344,11 @@ DELETE FROM `student_evaluate`;
 /*!40000 ALTER TABLE `student_evaluate` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.subjects
-DROP TABLE IF EXISTS `subjects`;
 CREATE TABLE IF NOT EXISTS `subjects` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `subject_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table school_management.subjects: ~7 rows (approximately)
 DELETE FROM `subjects`;
@@ -253,86 +364,89 @@ INSERT INTO `subjects` (`id`, `subject_name`) VALUES
 /*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.teacher_subjects
-DROP TABLE IF EXISTS `teacher_subjects`;
 CREATE TABLE IF NOT EXISTS `teacher_subjects` (
-  `user_id` int NOT NULL,
-  `subject_id` int NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`subject_id`),
   KEY `FKdweqkwxroox2u7pbmksehx04i` (`subject_id`),
   CONSTRAINT `FKdweqkwxroox2u7pbmksehx04i` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`),
   CONSTRAINT `FKockx0rkpkmbpvxh9ftrmgrx4q` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.teacher_subjects: ~11 rows (approximately)
+-- Dumping data for table school_management.teacher_subjects: ~15 rows (approximately)
 DELETE FROM `teacher_subjects`;
 /*!40000 ALTER TABLE `teacher_subjects` DISABLE KEYS */;
 INSERT INTO `teacher_subjects` (`user_id`, `subject_id`) VALUES
-	(20, 1),
 	(27, 1),
 	(28, 1),
-	(20, 2),
-	(27, 2),
-	(28, 2),
-	(20, 3),
-	(27, 4),
-	(27, 5),
-	(28, 5),
-	(28, 6),
-	(27, 7),
-	(28, 7);
+	(29, 2),
+	(30, 2),
+	(31, 3),
+	(32, 3),
+	(33, 4),
+	(34, 4),
+	(35, 5),
+	(36, 5),
+	(37, 6),
+	(38, 6),
+	(40, 7),
+	(41, 7),
+	(42, 7);
 /*!40000 ALTER TABLE `teacher_subjects` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.user
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) NOT NULL,
   `created_date` datetime NOT NULL,
   `deleted` bit(1) NOT NULL,
-  `dob` datetime NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `end_date` datetime NOT NULL,
-  `full_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `start_date` datetime NOT NULL,
+  `dob` date NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `end_date` date NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `start_date` date NOT NULL,
   `updated_date` datetime NOT NULL,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `username` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.user: ~13 rows (approximately)
+-- Dumping data for table school_management.user: ~17 rows (approximately)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `address`, `created_date`, `deleted`, `dob`, `email`, `end_date`, `full_name`, `image`, `password`, `phone`, `start_date`, `updated_date`, `username`) VALUES
-	(20, 'HN-VN', '2022-02-26 14:39:31', b'0', '2022-02-02 00:00:00', 'admin@gmail.com', '2022-02-17 00:00:00', 'Admin', 'kJFbCY8GuWzRJ6BQ3kva.jpg', '$2a$10$F7dP80A4BkyWIRd.FF.J1OEtbH8S7I5.eZTNpJ/aG3O6W8xykk8Za', '2316544', '2022-02-15 00:00:00', '2022-02-26 14:39:31', 'admin'),
-	(27, 'HN-VN', '2022-03-02 17:12:47', b'0', '2022-03-10 00:00:00', 'teacher1@gmail.com', '2022-02-14 00:00:00', 'Teacher 1', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$.0DOkskqnau9/amUtKZ8c.WEUW8ntmpwEjzjbr8R8Wm.zeM4RzhtC', '0123456789', '2022-02-08 00:00:00', '2022-03-02 17:12:47', 'teacher1'),
-	(28, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 2', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher2'),
-	(29, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 3', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher3'),
-	(30, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 4', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher4'),
-	(31, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 5', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher5'),
-	(32, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 6', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher6'),
-	(33, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 7', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher7'),
-	(34, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 8', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher8'),
-	(35, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 9', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher9'),
-	(36, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 10', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher10'),
-	(37, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 11', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher11'),
-	(38, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02 00:00:00', 'teacher2@gmail.com', '2022-03-23 00:00:00', 'Teacher 12', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15 00:00:00', '2022-03-02 17:24:14', 'teacher12');
+	(20, 'HN-VN', '2022-02-26 14:39:31', b'0', '2022-02-02', 'admin@gmail.com', '2022-02-17', 'Admin', 'kJFbCY8GuWzRJ6BQ3kva.jpg', '$2a$10$F7dP80A4BkyWIRd.FF.J1OEtbH8S7I5.eZTNpJ/aG3O6W8xykk8Za', '2316544', '2022-02-15', '2022-02-26 14:39:31', 'admin'),
+	(27, 'HN-VN', '2022-03-02 17:12:47', b'0', '2022-03-10', 'teacher1@gmail.com', '2022-02-14', 'Teacher 1', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$F7dP80A4BkyWIRd.FF.J1OEtbH8S7I5.eZTNpJ/aG3O6W8xykk8Za', '0123456789', '2022-02-08', '2022-03-02 17:12:47', 'teacher1'),
+	(28, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 2', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher2'),
+	(29, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 3', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher3'),
+	(30, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 4', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher4'),
+	(31, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 5', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher5'),
+	(32, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 6', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher6'),
+	(33, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 7', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher7'),
+	(34, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 8', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher8'),
+	(35, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 9', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher9'),
+	(36, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 10', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher10'),
+	(37, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 11', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher11'),
+	(38, 'HN-VN', '2022-03-02 17:24:14', b'0', '2022-03-02', 'teacher2@gmail.com', '2022-03-23', 'Teacher 12', 'JJUNVonQNdTNT3WfSIn1.jpg', '$2a$10$zxyMz/iAELsSdZ88uz4ESu8w4yqV5aXaPLbJGEBIUU79LJfM8Slcu', '0123456789', '2022-02-15', '2022-03-02 17:24:14', 'teacher12'),
+	(39, '1 New Castle Trails', '2022-03-07 17:18:19', b'0', '2022-03-01', 'nam.nv.836@aptechlearning.edu.vn', '2022-04-09', 'Teacher14', 'e362b14e-d7bb-4eeb-b414-9fd0f1250872.jpg', '$2a$10$9ubKTdDaCPRi2fYsMD3d7.uvOcLkauOQNqQZLI3w.tc6.qFRD/xeC', '0355789812', '2022-02-27', '2022-03-07 17:18:19', 'Teacher14'),
+	(40, '1 New Castle Trails', '2022-03-07 17:18:49', b'0', '2022-03-01', 'nam.nv.836@aptechlearning.edu.com', '2022-04-09', 'Teacher 15', '7aa846a5-5c58-40cd-9352-7382c7b02783.jpg', '$2a$10$tGBjRDiHi9o4O04rDBXc9ec2fvX2KXgDCOOvUrJEfgnBV9vyy8DUq', '0355789812', '2022-04-06', '2022-03-07 17:18:49', 'teacher 15'),
+	(41, '1 New Castle Trails', '2022-03-07 17:19:19', b'1', '2022-02-27', 'nam.nv.836@aptechlearning.edu.vn.v', '2022-03-01', 'Teacher 16', '0b61a20e-59f3-4a83-ada6-480e76998965.jpg', '$2a$10$t5OOsBlnoqbTPAcO3a9InOyLovS./ZGz/f6OK0PvAVv40fgzZexKe', '0355789812', '2022-02-27', '2022-03-07 17:19:19', 'Teacher16'),
+	(42, 'Saint Pauls', '2022-03-07 17:19:53', b'0', '2022-03-01', 'nam.nv.836@aptechlearning.edu.vn.com', '2022-03-03', 'Teacher 17', '57a245ca-fc10-4b78-b892-d60a75988ebd.jpg', '$2a$10$HdIZHqa5L3PajZYZgCiohuR3wBQTZuJAMWJuoWDbrGDPdmvKN2dGy', '0355789812', '2022-02-27', '2022-03-07 17:19:53', 'teacher 17');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table school_management.user_role
-DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE IF NOT EXISTS `user_role` (
-  `user_id` int NOT NULL,
-  `role_id` int NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `FKa68196081fvovjhkek5m97n3y` (`role_id`),
   CONSTRAINT `FK859n2jvi8ivhui0rl0esws6o` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table school_management.user_role: ~13 rows (approximately)
+-- Dumping data for table school_management.user_role: ~17 rows (approximately)
 DELETE FROM `user_role`;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
@@ -348,220 +462,12 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 	(35, 2),
 	(36, 2),
 	(37, 2),
-	(38, 2);
-	
-CREATE TABLE class_teacher_subject(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	user_id INT ,
-	subject_id INT ,
-	class_id INT ,
-	FOREIGN KEY (user_id) REFERENCES user(id),
-	FOREIGN KEY (subject_id) REFERENCES subjects(id),
-	FOREIGN KEY (class_id) REFERENCES class(id)
-);
-
-SELECT * FROM class_teacher_subject s WHERE s.class_id =1 AND s.subject_id = 5
-
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Ceciley Camis', 'ccamis0', 'Hu0tQY94ZMl', '03/23/2021', '7329 Weeping Birch Center', 1, 'Aluminum', 1999, 1978, '07/03/2021', '07/04/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Trefor Gorce', 'tgorce1', 'vlQP1gCr', '07/31/2021', '29 Sugar Junction', 1, 'Glass', 2012, 2007, '07/11/2021', '08/21/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Alisa Rangell', 'arangell2', 'ExFcXs3mBtm', '04/22/2021', '3 Bluestem Crossing', 0, 'Plexiglass', 2010, 2004, '11/21/2021', '07/05/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Davide Checketts', 'dchecketts3', '64To7e', '04/21/2021', '0 Banding Parkway', 0, 'Plexiglass', 2005, 1997, '03/31/2021', '02/09/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Val Corker', 'vcorker4', 'U43obf17EU', '11/24/2021', '1 Myrtle Plaza', 0, 'Glass', 2006, 2006, '03/18/2021', '12/11/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Ranna Thynn', 'rthynn5', 'ME4MfOdVC', '09/27/2021', '19 East Trail', 1, 'Steel', 1969, 1993, '03/28/2021', '04/17/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Ronna Sandland', 'rsandland6', 'sLbQtZwik3O', '12/23/2021', '51447 Lillian Court', 1, 'Granite', 1993, 1999, '09/03/2021', '07/26/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Cale Bayle', 'cbayle7', 'TXdV03Fu', '10/17/2021', '080 Miller Place', 0, 'Glass', 1987, 1997, '11/11/2021', '09/09/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Adina Somerset', 'asomerset8', 'RYMBGKLEm', '06/10/2021', '6 Porter Center', 1, 'Plastic', 1994, 2003, '11/05/2021', '01/07/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Matilda Faers', 'mfaers9', 'KKCaIuqFMb', '11/15/2021', '5371 Hermina Trail', 0, 'Vinyl', 2004, 1992, '03/15/2021', '01/23/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Dulcine Bowhay', 'dbowhaya', 'JjXJlAmwW', '01/23/2022', '02835 Judy Court', 1, 'Glass', 2006, 2010, '11/15/2021', '09/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Bamby Bucknell', 'bbucknellb', 'x4mlHUuaQq7', '07/05/2021', '13 Northwestern Terrace', 0, 'Vinyl', 1998, 2007, '10/19/2021', '01/28/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Kally Ruddlesden', 'kruddlesdenc', 'Njh21wj3', '07/07/2021', '8815 Sachtjen Avenue', 1, 'Brass', 2001, 2000, '01/20/2022', '09/18/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Lexi Martignoni', 'lmartignonid', 'oy8vBpcTQ2', '12/29/2021', '1 Reinke Court', 1, 'Glass', 1994, 2012, '02/14/2022', '04/25/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Lockwood Crookshanks', 'lcrookshankse', 'DfGeAI2u', '11/06/2021', '23 Harbort Street', 1, 'Granite', 2011, 1995, '12/31/2021', '04/23/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Meagan Gummoe', 'mgummoef', 'caNZiqcSzZd', '08/21/2021', '0 Utah Avenue', 0, 'Rubber', 2006, 1994, '06/22/2021', '03/04/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tobiah Kisby', 'tkisbyg', 'x18sQXeH', '11/03/2021', '62261 Springs Park', 0, 'Wood', 1995, 2004, '03/24/2021', '09/11/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Trish Legg', 'tleggh', 'YXhHIz', '12/07/2021', '03 Judy Park', 1, 'Aluminum', 1984, 2001, '10/29/2021', '08/09/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Odo Halt', 'ohalti', '3OsoHSLSt', '09/11/2021', '80 Homewood Drive', 1, 'Steel', 2001, 1991, '04/29/2021', '03/25/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Elihu Schulke', 'eschulkej', '5gFhw1', '01/10/2022', '18 Thompson Road', 1, 'Plastic', 2005, 2007, '07/18/2021', '02/12/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Brenna Northridge', 'bnorthridgek', 'GV0oXzdW4Lr', '04/05/2021', '96358 Sutherland Circle', 1, 'Rubber', 1992, 2001, '06/29/2021', '04/01/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Clarke Code', 'ccodel', 'JSvK7O3', '10/25/2021', '310 Beilfuss Lane', 0, 'Rubber', 1995, 2005, '05/18/2021', '09/23/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Daniella Climar', 'dclimarm', 'REyTjQzjqa5', '03/02/2022', '15529 Reinke Hill', 1, 'Plastic', 1996, 2001, '10/13/2021', '06/28/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Karleen Foot', 'kfootn', '5Htilaa1zECw', '05/28/2021', '06 Hintze Lane', 1, 'Vinyl', 2008, 2000, '03/06/2022', '02/23/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tremayne Slarke', 'tslarkeo', 'uSavwrc', '06/13/2021', '4 Di Loreto Place', 1, 'Vinyl', 2001, 2004, '08/02/2021', '09/15/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Malvina Bubeer', 'mbubeerp', 'kL7bxIxE', '09/03/2021', '90 Bluejay Avenue', 0, 'Vinyl', 2000, 2009, '02/08/2022', '01/19/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Erena Churchyard', 'echurchyardq', 'mVB0Ad', '04/01/2021', '953 Arizona Terrace', 1, 'Plexiglass', 2000, 2000, '06/11/2021', '10/31/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Nickola Gumary', 'ngumaryr', '6RSSkinD3Q9z', '09/14/2021', '80 Londonderry Alley', 1, 'Plastic', 1987, 2000, '01/18/2022', '03/26/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tyson Ganley', 'tganleys', 'NXfBz2W2HCGd', '07/31/2021', '29 Menomonie Court', 0, 'Plastic', 2006, 2005, '02/03/2022', '01/16/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Adriano McGinney', 'amcginneyt', 'gKWSE4xwLu', '06/12/2021', '83 Luster Road', 1, 'Aluminum', 1992, 1995, '07/31/2021', '03/26/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Aimil Martill', 'amartillu', 'UiP16VPPiTc', '07/11/2021', '40668 Sommers Lane', 1, 'Stone', 2007, 1994, '04/01/2021', '07/17/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Dennie Eassom', 'deassomv', 'U4CU0JfBhKC1', '05/06/2021', '58 Golf View Street', 0, 'Granite', 2010, 1998, '05/20/2021', '03/25/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Sergio Maryet', 'smaryetw', 'ykcr5Dc', '08/09/2021', '0 Lakeland Place', 0, 'Stone', 2009, 2004, '11/04/2021', '02/25/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Lucilia Gregoli', 'lgregolix', '8iuDxJoxGLX', '03/01/2022', '0927 Clarendon Center', 1, 'Stone', 2006, 2007, '04/07/2021', '01/02/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tiebout Wolfindale', 'twolfindaley', 'o51i9OJIHWmj', '10/22/2021', '39 Basil Pass', 1, 'Glass', 2002, 2011, '05/14/2021', '04/16/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Elfrieda Ferrie', 'eferriez', 'xILiKiXR', '07/24/2021', '65458 Corry Plaza', 1, 'Steel', 2002, 1998, '11/07/2021', '02/16/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Hubey Mizen', 'hmizen10', '7G8bOsDek', '07/06/2021', '161 La Follette Drive', 1, 'Stone', 2004, 1986, '12/19/2021', '01/29/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Rube Vittel', 'rvittel11', 'K5XALAy0xo', '10/05/2021', '57 Comanche Parkway', 0, 'Vinyl', 2002, 2006, '01/24/2022', '07/13/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Hilarius Prop', 'hprop12', 'Uvq3i1', '09/27/2021', '964 Westerfield Pass', 0, 'Wood', 2012, 1992, '10/12/2021', '03/19/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Glynda Swaysland', 'gswaysland13', 'Bvw2tvp91w4', '08/06/2021', '06 Bartelt Way', 0, 'Steel', 2011, 1994, '02/03/2022', '07/03/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Dudley Domingues', 'ddomingues14', 'KcWPIR5cDwA', '08/24/2021', '45280 Golf View Hill', 1, 'Stone', 1996, 1987, '12/17/2021', '07/03/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tally Vautier', 'tvautier15', 's3Vi2G9j82c', '10/27/2021', '07390 Arapahoe Court', 0, 'Wood', 2007, 1985, '03/26/2021', '01/20/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Vail Grestie', 'vgrestie16', 'plXao1', '02/11/2022', '777 Park Meadow Parkway', 1, 'Plastic', 1986, 1994, '02/14/2022', '06/18/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Abel Harradine', 'aharradine17', 'OkNGF5LwfLdN', '04/03/2021', '14612 Killdeer Trail', 1, 'Wood', 1992, 1997, '02/18/2022', '05/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Valli Moncreiffe', 'vmoncreiffe18', '49Z0gZ', '05/04/2021', '1908 Melrose Parkway', 1, 'Glass', 2010, 2006, '12/25/2021', '10/12/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Jobye Grimestone', 'jgrimestone19', 'd0asTT', '06/27/2021', '97583 Buhler Drive', 0, 'Steel', 1998, 2006, '03/19/2021', '06/06/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Amabelle Riccetti', 'ariccetti1a', 'VKh6BcXNP', '12/23/2021', '60981 Fairview Trail', 0, 'Brass', 2011, 2007, '10/21/2021', '04/29/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Lacee Lortz', 'llortz1b', 'pMoO5sWDZj2p', '10/28/2021', '7 Corry Parkway', 0, 'Brass', 1999, 1994, '05/01/2021', '05/06/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Yovonnda Beebis', 'ybeebis1c', 'VOll96AFOA', '11/09/2021', '34296 Esch Road', 1, 'Glass', 2005, 1997, '01/12/2022', '05/29/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Moises Ames', 'mames1d', 'SuUtz1Sa', '03/05/2022', '531 Sheridan Drive', 0, 'Plexiglass', 1999, 1992, '04/11/2021', '02/11/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Madelin Weepers', 'mweepers1e', 'TOWQoK2', '12/05/2021', '3104 Little Fleur Road', 1, 'Plexiglass', 1992, 1993, '08/13/2021', '10/22/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Berny Pllu', 'bpllu1f', 'Y0yxVLIsH', '05/19/2021', '0684 Dexter Trail', 1, 'Steel', 2011, 2007, '12/19/2021', '11/11/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Suzanne Cobby', 'scobby1g', 'ZUHXrToXQ', '03/08/2021', '5101 Heath Avenue', 1, 'Rubber', 2000, 1995, '06/18/2021', '09/18/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Adore O''Hoolahan', 'aohoolahan1h', 'LKjudKkF6iNv', '03/02/2022', '0053 Declaration Drive', 0, 'Granite', 1996, 2006, '11/18/2021', '05/21/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Wyatt Berthelet', 'wberthelet1i', 'wnQiyn4AS33', '02/08/2022', '6 Marcy Circle', 0, 'Plastic', 1997, 2004, '10/28/2021', '03/14/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Gnni Murty', 'gmurty1j', 't91EqXdAZTVb', '01/29/2022', '2 Petterle Drive', 1, 'Plexiglass', 1996, 2005, '07/05/2021', '11/14/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Carolann Renon', 'crenon1k', 'zH4Yfv', '01/17/2022', '7873 Vidon Center', 1, 'Stone', 2009, 1995, '03/20/2021', '04/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Sabrina Hurran', 'shurran1l', 'ibfHe31d', '05/10/2021', '8519 Troy Plaza', 0, 'Stone', 1996, 1995, '06/05/2021', '08/25/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Faun McClay', 'fmcclay1m', 'C6meUKh', '08/31/2021', '156 Claremont Drive', 1, 'Aluminum', 2002, 2011, '11/08/2021', '03/04/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Shelba Humphery', 'shumphery1n', 'JcVLFeetL', '05/29/2021', '4589 Merrick Center', 1, 'Stone', 2005, 2004, '06/22/2021', '04/03/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Nicolea Winterbotham', 'nwinterbotham1o', 'gwFxbmvKHHEQ', '03/14/2021', '79 Linden Avenue', 0, 'Wood', 2007, 1997, '01/08/2022', '02/06/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Bethanne Reedshaw', 'breedshaw1p', 'WgsxSO', '07/03/2021', '640 Lien Place', 0, 'Steel', 1996, 2007, '11/09/2021', '07/23/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Vinson Knappett', 'vknappett1q', 'AR6T3f6UIqhZ', '02/12/2022', '09945 Eagle Crest Circle', 0, 'Steel', 2012, 1995, '06/19/2021', '08/15/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Reinhard McDermid', 'rmcdermid1r', 'BbZvtyzML9x', '07/09/2021', '82740 Village Green Drive', 0, 'Brass', 1998, 2011, '05/06/2021', '04/07/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Rufus Conaghan', 'rconaghan1s', 'bbQspWdls', '10/14/2021', '66 Buhler Street', 0, 'Vinyl', 1999, 1992, '03/27/2021', '08/25/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Quincy Leavold', 'qleavold1t', 'yvnHxk', '01/10/2022', '1134 Waywood Center', 1, 'Glass', 1999, 2009, '07/10/2021', '10/07/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Krystyna Tourville', 'ktourville1u', 'P1ygYI2M', '11/20/2021', '0034 Logan Alley', 1, 'Wood', 2009, 2007, '09/21/2021', '12/31/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Shannan Abilowitz', 'sabilowitz1v', 'ysvtG5JqH', '08/26/2021', '842 Toban Junction', 0, 'Vinyl', 1998, 2007, '03/04/2022', '05/14/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Shaylah Branscombe', 'sbranscombe1w', 'lVO5eL', '07/30/2021', '88 Linden Pass', 1, 'Stone', 1999, 1992, '09/21/2021', '03/28/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Reeba Rappport', 'rrappport1x', 'X1yZmsGaZ', '02/20/2022', '3344 Becker Circle', 0, 'Aluminum', 1993, 2009, '05/25/2021', '09/04/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Cordelia McGrail', 'cmcgrail1y', '4j6zPri', '06/20/2021', '38 Loeprich Park', 1, 'Plexiglass', 2011, 2004, '02/16/2022', '06/03/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Cecile Adamski', 'cadamski1z', 'GOFUShJc3', '06/29/2021', '3 Barby Road', 0, 'Plastic', 1993, 1996, '02/27/2022', '06/15/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Janie Shury', 'jshury20', 'FTCQ7VQr', '01/24/2022', '279 Fulton Circle', 0, 'Plexiglass', 1997, 2010, '04/18/2021', '10/21/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Fanchette Haggish', 'fhaggish21', 'Wj1vqzeki5', '04/19/2021', '533 Monument Road', 0, 'Wood', 1993, 2001, '07/20/2021', '05/09/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Kahaleel Branch', 'kbranch22', 'E8XOYBD', '08/25/2021', '01 Anhalt Street', 0, 'Wood', 2011, 1991, '07/16/2021', '03/06/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Katherine Eddy', 'keddy23', 'UAin7g4U', '11/30/2021', '38142 Rockefeller Terrace', 1, 'Steel', 1976, 2011, '09/14/2021', '12/28/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Geordie MacAlpine', 'gmacalpine24', 'tbx7cgFr', '04/20/2021', '6214 Eagle Crest Street', 0, 'Glass', 2007, 1999, '01/13/2022', '06/05/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Peadar Mathys', 'pmathys25', 'Sq7vQLdDYU3', '07/01/2021', '3165 Badeau Circle', 1, 'Rubber', 1992, 2011, '01/17/2022', '12/20/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tisha Medd', 'tmedd26', 'H6TFIVbw', '01/29/2022', '59 Eggendart Avenue', 1, 'Glass', 2001, 1997, '12/06/2021', '03/24/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Tabbitha Borge', 'tborge27', 'BDnwXihH', '09/06/2021', '41034 Hintze Street', 1, 'Aluminum', 1980, 2001, '06/23/2021', '01/23/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Chaunce Gianelli', 'cgianelli28', 'knnjhPKS', '10/10/2021', '122 Mayer Parkway', 0, 'Vinyl', 1992, 1997, '05/06/2021', '05/09/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Rhett McCrainor', 'rmccrainor29', 'gn3w8S7GQT', '06/12/2021', '5 Mockingbird Alley', 1, 'Steel', 2001, 1970, '04/27/2021', '04/08/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Meier Saleway', 'msaleway2a', 'DPrvtaEX', '02/24/2022', '01006 Merrick Terrace', 1, 'Rubber', 1999, 1995, '03/17/2021', '03/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Yurik Winslade', 'ywinslade2b', 'fBJeNa1', '08/20/2021', '67 Schmedeman Court', 0, 'Wood', 1995, 2006, '09/22/2021', '01/12/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Suzanna McDermott', 'smcdermott2c', 'uK7ByuQIbXyw', '02/02/2022', '67413 High Crossing Street', 1, 'Stone', 2006, 2004, '02/06/2022', '12/29/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Deborah Towson', 'dtowson2d', 'UayaKybIwxG', '07/13/2021', '3209 Morrow Terrace', 0, 'Wood', 2007, 2008, '09/23/2021', '06/14/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Terrance Garretson', 'tgarretson2e', 'NC2GfwXh', '12/31/2021', '72 Scott Way', 0, 'Brass', 2007, 2009, '06/17/2021', '08/15/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Turner Titterington', 'ttitterington2f', 'r2iopNW62', '01/18/2022', '64 Johnson Trail', 1, 'Rubber', 2012, 2006, '09/04/2021', '10/05/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Liva Clinton', 'lclinton2g', 'z3OxmGPMm', '11/03/2021', '733 Oak Valley Trail', 1, 'Rubber', 1996, 1996, '06/23/2021', '07/28/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Nonah Escale', 'nescale2h', 'SECXZMO5HqpN', '01/31/2022', '1 Roth Parkway', 1, 'Glass', 2008, 2004, '09/18/2021', '06/21/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Cirillo Merrick', 'cmerrick2i', '5rWK777f', '03/25/2021', '6 Shasta Trail', 1, 'Granite', 2006, 1997, '06/28/2021', '09/21/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Harris Pimm', 'hpimm2j', 'BQck8IrqMJJ', '07/16/2021', '4 Lake View Terrace', 0, 'Plastic', 2011, 1993, '08/02/2021', '04/09/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Georgetta Leaburn', 'gleaburn2k', 'FbsX5McZT', '12/11/2021', '34439 Shopko Parkway', 0, 'Granite', 2006, 1986, '06/22/2021', '01/31/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Town Trahair', 'ttrahair2l', '2REvDK', '05/26/2021', '6699 Lunder Point', 1, 'Plexiglass', 1999, 2004, '07/30/2021', '05/20/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Arthur Digman', 'adigman2m', 'QVbsAxF', '04/11/2021', '34 Village Crossing', 0, 'Wood', 2007, 1998, '09/03/2021', '09/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Zahara Harbard', 'zharbard2n', 'cqm7ZtoLA', '07/19/2021', '62314 Warrior Court', 0, 'Glass', 1993, 2004, '01/10/2022', '04/01/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Krystle Shead', 'kshead2o', '0RJjdPqkkngW', '07/16/2021', '6 Moland Street', 1, 'Aluminum', 2012, 2001, '08/02/2021', '10/16/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Myrle Eayres', 'meayres2p', 'U8phWMEH7', '05/10/2021', '4 Toban Street', 0, 'Wood', 2001, 1996, '03/13/2021', '06/29/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Maighdiln Darwood', 'mdarwood2q', 'SMhpQye', '09/13/2021', '42 Laurel Plaza', 1, 'Glass', 2011, 2006, '06/18/2021', '12/27/2021');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Raffaello Routley', 'rroutley2r', 'FCXPlYG', '03/22/2021', '1044 Schurz Circle', 1, 'Steel', 2003, 1984, '06/20/2021', '01/14/2022');
-insert into student (full_name, username, password, dob, address, status, image, admission_year, graduate_year, created_date, updated_date) values ('Terra Humpatch', 'thumpatch0', 'aPZZSuaT', '2021-06-03 21:33:50', '59123 Ruskin Park', 0, 'Plexiglass', 2010, 1997, '01/24/2022', '05/26/2021');
+	(38, 2),
+	(39, 2),
+	(40, 2),
+	(41, 2),
+	(42, 2);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
-
-insert into student_class (class_id, student_id) values (2, 6);
-insert into student_class (class_id, student_id) values (2, 7);
-insert into student_class (class_id, student_id) values (2, 8);
-insert into student_class (class_id, student_id) values (2, 9);
-insert into student_class (class_id, student_id) values (2, 10);
-insert into student_class (class_id, student_id) values (2, 11);
-insert into student_class (class_id, student_id) values (2, 12);
-insert into student_class (class_id, student_id) values (2, 13);
-insert into student_class (class_id, student_id) values (2, 14);
-insert into student_class (class_id, student_id) values (2, 15);
-insert into student_class (class_id, student_id) values (2, 16);
-insert into student_class (class_id, student_id) values (2, 17);
-insert into student_class (class_id, student_id) values (2, 18);
-insert into student_class (class_id, student_id) values (2, 19);
-insert into student_class (class_id, student_id) values (2, 20);
-insert into student_class (class_id, student_id) values (2, 21);
-insert into student_class (class_id, student_id) values (2, 22);
-insert into student_class (class_id, student_id) values (2, 23);
-insert into student_class (class_id, student_id) values (2, 24);
-insert into student_class (class_id, student_id) values (2, 25);
-insert into student_class (class_id, student_id) values (2, 26);
-insert into student_class (class_id, student_id) values (2, 27);
-insert into student_class (class_id, student_id) values (2, 28);
-insert into student_class (class_id, student_id) values (2, 29);
-insert into student_class (class_id, student_id) values (3, 30);
-insert into student_class (class_id, student_id) values (3, 31);
-insert into student_class (class_id, student_id) values (3, 32);
-insert into student_class (class_id, student_id) values (3, 33);
-insert into student_class (class_id, student_id) values (3, 34);
-insert into student_class (class_id, student_id) values (3, 35);
-insert into student_class (class_id, student_id) values (3, 36);
-insert into student_class (class_id, student_id) values (3, 37);
-insert into student_class (class_id, student_id) values (3, 38);
-insert into student_class (class_id, student_id) values (3, 39);
-insert into student_class (class_id, student_id) values (4, 40);
-insert into student_class (class_id, student_id) values (4, 41);
-insert into student_class (class_id, student_id) values (4, 42);
-insert into student_class (class_id, student_id) values (4, 43);
-insert into student_class (class_id, student_id) values (4, 44);
-insert into student_class (class_id, student_id) values (4, 45);
-insert into student_class (class_id, student_id) values (4, 46);
-insert into student_class (class_id, student_id) values (4, 47);
-insert into student_class (class_id, student_id) values (4, 48);
-insert into student_class (class_id, student_id) values (4, 49);
-insert into student_class (class_id, student_id) values (5, 50);
-insert into student_class (class_id, student_id) values (5, 51);
-insert into student_class (class_id, student_id) values (5, 52);
-insert into student_class (class_id, student_id) values (5, 53);
-insert into student_class (class_id, student_id) values (5, 54);
-insert into student_class (class_id, student_id) values (5, 55);
-insert into student_class (class_id, student_id) values (5, 56);
-insert into student_class (class_id, student_id) values (5, 57);
-insert into student_class (class_id, student_id) values (5, 58);
-insert into student_class (class_id, student_id) values (5, 59);
-insert into student_class (class_id, student_id) values (6, 60);
-insert into student_class (class_id, student_id) values (6, 61);
-insert into student_class (class_id, student_id) values (6, 62);
-insert into student_class (class_id, student_id) values (6, 63);
-insert into student_class (class_id, student_id) values (6, 64);
-insert into student_class (class_id, student_id) values (6, 65);
-insert into student_class (class_id, student_id) values (6, 66);
-insert into student_class (class_id, student_id) values (6, 67);
-insert into student_class (class_id, student_id) values (6, 68);
-insert into student_class (class_id, student_id) values (6, 69);
-insert into student_class (class_id, student_id) values (7, 70);
-insert into student_class (class_id, student_id) values (7, 71);
-insert into student_class (class_id, student_id) values (7, 72);
-insert into student_class (class_id, student_id) values (7, 73);
-insert into student_class (class_id, student_id) values (7, 74);
-insert into student_class (class_id, student_id) values (7, 75);
-insert into student_class (class_id, student_id) values (7, 76);
-insert into student_class (class_id, student_id) values (7, 77);
-insert into student_class (class_id, student_id) values (7, 78);
-insert into student_class (class_id, student_id) values (7, 79);
-insert into student_class (class_id, student_id) values (8, 80);
-insert into student_class (class_id, student_id) values (8, 81);
-insert into student_class (class_id, student_id) values (8, 82);
-insert into student_class (class_id, student_id) values (8, 83);
-insert into student_class (class_id, student_id) values (8, 84);
-insert into student_class (class_id, student_id) values (8, 85);
-insert into student_class (class_id, student_id) values (8, 86);
-insert into student_class (class_id, student_id) values (8, 87);
-insert into student_class (class_id, student_id) values (8, 88);
-insert into student_class (class_id, student_id) values (8, 89);
-insert into student_class (class_id, student_id) values (9, 90);
-insert into student_class (class_id, student_id) values (9, 91);
-insert into student_class (class_id, student_id) values (9, 92);
-insert into student_class (class_id, student_id) values (9, 93);
-insert into student_class (class_id, student_id) values (9, 94);
-insert into student_class (class_id, student_id) values (9, 95);
-insert into student_class (class_id, student_id) values (9, 96);
-insert into student_class (class_id, student_id) values (9, 97);
-insert into student_class (class_id, student_id) values (9, 98);
-insert into student_class (class_id, student_id) values (9, 99);
-insert into student_class (class_id, student_id) values (10, 100);
- 
-
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
