@@ -88,7 +88,7 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label>Full Name</label>
-                            <input th:field="*{fullName}" type="text"
+                            <input th:field="*{}" type="text"
                                    th:classappend="${#fields.hasErrors('fullName') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('fullName')}"
                                th:errors="*{fullName}"></p>

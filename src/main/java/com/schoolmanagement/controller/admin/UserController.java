@@ -4,30 +4,22 @@ import com.schoolmanagement.helper.UserExcelExporter;
 import com.schoolmanagement.helper.UserExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.UserService;
+import com.schoolmanagement.model.request.EditUserRequest;
+import com.schoolmanagement.service.UserServiceImp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -47,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
   @Autowired
-  private UserService userService;
+  private UserServiceImp userService;
 
   @Autowired
   private EntityManager entityManager;
@@ -160,7 +152,7 @@ public class UserController {
   public String editTeacher(@PathVariable("id") Integer id, Model model) {
     model.addAttribute("user", userService.getUserById(id));
 
-    return "/admin/user/edit_user";
+    return "/admin/user/form_user";
   }
 
   @GetMapping("/show/user/search")
@@ -216,12 +208,20 @@ public class UserController {
   }
 
   @PostMapping("/update/save/user")
-  public String updateTeacher (@Valid User user, BindingResult result,
+  public String updateTeacher (@Valid EditUserRequest user, BindingResult result,
       @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
     String root = "src/main/";
     String folder = "upload/image/user_image/";
     String org_filename = multipartFile.getOriginalFilename();
+
     String str_filename = "";
+    // check duplicate email , username
+    // using repo findByEmail
+    // if user_id != user then show error message
+    // if has error throw exception
+
+
+
     if (org_filename != null && !org_filename.isEmpty()) {
       str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
 
@@ -233,12 +233,12 @@ public class UserController {
 
       user.setImage(str_filename);
     }
-    Role role = entityManager.find(Role.class, 2);
-    user.addRole(role);
-
-    user.setUpdatedDate(LocalDateTime.now());
-
-    userService.saveUser(user);
+//    Role role = entityManager.find(Role.class, 2);
+//    user.addRole(role);
+//
+//    user.setUpdatedDate(LocalDateTime.now());
+//
+//    userService.saveUser(user);
 
     return "redirect:/show/user";
   }

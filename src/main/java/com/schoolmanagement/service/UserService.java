@@ -2,90 +2,34 @@ package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.repositories.RoleRepositories;
-import com.schoolmanagement.repositories.UserRepositories;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
+public interface UserService {
+  User saveUser(User user);
 
-  @Autowired
-  private UserRepositories repo;
+  Iterable<User> saveAllUser(Iterable<User> list);
 
-  @Autowired
-  private RoleRepositories roleRepositories;
+  List<User> getAllUser();
 
-  public User saveUser(User user) {
-    return repo.save(user);
-  }
+  Page<User> getAllUserByPage(int pageNumber, String sortField, String sortDir);
 
-  public Iterable<User> saveAllUser(Iterable<User> list) {
-    return repo.saveAll(list);
-  }
+  Page<User> searchUserByFullName(String fullName, int pageNumber, String sortField,
+  String sortDir);
 
-  public List<User> getAllUser() {
-    List<User> list = new ArrayList<>();
+  Page<User> searchUserByFullNameAndDeleted(String fullName, Boolean deleted, int pageNumber,
+      String sortField, String sortDir);
 
-    for (User user : repo.findAll()) {
-      for (Role role : user.getRoles()) {
-        if (role.getRoleID() == 2) {
-          list.add(user);
-        }
-      }
-    }
+  User getUserByUsername(String username);
 
-    return list;
-  }
+  User findbyUserid(int id);
 
-  public Page<User> getAllUserByPage(int pageNumber, String sortField, String sortDir) {
-    Sort sort = Sort.by(sortField);
-    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-    Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-    return repo.findAll(page);
-  }
+  User getUserById(Integer id);
 
-  public Page<User> searchUserByFullName(String fullName, int pageNumber, String sortField,
-      String sortDir) {
-    Sort sort = Sort.by(sortField);
-    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-    Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-
-    return repo.searchUsersByFullName(fullName, page);
-  }
-
-  public Page<User> searchUserByFullNameAndDeleted(String fullName, Boolean deleted, int pageNumber,
-      String sortField, String sortDir) {
-    Sort sort = Sort.by(sortField);
-    sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-    Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-
-    return repo.searchUsersByFullNameAndDeleted(fullName, deleted, page);
-  }
-
-  public User getUserByUsername(String username) {
-    return repo.findUserByUsername(username);
-  }
-
-  public User findbyUserid(int id) {
-    return repo.findById(id);
-  }
-
-  public User getUserById(Integer id) {
-    return repo.findById(id).get();
-  }
-
-  public void makeRetired(Integer id) {
-    repo.changeDeleted(true, id);
-  }
-
-  public void makeWorking(Integer id) {
-    repo.changeDeleted(false, id);
-  }
+  void makeRetired(Integer id);
+  void makeWorking(Integer id);
 }

@@ -2,8 +2,8 @@ package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.SubjectService;
-import com.schoolmanagement.service.UserService;
+import com.schoolmanagement.service.SubjectServiceImp;
+import com.schoolmanagement.service.UserServiceImp;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SubjectController {
 
   @Autowired
-  private SubjectService subjectService;
+  private SubjectServiceImp subjectServiceImp;
 
   @Autowired
-  private UserService userService;
+  private UserServiceImp userServiceImp;
 
   //index
   @GetMapping("/show/subjects")
@@ -42,9 +42,9 @@ public class SubjectController {
       @Param("search") String search) {
     Page<Subjects> page;
     if (search.equalsIgnoreCase("")) {
-      page = subjectService.getAllSubjectByPage(currentPage, sortField, sortDir);
+      page = subjectServiceImp.getAllSubjectByPage(currentPage, sortField, sortDir);
     } else {
-      page = subjectService.findSubjectByName(search, currentPage, sortField, sortDir);
+      page = subjectServiceImp.findSubjectByName(search, currentPage, sortField, sortDir);
     }
     long totalItems = page.getTotalElements();
     int totalPages = page.getTotalPages();
@@ -71,10 +71,10 @@ public class SubjectController {
   //New
   @GetMapping("/insert/subjects")
   public String SubjectIndexAdd(Model model) {
-    Iterable<User> listUser = userService.getAllUser();
+    Iterable<User> listUser = userServiceImp.getAllUser();
     model.addAttribute("listUser", listUser);
     model.addAttribute("subjects", new Subjects());
-    model.addAttribute("listSubject", subjectService.getAllSubject());
+    model.addAttribute("listSubject", subjectServiceImp.getAllSubject());
 
     return "/admin/subjects/form_subject";
   }
@@ -82,8 +82,8 @@ public class SubjectController {
   // Edit
   @GetMapping("/edit/subjects/{id}")
   public String SubjectEdit(Model model, @PathVariable("id") int id) {
-    Subjects subjects = subjectService.findBySubjectID(id);
-    Iterable<User> listUser = userService.getAllUser();
+    Subjects subjects = subjectServiceImp.findBySubjectID(id);
+    Iterable<User> listUser = userServiceImp.getAllUser();
     model.addAttribute("listUser", listUser);
     model.addAttribute("subjects", subjects);
 
@@ -98,7 +98,7 @@ public class SubjectController {
       return "/admin/subjects/form_subject";
     }
 
-    subjectService.SaveSubject(subjects);
+    subjectServiceImp.SaveSubject(subjects);
     return "redirect:/show/subjects";
   }
 
@@ -110,7 +110,7 @@ public class SubjectController {
       return "/admin/subjects/update_subjects";
     }
 
-    subjectService.SaveSubject(subjects);
+    subjectServiceImp.SaveSubject(subjects);
 
     return "redirect:/show/subjects";
   }
@@ -118,7 +118,7 @@ public class SubjectController {
   //Detail
   @GetMapping("/show/subjects/details/{id}")
   public String DetailSubject(Model model, @PathVariable("id") int id) {
-    Subjects subjects = subjectService.findBySubjectID(id);
+    Subjects subjects = subjectServiceImp.findBySubjectID(id);
     model.addAttribute("subject", subjects);
     model.addAttribute("listUser", subjects.getUsers());
 
@@ -128,12 +128,12 @@ public class SubjectController {
   @GetMapping("/show/subjects/details/{id}/{userid}")
   public String DetailSubjectDelete(Model model, @PathVariable("id") int id,
       @PathVariable("userid") int userid) {
-    Subjects subjects = subjectService.findBySubjectID(id);
-    User user = userService.findbyUserid(userid);
+    Subjects subjects = subjectServiceImp.findBySubjectID(id);
+    User user = userServiceImp.findbyUserid(userid);
 
     subjects.getUsers().remove(user);
 
-    subjectService.SaveSubject(subjects);
+    subjectServiceImp.SaveSubject(subjects);
 
     return "redirect:/show/subjects/details/" + subjects.getId();
   }

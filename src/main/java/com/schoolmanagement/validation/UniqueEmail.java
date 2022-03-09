@@ -10,7 +10,7 @@ import javax.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = UniqueEmailValidator.class)
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueEmail {
 

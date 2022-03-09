@@ -1,56 +1,19 @@
 package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Student;
-import com.schoolmanagement.repositories.StudentRepositories;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-@Service
-public class StudentService {
+public interface StudentService {
+  void saveStudent(Student student);
 
-	@Autowired
-	private StudentRepositories repositories;
+  Iterable<Student> getAllStudent();
 
-	public void saveStudent(Student student) {
-		repositories.save(student);
-	}
+  Page<Student> getAllStudentByPages(int pageNumber, String sortField, String sortDir);
 
-	public Iterable<Student> getAllStudent() {
-		return repositories.findAll();
-	}
+  Student getStudentById(Integer id);
 
-	public Page<Student> getAllStudentByPages(int pageNumber, String sortField, String sortDir) {
-		Sort sort = Sort.by(sortField);
-		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
+  Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField,
+      String sortDir);
 
-		return repositories.findAll(page);
-	}
-
-	public Student getStudentById(Integer id) {
-		return repositories.findById(id).get();
-	}
-
-	public Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField,
-			String sortDir) {
-		Sort sort = Sort.by(sortField);
-		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-
-		if (status.equalsIgnoreCase("all")) {
-			return repositories.findStudentByFullName(fullName, page);
-		} else {
-			return repositories.findStudentByFullNameAndStatus(fullName, Integer.parseInt(status), page);
-		}
-	}
-	
-	public Page<Student> getAllStudentByClass(int pageNumber) {
-		Pageable page = PageRequest.of(pageNumber - 1, 10);
-
-		return repositories.findAll(page);
-	}
+  Page<Student> getAllStudentByClass(int pageNumber);
 }

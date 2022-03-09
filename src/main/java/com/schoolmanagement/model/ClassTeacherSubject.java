@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "class_teacher_subject")
-public class ClassTeacherSubejct {
+public class ClassTeacherSubject {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class ClassTeacherSubejct {
 	@JoinColumn(name="class_id")
 	private Class theClass; 
 	
-	public ClassTeacherSubejct() {}
+	public ClassTeacherSubject() {}
 
 	public int getId() {
 		return id;

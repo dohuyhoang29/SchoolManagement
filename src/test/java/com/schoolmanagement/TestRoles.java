@@ -1,8 +1,6 @@
 package com.schoolmanagement;
 
 import com.schoolmanagement.model.Role;
-import com.schoolmanagement.repositories.RoleRepositories;
-import com.schoolmanagement.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

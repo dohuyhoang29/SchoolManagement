@@ -1,11 +1,10 @@
 package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.SchoolManagementApplication;
-import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.ClassService;
-import com.schoolmanagement.service.StudentService;
+import com.schoolmanagement.service.ClassServiceImp;
+import com.schoolmanagement.service.StudentServiceImp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -13,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
@@ -35,13 +33,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class StudentController {
 
   @Autowired
-  private StudentService studentService;
+  private StudentServiceImp studentServiceImp;
 
   @Autowired
   private StudentRepositories studentRepositories;
 
   @Autowired
-  private ClassService classService;
+  private ClassServiceImp classServiceImp;
 
   @Autowired
   private EntityManager entityManager;
@@ -58,7 +56,7 @@ public class StudentController {
       @Param("sortDir") String sortDir,
       @Param("search") String search,
       @Param("status") String status) {
-    Page<Student> page = studentService.searchStudent(search, status, currentPage, sortField,
+    Page<Student> page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
         sortDir);
 
     long totalItems = page.getTotalElements();
@@ -83,7 +81,7 @@ public class StudentController {
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
     model.addAttribute("student", new Student());
-    model.addAttribute("classList", classService.getAllClass());
+    model.addAttribute("classList", classServiceImp.getAllClass());
 
     return "/admin/student/form_student";
   }
@@ -124,14 +122,14 @@ public class StudentController {
     if (result.hasErrors()) {
       return "/admin/student/form_student";
     }
-    studentService.saveStudent(student);
+    studentServiceImp.saveStudent(student);
 
     return "redirect:/show/student";
   }
 
   @GetMapping("/show/student/details/{id}")
   public String studentDetails(Model model, @PathVariable("id") Integer id) {
-    model.addAttribute("student", studentService.getStudentById(id));
+    model.addAttribute("student", studentServiceImp.getStudentById(id));
 
     return "/admin/student/student_details";
   }
