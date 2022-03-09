@@ -2,11 +2,14 @@ package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.ClassTeacherSubject;
+import com.schoolmanagement.model.Student;
 import com.schoolmanagement.service.ClassServiceImp;
 import com.schoolmanagement.service.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.StudentServiceImp;
 import com.schoolmanagement.service.SubjectServiceImp;
 import com.schoolmanagement.service.UserServiceImp;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,22 +88,43 @@ public class ClassController {
 //details
 	@GetMapping("/details/class/{id}")
 	public String DetailClass(Model model, @PathVariable("id") int id) {
-		Iterable<ClassTeacherSubject> cts = classTeacherSubjectServiceImp.findAllByClassId(id);
-		model.addAttribute("classTeacherSubject", cts);
-		model.addAttribute("class", classServiceImp.getClassById(id));
-		model.addAttribute("studentList", studentServiceImp.getAllStudent());
-		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
 		
-		return "/admin/class/class_details";
+		return DetailsClassPage(model, id, 1 ,"");
 		
 	}
 
-// search
+	@GetMapping("/details/class/{classId}/{id}")
+	public String DetailsClassPage(Model model , @PathVariable("classId") int id 
+			, @PathVariable("id") int currentPage , @Param("search") String search) {
+		Iterable<ClassTeacherSubject> cts = classTeacherSubjectServiceImp.findAllByClassId(id);
+		
+		Page<Student> studentPage = studentServiceImp.findStudentByClassId(id,search, currentPage);
+		
+		int totalPages = studentPage.getSize();
+		
+		List<Student> listStudent = studentPage.getContent();
+		
+		model.addAttribute("classTeacherSubject", cts);
+		model.addAttribute("class", classServiceImp.getClassById(id));
+		model.addAttribute("studentList", listStudent);
+		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("search",search);
+		
+		return "/admin/class/class_details";
+	}
+	
+// search manager
 	@GetMapping("/show/class/search")
 	public String SearchClass(Model model , @RequestParam("search") String nameclass) {
 		
 		return listClassByPage(model, 1, nameclass);
 	}
-	//seacher student by class
-	
+	//seacher student by class Details
+	@GetMapping("/detail/class/student/search/{id}")
+	public String searchByNameStudent(Model model ,@PathVariable("id") int id  , @Param("search") String search) {
+		
+		return DetailsClassPage(model, id, 1, search);
+	}
 }

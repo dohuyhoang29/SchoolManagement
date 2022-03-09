@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Controller
-@Slf4j
 public class BlogController {
 	@Autowired
 	private BlogServiceImp blogServiceImp;

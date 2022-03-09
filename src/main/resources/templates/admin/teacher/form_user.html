@@ -9,7 +9,6 @@
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
 
@@ -71,10 +70,10 @@
           </div>
           <ul class="nav nav-tabs page-header-tab">
             <li class="nav-item">
-              <a th:href="@{/show/user}" class="nav-link">List View</a>
+              <a th:href="@{/show/teacher}" class="nav-link">List View</a>
             </li>
             <li class="nav-item">
-              <a th:href="@{/insert/user}"
+              <a th:href="@{/insert/teacher}"
                  th:classappend="${user.id == null ? 'nav-link active' : 'nav-link'}">Add</a>
             </li>
           </ul>
@@ -92,7 +91,7 @@
                     <h3 class="card-title">Basic Information</h3>
                   </div>
                   <div class="card-body">
-                    <form th:action="@{/user/save}" method="post" th:object="${user}"
+                    <form th:action="@{/teacher/save}" method="post" th:object="${user}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
                       <div class="row clearfix">
@@ -207,7 +206,7 @@
                         </div>
                         <div class="col-sm-12">
                           <button type="submit" class="btn btn-primary">Submit</button>
-                          <a th:href="@{/show/user}">
+                          <a th:href="@{/show/teacher}">
                             <button type="button" class="btn btn-outline-secondary">Cancel</button>
                           </a>
                         </div>

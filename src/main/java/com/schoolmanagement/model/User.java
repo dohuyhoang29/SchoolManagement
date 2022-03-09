@@ -53,6 +53,7 @@ public class User {
 
   @Column(name = "email", nullable = false)
   @NotEmpty(message = "Enter email")
+  @UniqueEmail(message = "Such email already exist!")
   private String email;
 
   @Column(name = "phone", nullable = false)
@@ -140,7 +141,6 @@ public class User {
     return "/upload/image/user_image/" + image;
   }
 
-  @UniqueEmail(message = "Such email already exist!")
   public User(String fullName, String username, String password, String email, String phone,
       LocalDate dob, String address, LocalDate startDate, LocalDate endDate, boolean deleted,
       LocalDateTime createdDate, LocalDateTime updatedDate) {

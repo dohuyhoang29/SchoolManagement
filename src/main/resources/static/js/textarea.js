@@ -7,11 +7,17 @@ $(document).ready(function() {
 		callbacks: {
 			onImageUpload: function(files, editor, welEditable) {
 				for (var i = files.length - 1; i >= 0; i--) {
-					sendFile(files[i], this);
+					let maxSize = 1048576; // according to the database validator
+					if (files[i].size > maxSize) {
+						alert('Image too large. Images must be less than 100 million bytes (9KB). Less than 1MB is recommended.');
+						return;
+					} else {
+						sendFile(files[i], this);
+					}
+
 				}
 			}
 		}
-
 	});
 
 	function sendFile(file, el) {

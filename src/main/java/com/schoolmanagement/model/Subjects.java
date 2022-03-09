@@ -17,22 +17,19 @@ import lombok.Setter;
 
 public class Subjects {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-  @NotEmpty(message = "Enter subject name")
-  @Column(name = "subject_name")
-  @UniqueSubjectName(message = "Such subject name already exist!")
-  private String subjectName;
+	@NotEmpty(message = "Enter subject name")
+	@Column(name = "subject_name")
+	@UniqueSubjectName(message = "Such subject name already exist!")
+	private String subjectName;
 
-  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-  @JoinTable(name = "teacher_subjects",
-      joinColumns = @JoinColumn(name = "subject_id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<User> users = new HashSet<>();
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users = new HashSet<>();
 
-	
 	@OneToMany(mappedBy = "subjects", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<ClassTeacherSubject> subjects = new ArrayList<>();
 //	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -40,8 +37,8 @@ public class Subjects {
 //	@MapKeyJoinColumn(name = "class_id")
 //	private Map<Class, Student> studentClass = new HashMap<>();
 
-  @Override
-  public String toString() {
-    return subjectName;
-  }
+	@Override
+	public String toString() {
+		return subjectName;
+	}
 }

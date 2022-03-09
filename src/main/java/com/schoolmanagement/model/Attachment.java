@@ -16,10 +16,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Attachment {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-  @Column(name = "path")
-  private String path;
+	@Column(name = "path")
+	private String path;
 }

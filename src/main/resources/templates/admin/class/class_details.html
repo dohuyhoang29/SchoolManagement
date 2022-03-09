@@ -9,7 +9,6 @@
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
   <!--selectPickercss-->
@@ -91,79 +90,167 @@
                   		</div>
                   	</form>
                   	<hr>
-                  	<label class="font-weight-bold">Student          : <span></span></label>
-                  	<form  method="get">
-		                  <div class="row">
-		                    <div class="col-lg-5 col-md-6 col-sm-12">
-		                      <div class="input-group">
-		                        <input type="text" id="search" name="search"
-		                               class="form-control" 
-		                               placeholder="Name">
-		                      </div>
-		                    </div>
-		                    <div class="col-lg-1 col-md-4 col-sm-12">
-		                      <input type="submit" value="Search">
-		                    </div>
-		                  </div>
-                </form>
-                  	<table class="table">
-                  		<thead>
-                  			<tr>
-                  				<th>Student Name</th>
-                  				<th>Date of Birth</th>
-                  				<th>Address</th>
-                  				<th>Action</th>
-                  			</tr>
-                  		</thead>
-                  		<tbody>
-                  			<tr th:each="student : ${class.students}">
-                  				<td th:text="${student.fullName}"></td>
-                  				<td th:text="${student.dob}"></td>
-                  				<td th:text="${student.address}"></td>
-                  				<td th:if="${student.status == 1}">
-                   					<span class="tag tag-success">Studying</span>
-			                    </td>
-                    			<td th:if="${student.status == 2}">
-                      				<span class="tag tag-warning">Absent</span>
-                    			</td>
-                    			<td th:if="${student.status == 3}">
-                   					<span class="tag tag-secondary">Graduate</span>
-                    			</td>
-                  				<td><a class="btn btn-success text-white">Edit</a></td>
-                  				<td><a class="btn btn-danger text-white">Remove</a></td>
-                  				
-                  			</tr>
-                  		</tbody>
-                  	</table>
+                  	<div class="row">
+                  		<div class="col-lg-6 ">
+                  			<label class="font-weight-bold">Student</label>
+                  				<hr>
+			                  	<form th:action="@{'/detail/class/student/search/'+ ${class.id}}"  method="get">
+					                  <div class="row">
+					                    <div class="col-lg-5 col-md-6 col-sm-12">
+					                      <div class="input-group">
+					                        <input type="text" id="search" name="search" th:value="${search}"
+					                               class="form-control" 
+					                               placeholder="Name">
+					                      </div>
+					                    </div>
+					                    <div class="col-lg-1 col-md-4 col-sm-12">
+					                      <input type="submit" class="btn btn-primary text-white" value="Search">
+					                    </div>
+					                  </div>
+			                	</form>
+			                  	<table class="table">
+			                  		<thead>
+			                  			<tr>
+			                  				<th>Student Name</th>
+			                  				<th>Date of Birth</th>
+			                  				<th>Address</th>
+			                  				<th>Action</th>
+			                  			</tr>
+			                  		</thead>
+			                  		<tbody>
+			                  			<tr th:each="student : ${studentList}">
+			                  				<td th:text="${student.fullName}"></td>
+			                  				<td th:text="${student.dob}"></td>
+			                  				<td th:text="${student.address}"></td>
+			                  				<td th:if="${student.status == 1}">
+			                   					<span class="tag tag-success">Studying</span>
+						                    </td>
+			                    			<td th:if="${student.status == 2}">
+			                      				<span class="tag tag-warning">Absent</span>
+			                    			</td>
+			                    			<td th:if="${student.status == 3}">
+			                   					<span class="tag tag-secondary">Graduate</span>
+			                    			</td>
+			                  				<td><a class="btn btn-success text-white">Edit</a></td>
+			                  				<td><a class="btn btn-danger text-white">Remove</a></td>
+			                  				
+			                  			</tr>
+			                  		</tbody>
+			                  	</table>
+			                  	<div class="card-body">
+				                  	<div th:fragment="pagination">
+					                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?search='+ ${search} ">
+						                	<nav>
+							                    <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/details/class/'">
+							                      
+							                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+							                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">First</a>
+							                      </li>
+							                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+							                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+							                      </li>
+							                      
+							                      <th:block th:if="${totalPages <= 6}" >
+							                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+							                          <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+					                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+							                        </li>
+							                      </th:block>
+							                      
+							                      <th:block th:if="${totalPages > 6}">
+							                      		<th:block th:if="${currentPage <= 4}">
+							                      			<li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+							                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+							                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+							                        		</li>
+							                        		
+							                        		<button class="page-link">...</button>
+							                        		
+							                        		<li class="page-item">
+							                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix}}">[[${totalPages}]]</a>
+							                        		</li>
+							                      		</th:block>
+							                      		<th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+							                        		<li th:class="page-item">
+							                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">1</a>
+							                        		</li>
+							                        		
+							                        		<button class="page-link">...</button>
+							                        		
+							                      			<li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+							                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i}+ ${pageUrlPostfix} }">[[${i}]]</a>
+							                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+							                        		</li>
+							                        		
+							                        		<button th:class="page-link">...</button>
+							                        		
+							                        		<li class="page-item">
+							                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${totalPages} + ${pageUrlPostfix}}">[[${totalPages}]]</a>
+							                        		</li>
+							                      		</th:block>
+							                      		<th:block th:if="${currentPage >= totalPages - 3}">
+							                        		<li class="page-item">
+							                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">1</a>
+							                        		</li>
+							                        		
+							                        		<button class="page-link">...</button>
+							                        		
+							                      			<li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+							                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i}+ ${pageUrlPostfix} }">[[${i}]]</a>
+							                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+							                        		</li>
+							                      		</th:block>
+							                      </th:block>
+							                      
+							                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+							                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${currentPage + 1} + ${pageUrlPostfix} }">Next</a>
+							                      </li>
+							                      
+							                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+							                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${totalPages} + ${pageUrlPostfix}}">Last</a>
+							                      </li>
+							                      
+							                    </ul>
+						                  </nav>
+						                </div>
+					                  	</div>
+	              				</div>
+			                  </div>
+			            		<div style="margin : 0 50px;"></div>
+			                  		<div  class="col-lg-5">
+			                  			<label class="font-weight-bold">Subject</label>
+			                  			<hr>
+			                  			<div th:each="TeacherSubject : ${classTeacherSubject}">
+					             			<form id="classInsertForm"  method="post">
+						                      <div class="row clearfix">
+						                        <div class="col-md-12 col-sm-12">
+						                          <div class="form-group">
+						                            <input type="hidden" name="class" id="classId" th:value="${class.id}">
+						                          </div>
+						                        </div>
+						                        <div class="col-md-12 col-sm-12">
+						                          <div class="form-group">
+						                            <div class="form-group row" >
+						                              <label  class="col-md-3 col-form-label" >[[${TeacherSubject.getSubjects().subjectName}]]</label>
+						                                  <input type="hidden" class="subject" name="subject" th:value="${TeacherSubject.getSubjects().id}"> 
+						                              <select class="col-md-5 form-control input-height users" name="users">
+						                              	<th:block th:each = "teacher : ${TeacherSubject.subjects.users}">
+						                              		<option th:selected = "${teacher.id} == ${TeacherSubject.users.id}" th:value = "${teacher.id}" th:utext="${teacher.fullName}"></option>
+						                              	</th:block>
+						                              </select>
+						                              <a class="btn btn-primary text-white ml-4" id="addNew">Change</a>
+						                            </div>
+						                          </div>
+						                        </div>
+						                     </div>
+						                    </form>
+			                  			</div>
+			                  		</div>
+			                  	</div>
                   	<hr>
-                  	<div th:each="TeacherSubject : ${classTeacherSubject}">
-                  	<form id="classInsertForm"  method="post">
-                      <div class="row clearfix">
-                        <div class="col-md-12 col-sm-12">
-                          <div class="form-group">
-                            <input type="hidden" name="class" id="classId" th:value="${class.id}">
-                          </div>
-                        </div>
-                        <div class="col-md-12 col-sm-12">
-                          <div class="form-group">
-                            <div class="form-group row" >
-                              <label  class="col-md-3 col-form-label" >[[${TeacherSubject.getSubjects().subjectName}]]</label>
-                                  <input type="hidden" class="subject" name="subject" th:value="${TeacherSubject.getSubjects().id}"> 
-                              <select class="col-md-5 form-control input-height users" name="users">
-                                <option class="active" th:each="teacher : ${TeacherSubject.getUsers()}"
-                                        th:value="${teacher.id}"
-                                        th:utext="${teacher.fullName}"></option>
-                              </select>
-                              <a class="btn btn-primary text-white ml-4">Change</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  	</div>
                   	<div align="center">
                   		<a class="btn btn-warning text-white col-lg-1">Edit</a>
-                  		<a class="btn btn-secondary text-white col-lg-1">Cancel</a>
+                  		<a th:href="@{/show/class}" class="btn btn-secondary text-white col-lg-1">Cancel</a>
                   		<a class="btn btn-success text-white col-lg-1">Export</a>
                   	</div>
                   </div>
@@ -197,7 +284,7 @@
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
-
+<script type="text/javascript" src="/js/ClassSubjectTeacher/CrudClassTeacherSubject.js"></script>
 </body>
 
 </html>

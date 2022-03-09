@@ -19,7 +19,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "student_evaluate")
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class StudentEvaluate {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,80 +52,6 @@ public class StudentEvaluate {
 	@ManyToOne
 	@JoinColumn(name = "updated_by")
 	private User updatedBy;
-	
-	public StudentEvaluate() {}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getSemester() {
-		return semester;
-	}
-
-	public void setSemester(Integer semester) {
-		this.semester = semester;
-	}
-
-	public String getEvaluate() {
-		return evaluate;
-	}
-
-	public void setEvaluate(String evaluate) {
-		this.evaluate = evaluate;
-	}
-
-	public Integer getConduct() {
-		return conduct;
-	}
-
-	public void setConduct(Integer conduct) {
-		this.conduct = conduct;
-	}
-
-	public Integer getAcademicAbility() {
-		return academicAbility;
-	}
-
-	public void setAcademicAbility(Integer academicAbility) {
-		this.academicAbility = academicAbility;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public User getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public User getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(User updatedBy) {
-		this.updatedBy = updatedBy;
-	}
 	
 	
 }

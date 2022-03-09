@@ -59,4 +59,14 @@ public class StudentServiceImp implements StudentService{
 
 		return repositories.findAll(page);
 	}
+
+	@Override
+	public Page<Student> findStudentByClassId(int id , String search , int page) {
+		Sort sort = Sort.by("fullName");
+		Pageable pageable = PageRequest.of(page -1 , 5 ,sort );
+		
+		return repositories.findByClassId(id, search,pageable);
+	}
+
+	
 }

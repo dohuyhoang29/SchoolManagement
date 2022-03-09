@@ -1,5 +1,9 @@
 package com.schoolmanagement.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +16,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "class_teacher_subject")
+@Getter
+@Setter
+@NoArgsConstructor
 public class ClassTeacherSubject {
 	
 	@Id
@@ -30,39 +37,6 @@ public class ClassTeacherSubject {
 	@JoinColumn(name="class_id")
 	private Class theClass; 
 	
-	public ClassTeacherSubject() {}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public User getUsers() {
-		return users;
-	}
-
-	public void setUsers(User users) {
-		this.users = users;
-	}
-
-	public Subjects getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(Subjects subjects) {
-		this.subjects = subjects;
-	}
-
-	public Class getTheClass() {
-		return theClass;
-	}
-
-	public void setTheClass(Class theClass) {
-		this.theClass = theClass;
-	}
-	
 	
 }

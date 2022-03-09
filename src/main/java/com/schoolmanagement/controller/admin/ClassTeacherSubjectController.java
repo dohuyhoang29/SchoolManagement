@@ -47,7 +47,7 @@ public class ClassTeacherSubjectController {
 	}
 	
 	
-	@PostMapping("/company/save")
+	@PostMapping("/classTeacherSubject/save")
 	public ResponseEntity<Void> saveOrUpdateCompany(@RequestBody ClassTeacherSubjectRequest dr) {
 		ClassTeacherSubject cts = new ClassTeacherSubject();
 		User users = userServiceImp.findbyUserid(dr.getUserid());

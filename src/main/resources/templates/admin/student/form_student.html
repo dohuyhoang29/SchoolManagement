@@ -88,7 +88,7 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label>Full Name</label>
-                            <input th:field="*{}" type="text"
+                            <input th:field="*{fullName}" type="text"
                                    th:classappend="${#fields.hasErrors('fullName') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('fullName')}"
                                th:errors="*{fullName}"></p>
@@ -163,13 +163,13 @@
                           <div class="form-group">
                             <label>Class</label>
                             <select class="form-control input-height" name="class"
-                                    th:field="*{classes}">
+                                    th:field="*{aClass}">
                               <option th:each="class : ${classList}"
-                                      th:field="*{classes}" th:value="${class.id}"
+                                       th:value="${class.id}"
                                       th:utext="${class.className}"></option>
                             </select>
-                            <p class="error-message" th:if="${#fields.hasErrors('classes')}"
-                               th:errors="*{classes}"></p>
+                            <p class="error-message" th:if="${#fields.hasErrors('aClass')}"
+                               th:errors="*{aClass}"></p>
                           </div>
                         </div>
                         <div class="col-sm-12">
@@ -184,7 +184,7 @@
                         </div>
                         <div class="col-sm-12">
                           <button type="submit" class="btn btn-primary">Submit</button>
-                          <a th:href="@{/admin/user/user_management}">
+                          <a th:href="@{/templates/admin/teacher/user_management}">
                             <button type="button" class="btn btn-outline-secondary">Cancel</button>
                           </a>
                         </div>
