@@ -1,18 +1,16 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.SchoolManagementApplication;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,23 +87,21 @@ public class StudentController {
   public String saveStudent(@Valid Student student, BindingResult result,
       @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
 
-    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+    String root = "src/main/";
+    String folder = "upload/image/student_image/";
+    String org_filename = multipartFile.getOriginalFilename();
+    String str_filename = "";
+    if (org_filename != null && !org_filename.isEmpty()) {
+      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
 
-    String uploadDir = "./src/main/resources/static/images/student-images/";
-    Path uploadPath = Paths.get(uploadDir);
+      if (!Files.exists(Paths.get(root + folder))) {
+        Files.createDirectories(Paths.get(root + folder));
+      }
+      Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
+          StandardCopyOption.REPLACE_EXISTING);
 
-    if (!Files.exists(uploadPath)) {
-      Files.createDirectories(uploadPath);
+      student.setImage(str_filename);
     }
-    String imageName = SchoolManagementApplication.randomString(fileName);
-    try (InputStream inputStream = multipartFile.getInputStream()) {
-      Path filePath = uploadPath.resolve(fileName);
-      Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-      Files.move(filePath, filePath.resolveSibling(imageName));
-    } catch (IOException ioException) {
-      throw new IOException("Could not save upload file : " + fileName);
-    }
-    student.setImage(imageName);
 
     student.setUsername("std_" + student.getAdmissionYear() + "_" + (
         studentRepositories.findAllByAdmissionYear(student.getAdmissionYear()).size() + 1));

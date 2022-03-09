@@ -29,61 +29,61 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor
 public class Student {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Integer id;
 
-	@Column(name = "full_name")
-	private String fullName;
+  @Column(name = "full_name", nullable = false)
+  private String fullName;
 
-	@Column(name = "username")
-	private String username;
+  @Column(name = "username", nullable = false, unique = true)
+  private String username;
 
-	@Column(name = "password")
-	private String password;
+  @Column(name = "password", nullable = false)
+  private String password;
 
-	@Column(name = "dob")
-	@DateTimeFormat(pattern = "MM/dd/yyyy")
-	private LocalDate dob;
+  @Column(name = "dob", nullable = false)
+  @DateTimeFormat(pattern = "MM/dd/yyyy")
+  private LocalDate dob;
 
-	@Column(name = "address")
-	private String address;
+  @Column(name = "address")
+  private String address;
 
-	@Column(name = "status")
-	private Integer status;
+  @Column(name = "status", nullable = false)
+  private Integer status;
 
-	@Column(name = "image")
-	private String image;
+  @Column(name = "image", nullable = false)
+  private String image;
 
-	@Column(name = "admission_year")
-	private Integer admissionYear;
+  @Column(name = "admission_year", nullable = false)
+  private Integer admissionYear;
 
-	@Column(name = "graduate_year")
-	private Integer graduateYear;
+  @Column(name = "graduate_year", nullable = false)
+  private Integer graduateYear;
 
-	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+  @Column(name = "created_date", nullable = false)
+  private LocalDateTime createdDate;
 
-	@Column(name = "updated_date")
-	private LocalDateTime updatedDate;
+  @Column(name = "updated_date", nullable = false)
+  private LocalDateTime updatedDate;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "class_id")
-	private Class aClass;
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "class_id")
+  private Class aClass;
 
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	@JoinTable(name = "student_evaluate", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
-	private Set<Class> studentClass = new HashSet<>();
+  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @JoinTable(name = "student_evaluate", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
+  private Set<Class> studentClass = new HashSet<>();
 
-	@Transient
-	public String getStudentImagePath() {
-		if (image == null || id == null) {
-			return null;
-		}
+  @Transient
+  public String getStudentImagePath() {
+    if (image == null || id == null) {
+      return null;
+    }
 
-		return "/images/student-images/" + image;
-	}
-	
-	
+    return "/images/student-images/" + image;
+  }
+
+
 }
