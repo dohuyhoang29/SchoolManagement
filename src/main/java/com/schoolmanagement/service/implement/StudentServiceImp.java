@@ -1,7 +1,8 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
+import com.schoolmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentServiceImp implements StudentService{
+public class StudentServiceImp implements StudentService {
 
 	@Autowired
 	private StudentRepositories repositories;

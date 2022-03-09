@@ -201,6 +201,7 @@
                             <input name="fileImage" id="fileImage" type="file" class="dropify"
                                    accept="image/png, image/jpeg" th:data-default-file="${user.getUserImagePath}">
                           </div>
+                          <input type="hidden" th:field="*{image}">
                           <p class="error-message" th:if="${#fields.hasErrors('image')}"
                              th:errors="*{image}"></p>
                         </div>

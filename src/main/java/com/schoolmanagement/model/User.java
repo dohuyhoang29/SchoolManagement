@@ -44,16 +44,14 @@ public class User {
   private String fullName;
 
   @NotEmpty(message = "Enter username")
-  @Column(name = "username", nullable = false)
+  @Column(name = "username", nullable = false, unique = true)
   private String username;
 
   @Column(name = "password", nullable = false)
-  @NotEmpty(message = "Enter password")
   private String password;
 
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   @NotEmpty(message = "Enter email")
-  @UniqueEmail(message = "Such email already exist!")
   private String email;
 
   @Column(name = "phone", nullable = false)
@@ -90,6 +88,7 @@ public class User {
   private LocalDateTime updatedDate;
 
   @Column(name = "image")
+  @NotEmpty(message = "Choose a image")
   private String image;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

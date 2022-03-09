@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, User> {
+public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
   @Autowired
   private UserRepositories repositories;
@@ -17,12 +17,11 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Us
   }
 
   @Override
-  public boolean isValid(User user, ConstraintValidatorContext constraintValidatorContext) {
+  public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
     if (repositories == null) {
       return true;
     }
 
-
-    return false;
+    return repositories.findAllByEmail(s) == null && s != null;
   }
 }

@@ -2,8 +2,8 @@ package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.SubjectServiceImp;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -128,7 +128,7 @@ public class SubjectController {
   public String DetailSubjectDelete(Model model, @PathVariable("id") int id,
       @PathVariable("userid") int userid) {
     Subjects subjects = subjectServiceImp.findBySubjectID(id);
-    User user = userServiceImp.findbyUserid(userid);
+    User user = userServiceImp.findByUserId(userid);
 
     subjects.getUsers().remove(user);
 

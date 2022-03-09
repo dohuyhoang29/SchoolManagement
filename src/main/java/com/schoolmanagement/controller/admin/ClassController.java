@@ -3,11 +3,11 @@ package com.schoolmanagement.controller.admin;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Student;
-import com.schoolmanagement.service.ClassServiceImp;
-import com.schoolmanagement.service.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.StudentServiceImp;
-import com.schoolmanagement.service.SubjectServiceImp;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.ClassServiceImp;
+import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
+import com.schoolmanagement.service.implement.StudentServiceImp;
+import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 import java.util.List;
 

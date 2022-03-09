@@ -16,23 +16,26 @@ public class EditUserRequest {
 
   private Integer id;
 
+  @NotEmpty(message = "Enter full Name")
   private String fullName;
 
+  @NotEmpty(message = "Enter User Name")
   private String username;
-
-  private String password;
 
   @NotEmpty(message = "Enter email")
   private String email;
 
+  @NotEmpty(message = "Enter password")
+  private String password;
+
+  @NotEmpty(message = "Enter phone number")
   private String phone;
 
+  @NotNull(message = "Enter date of birth")
   private LocalDate dob;
-
 
   @NotEmpty(message = "Enter address")
   private String address;
-
 
   @NotNull(message = "Enter start date")
   @DateTimeFormat(pattern = "MM/dd/yyyy")
@@ -46,6 +49,7 @@ public class EditUserRequest {
   private Boolean deleted;
 
   @Column(name = "image")
+  @NotEmpty(message = "Choose a image")
   private String image;
 
   public String getUserImagePath() {

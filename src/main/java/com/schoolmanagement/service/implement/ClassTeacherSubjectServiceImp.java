@@ -1,6 +1,7 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 
+import com.schoolmanagement.service.ClassTeacherSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.repositories.ClassTeacherSubjectRepositories;
 
 @Service
-public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService{
+public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService {
 	@Autowired
 	private ClassTeacherSubjectRepositories classTeacherSubjectRepositories;
 

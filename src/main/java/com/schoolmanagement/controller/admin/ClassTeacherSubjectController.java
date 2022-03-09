@@ -14,11 +14,11 @@ import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.ClassTeacherSubjectRequest;
-import com.schoolmanagement.service.ClassServiceImp;
-import com.schoolmanagement.service.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.StudentServiceImp;
-import com.schoolmanagement.service.SubjectServiceImp;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.ClassServiceImp;
+import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
+import com.schoolmanagement.service.implement.StudentServiceImp;
+import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 @Controller
 public class ClassTeacherSubjectController {
@@ -50,7 +50,7 @@ public class ClassTeacherSubjectController {
 	@PostMapping("/classTeacherSubject/save")
 	public ResponseEntity<Void> saveOrUpdateCompany(@RequestBody ClassTeacherSubjectRequest dr) {
 		ClassTeacherSubject cts = new ClassTeacherSubject();
-		User users = userServiceImp.findbyUserid(dr.getUserid());
+		User users = userServiceImp.findByUserId(dr.getUserid());
 		Subjects subjects = subjectServiceImp.findBySubjectID(dr.getSubjectId());
 		com.schoolmanagement.model.Class class_u = classServiceImp.getClassById(dr.getClassid());
 		ClassTeacherSubject e = classTeacherSubjectServiceImp.findByIdOther(subjects.getId(), class_u.getId());

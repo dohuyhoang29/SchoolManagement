@@ -2,7 +2,7 @@ package com.schoolmanagement.config;
 
 import com.schoolmanagement.model.AdminAndTeacherAccountDetails;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

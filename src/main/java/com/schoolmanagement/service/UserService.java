@@ -26,7 +26,9 @@ public interface UserService {
 
   User getUserByUsername(String username);
 
-  User findbyUserid(int id);
+  User getUserByEmail(String email);
+
+  User findByUserId(int id);
 
   User getUserById(Integer id);
 

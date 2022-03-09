@@ -1,7 +1,8 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.repositories.SubjectRepositories;
+import com.schoolmanagement.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

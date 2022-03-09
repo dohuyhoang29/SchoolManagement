@@ -2,8 +2,8 @@ package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.model.Blog;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.BlogServiceImp;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.BlogServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class BlogController {
 	
 	@GetMapping("/insert/blog")
 	public String InsertBlog(Model model) {
-		User user = userServiceImp.findbyUserid(8);
+		User user = userServiceImp.findByUserId(8);
 		model.addAttribute("blogs", new Blog());
 		model.addAttribute("users", user);
 
@@ -59,7 +59,7 @@ public class BlogController {
 	@GetMapping("/edit/blog/{id}")
 	public String Edit(Model model , @PathVariable("id") int id) {
 		Blog blogs = blogServiceImp.findByIdBlog(id);
-		User user = userServiceImp.findbyUserid(blogs.getUser().getId());
+		User user = userServiceImp.findByUserId(blogs.getUser().getId());
 		model.addAttribute("blogs", blogs);
 		model.addAttribute("users", user);
 

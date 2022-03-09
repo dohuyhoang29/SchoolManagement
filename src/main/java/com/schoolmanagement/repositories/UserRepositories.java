@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UserRepositories extends PagingAndSortingRepository<User, Integer> {
 
-  Iterable<User> findUserByEmail(String email);
+  @Query(value = "SELECT u FROM User u WHERE u.email = :email")
+  User findAllByEmail(@Param("email") String email);
 
   @Query(value = "SELECT u FROM User u WHERE u.username = :username")
   User findUserByUsername(String username);

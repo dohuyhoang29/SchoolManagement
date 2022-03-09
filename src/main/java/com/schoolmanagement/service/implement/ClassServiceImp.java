@@ -1,18 +1,17 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.ClassRepositories;
 
+import com.schoolmanagement.service.ClassService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClassServiceImp implements ClassService{
+public class ClassServiceImp implements ClassService {
 
 	@Autowired
 	private ClassRepositories classRepositories;

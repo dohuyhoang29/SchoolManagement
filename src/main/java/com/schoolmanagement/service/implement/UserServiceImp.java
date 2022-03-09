@@ -1,9 +1,10 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.RoleRepositories;
 import com.schoolmanagement.repositories.UserRepositories;
+import com.schoolmanagement.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
 
   @Autowired
   private UserRepositories repo;
@@ -81,7 +82,7 @@ public class UserServiceImp implements UserService{
   }
 
   @Override
-  public User findbyUserid(int id) {
+  public User findByUserId(int id) {
     return repo.findById(id);
   }
 
@@ -98,5 +99,10 @@ public class UserServiceImp implements UserService{
   @Override
   public void makeWorking(Integer id) {
     repo.changeDeleted(false, id);
+  }
+
+  @Override
+  public User getUserByEmail(String email) {
+    return repo.findAllByEmail(email);
   }
 }

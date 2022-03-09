@@ -1,12 +1,13 @@
-package com.schoolmanagement.service;
+package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Attachment;
 import com.schoolmanagement.repositories.AttachmentRepositories;
+import com.schoolmanagement.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AttachmentServiceImp implements AttachmentService{
+public class AttachmentServiceImp implements AttachmentService {
 	@Autowired
 	private AttachmentRepositories attachmentRepositories;
 

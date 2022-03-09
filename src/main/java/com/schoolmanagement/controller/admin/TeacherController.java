@@ -5,7 +5,8 @@ import com.schoolmanagement.helper.UserExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.EditUserRequest;
-import com.schoolmanagement.service.UserServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TeacherController {
@@ -105,7 +108,8 @@ public class TeacherController {
 
 	@PostMapping("/teacher/save")
 	public String saveTeacher(@Valid User user, BindingResult result,
-			@RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+			@RequestParam("fileImage") MultipartFile multipartFile,
+			RedirectAttributes rdrAttr) throws IOException {
 
 		user.setCreatedDate(LocalDateTime.now());
 		user.setUpdatedDate(LocalDateTime.now());
@@ -129,14 +133,36 @@ public class TeacherController {
 			user.setImage(str_filename);
 		}
 
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String rawPassword = user.getPassword();
-		String encoderPassword = encoder.encode(rawPassword);
-		user.setPassword(encoderPassword);
+		if (user.getId() == null) {
+			if (user.getPassword().isEmpty()) {
+				result.rejectValue("password", "error.user", "Enter password");
+			} else {
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				String rawPassword = user.getPassword();
+				String encoderPassword = encoder.encode(rawPassword);
+				user.setPassword(encoderPassword);
+			}
+			if (userService.getUserByEmail(user.getEmail()) != null) {
+				result.rejectValue("email", "error.user", "An account already exists for this email.");
+			}
+		} else {
+			user.setPassword(user.getPassword());
+			if (userService.getUserByEmail(user.getEmail()) != null &&
+					!Objects.equals(user.getId(), userService.getUserByEmail(user.getEmail()).getId())) {
+				result.rejectValue("email", "error.user", "An account already exists for this email.");
+			}
+		}
 
 		if (result.hasErrors()) {
 			return "/admin/teacher/form_user";
 		}
+
+		if (user.getImage() == null) {
+			rdrAttr.addFlashAttribute("message", "Add teacher successfully");
+		} else {
+			rdrAttr.addFlashAttribute("message", "Edit teacher successfully");
+		}
+
 		userService.saveUser(user);
 
 		return "redirect:/show/teacher";
@@ -196,42 +222,6 @@ public class TeacherController {
 	@GetMapping("/update/teacher/working/{id}")
 	public String makeTeacherWorking(@PathVariable("id") Integer id) {
 		userService.makeWorking(id);
-
-		return "redirect:/show/teacher";
-	}
-
-  @PostMapping("/update/save/teacher")
-  public String updateTeacher (@Valid EditUserRequest user, BindingResult result,
-      @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
-    String root = "src/main/";
-    String folder = "upload/image/user_image/";
-    String org_filename = multipartFile.getOriginalFilename();
-
-    String str_filename = "";
-    // check duplicate email , username
-    // using repo findByEmail
-    // if user_id != user then show error message
-    // if has error throw exception
-
-
-
-    if (org_filename != null && !org_filename.isEmpty()) {
-      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
-
-			if (!Files.exists(Paths.get(root + folder))) {
-				Files.createDirectories(Paths.get(root + folder));
-			}
-			Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
-					StandardCopyOption.REPLACE_EXISTING);
-
-      user.setImage(str_filename);
-    }
-//    Role role = entityManager.find(Role.class, 2);
-//    user.addRole(role);
-//
-//    user.setUpdatedDate(LocalDateTime.now());
-//
-//    userService.saveUser(user);
 
 		return "redirect:/show/teacher";
 	}
