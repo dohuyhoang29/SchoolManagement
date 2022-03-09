@@ -31,10 +31,6 @@ public class Subjects {
 
 	@OneToMany(mappedBy = "subjects", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<ClassTeacherSubject> subjects = new ArrayList<>();
-//	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-//	@JoinTable(name = "mark", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-//	@MapKeyJoinColumn(name = "class_id")
-//	private Map<Class, Student> studentClass = new HashMap<>();
 
 	@Override
 	public String toString() {

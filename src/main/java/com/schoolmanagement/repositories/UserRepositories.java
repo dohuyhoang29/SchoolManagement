@@ -17,7 +17,7 @@ public interface UserRepositories extends PagingAndSortingRepository<User, Integ
   User findAllByEmail(@Param("email") String email);
 
   @Query(value = "SELECT u FROM User u WHERE u.username = :username")
-  User findUserByUsername(String username);
+  User findUserByUsername(@Param("username") String username);
 
   @Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:fullName%")
   Page<User> searchUsersByFullName(@Param("fullName") String fullName, Pageable pageable);

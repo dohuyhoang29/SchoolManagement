@@ -146,12 +146,19 @@ public class TeacherController {
 			if (userService.getUserByEmail(user.getEmail()) != null) {
 				result.rejectValue("email", "error.user", "An account already exists for this email.");
 			}
+//			if (userService.getUserByUsername(user.getUsername()) != null) {
+//				result.rejectValue("username", "error.user", "An account already exists for this username.");
+//			}
 		} else {
 			user.setPassword(user.getPassword());
 			if (userService.getUserByEmail(user.getEmail()) != null &&
 					!Objects.equals(user.getId(), userService.getUserByEmail(user.getEmail()).getId())) {
 				result.rejectValue("email", "error.user", "An account already exists for this email.");
 			}
+//			if (userService.getUserByUsername(user.getUsername()) != null &&
+//					!Objects.equals(user.getId(), userService.getUserByUsername(user.getUsername()).getId())) {
+//				result.rejectValue("username", "error.user", "An account already exists for this username.");
+//			}
 		}
 
 		if (result.hasErrors()) {

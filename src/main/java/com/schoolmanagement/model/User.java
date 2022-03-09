@@ -122,12 +122,6 @@ public class User {
   @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
-  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-  @JoinTable(name = "teacher_subjects",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "subject_id"))
-  private Set<Subjects> subjects = new HashSet<>();
-
   public void addRole(Role role) {
     this.roles.add(role);
   }
