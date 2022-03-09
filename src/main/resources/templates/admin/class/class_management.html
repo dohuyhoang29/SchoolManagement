@@ -68,7 +68,7 @@
                   <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <input type="text" id="search" name="search"
+                        <input type="text" id="search" name="search" th:value="${seacrh}"
                                class="form-control"
                                placeholder="Name">
                       </div>
@@ -101,7 +101,7 @@
                     <td>[[${class.schoolYear}]]</td>
                     <td>[[${class.grade}]]</td>
                     <td>
-                      <a th:href="@{/show/class/details/{id}(id=${class.id})}">
+                      <a th:href="@{/details/class/{id}(id=${class.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
                           <i class="fa fa-eye text-success"></i>
                         </button>
@@ -122,50 +122,82 @@
                 </tbody>
               </table>
               <div class="card-body">
-                <!--                <div class="bd-example">-->
-                <!--                  <nav aria-label="...">-->
-                <!--                    <ul class="pagination justify-content-end">-->
-                <!--                      <li class="page-item" th:if="${currentPage > 1}">-->
-                <!--                        <a class="page-link"-->
-                <!--                           th:href="@{'/show/subjects' + 1 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">First</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item disabled" th:if="${currentPage == 1}">-->
-                <!--                        <a class="page-link">First</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item">-->
-                <!--                        <a class="page-link" th:if="${currentPage > 1}"-->
-                <!--                           th:href="@{'/show/subjects' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Previous</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item disabled" th:if="${currentPage == 1}">-->
-                <!--                        <a class="page-link">Previous</a>-->
-                <!--                      </li>-->
-                <!--                      <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">-->
-                <!--                        <li class="page-item" th:if="${i != currentPage}">-->
-                <!--                          <a class="page-link"-->
-                <!--                             th:href="@{'/show/subjects' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">[[${i}]]-->
-                <!--                          </a>-->
-                <!--                        </li>-->
-                <!--                        <li th:if="${i == currentPage}" class="page-item active"><a-->
-                <!--                            class="page-link">[[${i}]]</a>-->
-                <!--                        </li>-->
-                <!--                      </th:block>-->
-                <!--                      <li class="page-item">-->
-                <!--                        <a class="page-link" th:if="${currentPage < totalPages}"-->
-                <!--                           th:href="@{'/show/subjects' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Next</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item disabled" th:if="${currentPage == totalPages}">-->
-                <!--                        <a class="page-link">Next</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item">-->
-                <!--                        <a class="page-link" th:if="${currentPage < totalPages}"-->
-                <!--                           th:href="@{'/show/subjects' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}}">Last</a>-->
-                <!--                      </li>-->
-                <!--                      <li class="page-item disabled" th:if="${currentPage == totalPages}">-->
-                <!--                        <a class="page-link">Last</a>-->
-                <!--                      </li>-->
-                <!--                    </ul>-->
-                <!--                  </nav>-->
-                <!--                </div>-->
+                  <div th:fragment="pagination">
+                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?search=' + ${search}">
+	                	<nav>
+		                    <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/class/page/'">
+		                      
+		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+		                        <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
+		                      </li>
+		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+		                      </li>
+		                      
+		                      <th:block th:if="${totalPages <= 6}" >
+		                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+		                          <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+		                        </li>
+		                      </th:block>
+		                      
+		                      <th:block th:if="${totalPages > 6}">
+		                      		<th:block th:if="${currentPage <= 4}">
+		                      			<li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+		                        		</li>
+		                        		
+		                        		<button class="page-link">...</button>
+		                        		
+		                        		<li class="page-item">
+		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+		                        		</li>
+		                      		</th:block>
+		                      		<th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+		                        		<li th:class="page-item">
+		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+		                        		</li>
+		                        		
+		                        		<button class="page-link">...</button>
+		                        		
+		                      			<li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+		                        		</li>
+		                        		
+		                        		<button th:class="page-link">...</button>
+		                        		
+		                        		<li class="page-item">
+		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+		                        		</li>
+		                      		</th:block>
+		                      		<th:block th:if="${currentPage >= totalPages - 3}">
+		                        		<li class="page-item">
+		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+		                        		</li>
+		                        		
+		                        		<button class="page-link">...</button>
+		                        		
+		                      			<li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+		                        		</li>
+		                      		</th:block>
+		                      </th:block>
+		                      
+		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
+		                      </li>
+		                      
+		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
+		                      </li>
+		                      
+		                    </ul>
+	                  </nav>
+	                </div>
+                  </div>
               </div>
             </div>
           </div>

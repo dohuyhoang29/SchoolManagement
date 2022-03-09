@@ -10,27 +10,45 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Getter
-@Setter
+
 @Entity
 @Table(name = "role")
 public class Role {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Integer roleID;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer roleID;
 
-  @Column(name = "role_name")
-  private String roleName;
+	@Column(name = "role_name")
+	private String roleName;
 
-  public Role(String roleName) {
-    this.roleName = roleName;
-  }
-  
-  @Override
-  public String toString() {
-    return roleName;
-  }
+	public Role(String roleName) {
+		this.roleName = roleName;
+	}
+
+	@Override
+	public String toString() {
+		return roleName;
+	}
+	
+	public Role() {}
+
+	public Integer getRoleID() {
+		return roleID;
+	}
+
+	public void setRoleID(Integer roleID) {
+		this.roleID = roleID;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+	
+	
 }

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>School Management</title>
+  <title>Class Details</title>
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
@@ -49,28 +49,16 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center ">
           <div class="header-action">
-            <h1 class="page-title">Student</h1>
+            <h1 class="page-title">Class</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li th:if="${class.id == null}" class="breadcrumb-item active" aria-current="page">
-                Add
-                Student
+              <li  class="breadcrumb-item active" aria-current="page">
+                Class Details
               </li>
-              <li th:if="${class.id != null}" class="breadcrumb-item active" aria-current="page">
-                Edit
-                Student
-              </li>
+              
             </ol>
           </div>
-          <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item">
-              <a th:href="@{/show/class}" class="nav-link">List View</a>
-            </li>
-            <li class="nav-item">
-              <a th:href="@{/insert/class}"
-                 th:classappend="${class.id == null ? 'nav-link active' : 'nav-link'}">Add</a>
-            </li>
-          </ul>
+          
         </div>
       </div>
     </div>
@@ -85,34 +73,99 @@
                     <h3 class="card-title">Basic Information</h3>
                   </div>
                   <div class="card-body">
-                  	<label th:text="'Class: '+${class.className}"></label>
-                  	<div th:each="subject : ${subjectList}">
+                  	<form>
+                  		<div class="form-group">
+                  			<div class="form-group row">
+                  				<label>Class Name       : <span th:text="${class.className}"></span>  </label>
+                  				&emsp;&emsp;|&emsp;
+			                  	<label>       Grade     : <span th:text="${class.grade}"></span></label>
+                  			</div>
+                  		</div>
+                  		<hr>
+                  		<div class="form-group">
+                  			<div class="form-group row">
+                  				<label> School Year     : <span th:text="${class.schoolYear}"></span></label>
+                  				&emsp;&emsp;|&emsp;
+			                  	<label>Homeroom Teacher : <span th:text="${class.user.fullName}"></span></label>
+                  			</div>
+                  		</div>
+                  	</form>
+                  	<hr>
+                  	<label class="font-weight-bold">Student          : <span></span></label>
+                  	<form  method="get">
+		                  <div class="row">
+		                    <div class="col-lg-5 col-md-6 col-sm-12">
+		                      <div class="input-group">
+		                        <input type="text" id="search" name="search"
+		                               class="form-control" 
+		                               placeholder="Name">
+		                      </div>
+		                    </div>
+		                    <div class="col-lg-1 col-md-4 col-sm-12">
+		                      <input type="submit" value="Search">
+		                    </div>
+		                  </div>
+                </form>
+                  	<table class="table">
+                  		<thead>
+                  			<tr>
+                  				<th>Student Name</th>
+                  				<th>Date of Birth</th>
+                  				<th>Address</th>
+                  				<th>Action</th>
+                  			</tr>
+                  		</thead>
+                  		<tbody>
+                  			<tr th:each="student : ${class.students}">
+                  				<td th:text="${student.fullName}"></td>
+                  				<td th:text="${student.dob}"></td>
+                  				<td th:text="${student.address}"></td>
+                  				<td th:if="${student.status == 1}">
+                   					<span class="tag tag-success">Studying</span>
+			                    </td>
+                    			<td th:if="${student.status == 2}">
+                      				<span class="tag tag-warning">Absent</span>
+                    			</td>
+                    			<td th:if="${student.status == 3}">
+                   					<span class="tag tag-secondary">Graduate</span>
+                    			</td>
+                  				<td><a class="btn btn-success text-white">Edit</a></td>
+                  				<td><a class="btn btn-danger text-white">Remove</a></td>
+                  				
+                  			</tr>
+                  		</tbody>
+                  	</table>
+                  	<hr>
+                  	<div th:each="TeacherSubject : ${classTeacherSubject}">
                   	<form id="classInsertForm"  method="post">
-                      
                       <div class="row clearfix">
                         <div class="col-md-12 col-sm-12">
                           <div class="form-group">
                             <input type="hidden" name="class" id="classId" th:value="${class.id}">
                           </div>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-12 col-sm-12">
                           <div class="form-group">
                             <div class="form-group row" >
-                              <label
-                                  class="col-md-3 col-form-label">[[${subject.subjectName}]]</label>
-                                  <input type="hidden" class="subject" name="subject" th:value="${subject.id}"> 
+                              <label  class="col-md-3 col-form-label" >[[${TeacherSubject.getSubjects().subjectName}]]</label>
+                                  <input type="hidden" class="subject" name="subject" th:value="${TeacherSubject.getSubjects().id}"> 
                               <select class="col-md-5 form-control input-height users" name="users">
-                                <option th:each="teacher : ${subject.getUsers()}"
+                                <option class="active" th:each="teacher : ${TeacherSubject.getUsers()}"
                                         th:value="${teacher.id}"
                                         th:utext="${teacher.fullName}"></option>
                               </select>
+                              <a class="btn btn-primary text-white ml-4">Change</a>
                             </div>
                           </div>
                         </div>
                       </div>
                     </form>
                   	</div>
-                   <a class="btn btn-primary" id="addNew">Create</a>
+                  	<div align="center">
+                  		<a class="btn btn-warning text-white col-lg-1">Edit</a>
+                  		<a class="btn btn-secondary text-white col-lg-1">Cancel</a>
+                  		<a class="btn btn-success text-white col-lg-1">Export</a>
+                  	</div>
                   </div>
                 </div>
               </div>
@@ -145,51 +198,6 @@
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
 
-<script>
-$(document).ready(function () {
-    $('.yearpicker').datepicker({
-      format: "yyyy",
-      viewMode: "years",
-      minViewMode: "years",
-      autoclose: true
-    });
-    
-    $(document).delegate('#addNew', 'click', function(event) {
-		event.preventDefault();
-		const listUser =[];
-	    const listSubject=[];
-	    $('select.users').each(function() {
-	    	listUser.push($(this).val());
-	    });
-	    
-	    $('input.subject').each(function() {
-	    	listSubject.push($(this).val());
-	    });
-		for(var i = 0 ; i < listUser.length && i < listSubject.length ; i++){
-				var classId = $('#classId').val();
-				$.ajax({
-					type: "POST",
-					contentType: "application/json; charset=utf-8",
-					url: "http://localhost:8080/company/save",
-					data: JSON.stringify({'userid': listUser[i] , 'subjectId': listSubject[i] , 'classid': classId }),
-					cache: false,
-					success: function(result) {
-						$("#msg").html( "<span style='color: green'>Company added successfully</span>" );
-						window.setTimeout(function(){location.reload()},1000)
-					},
-					error: function(err) {
-						$("#msg").html( "<span style='color: red'>Name is required</span>" );
-					}
-				});
-				
-			
-			
-		}
-	});
-    
-    
-  });
-</script>
 </body>
 
 </html>

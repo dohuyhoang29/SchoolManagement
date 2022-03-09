@@ -83,16 +83,7 @@ public class StudentController {
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
     model.addAttribute("student", new Student());
-
-    List<Class> classList = new ArrayList<>();
-
-    for (Class c : (List<Class>) classService.getAllClass()) {
-      if (c.getSchoolYear() == 2022) {
-        classList.add(c);
-      }
-    }
-
-    model.addAttribute("classList", classList);
+    model.addAttribute("classList", classService.getAllClass());
 
     return "/admin/student/form_student";
   }

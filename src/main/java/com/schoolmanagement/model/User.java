@@ -3,7 +3,9 @@ package com.schoolmanagement.model;
 import com.schoolmanagement.validation.UniqueEmail;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -99,17 +101,24 @@ public class User {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Blog> blogs = new HashSet<>();
 
-  @OneToOne(mappedBy = "user")
-  private Class aClass;
+	@OneToOne(mappedBy = "user")
+	private Class aClass;
 
-  @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Mark> marks = new HashSet<>();
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ClassTeacherSubejct> users = new ArrayList<>();
 
-  @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Mark> mark = new HashSet<>();
 
-  @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Mark> studentEvaluateCreate = new HashSet<>();
+//	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<Mark> marks = new HashSet<>();
+//
+//	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<Mark> mark = new HashSet<>();
+//
+//	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<Mark> studentEvaluateCreate = new HashSet<>();
+//
+//	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
   @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Mark> studentEvaluateUpdate = new HashSet<>();

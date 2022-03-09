@@ -135,6 +135,6 @@ public class SubjectController {
 
     subjectService.SaveSubject(subjects);
 
-    return "redirect:/show/subjects/detail/" + subjects.getId();
+    return "redirect:/show/subjects/details/" + subjects.getId();
   }
 }

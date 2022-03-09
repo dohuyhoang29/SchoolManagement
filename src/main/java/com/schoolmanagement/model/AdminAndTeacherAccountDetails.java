@@ -10,50 +10,50 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class AdminAndTeacherAccountDetails implements UserDetails {
 
-  private User user;
+	private User user;
 
-  public AdminAndTeacherAccountDetails(User user) {
-    this.user = user;
-  }
+	public AdminAndTeacherAccountDetails(User user) {
+		this.user = user;
+	}
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    Set<Role> roles = user.getRoles();
-    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<Role> roles = user.getRoles();
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-    for (Role role : roles) {
-      authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-    }
-    return authorities;
-  }
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+		}
+		return authorities;
+	}
 
-  @Override
-  public String getPassword() {
-    return user.getPassword();
-  }
+	@Override
+	public String getPassword() {
+		return user.getPassword();
+	}
 
-  @Override
-  public String getUsername() {
-    return user.getUsername();
-  }
+	@Override
+	public String getUsername() {
+		return user.getUsername();
+	}
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-  @Override
-  public boolean isEnabled() {
-    return !user.getDeleted();
-  }
+	@Override
+	public boolean isEnabled() {
+		return !user.getDeleted();
+	}
 }

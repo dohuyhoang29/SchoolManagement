@@ -19,31 +19,96 @@ import lombok.Setter;
 @Entity
 @Table(name = "mark")
 public class Mark {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@Column(name = "type")
+	private Integer type;
+
+	@Column(name = "semester")
+	private Integer semester;
+
+	@Column(name = "coefficient")
+	private Integer coefficient;
+
+	@Column(name = "created_date")
+	private Date createdDate;
+
+	@ManyToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;
+
+	@Column(name = "updated_date")
+	private Date updatedDate;
+
+	@ManyToOne
+	@JoinColumn(name = "updated_by")
+	private User updatedBy;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getSemester() {
+		return semester;
+	}
+
+	public void setSemester(Integer semester) {
+		this.semester = semester;
+	}
+
+	public Integer getCoefficient() {
+		return coefficient;
+	}
+
+	public void setCoefficient(Integer coefficient) {
+		this.coefficient = coefficient;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	public User getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 
 
-  @Column(name = "type")
-  private Integer type;
-
-  @Column(name = "semester")
-  private Integer semester;
-
-  @Column(name = "coefficient")
-  private Integer coefficient;
-
-  @Column(name = "created_date")
-  private Date createdDate;
-
-  @ManyToOne
-  @JoinColumn(name = "created_by")
-  private User createdBy;
-
-  @Column(name = "updated_date")
-  private Date updatedDate;
-
-  @ManyToOne
-  @JoinColumn(name = "updated_by")
-  private User updatedBy;
 }

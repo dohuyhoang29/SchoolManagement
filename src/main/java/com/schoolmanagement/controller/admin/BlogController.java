@@ -5,6 +5,8 @@ import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.BlogService;
 import com.schoolmanagement.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -45,11 +47,11 @@ public class BlogController {
 	}
 	
 	@PostMapping("/save/blog")
-	public String save(Model model, @Valid Blog blogs) {
-	
+	public String save(Model model, @Valid Blog blogs , Authentication authentication) {
+		
+		User user = userService.getUserByUsername(authentication.getName());
+		blogs.setUser(user);
 		blogs.setCreatedDate(LocalDateTime.now());
-		
-		
 		blogs.setUpdatedDate(LocalDateTime.now());
 		blogService.SaveBlog(blogs);
 
