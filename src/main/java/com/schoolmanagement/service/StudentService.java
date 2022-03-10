@@ -1,6 +1,7 @@
 package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Student;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,10 +14,12 @@ public interface StudentService {
 
 	Student getStudentById(Integer id);
 
-	Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField, String sortDir);
+	Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField,
+			String sortDir, String grade, String className, String schoolYear);
 
 	Page<Student> getAllStudentByClass(int pageNumber);
 	
 	Page<Student> findStudentByClassId(int id , String search , int page);
-	
+
+	void saveAlLStudent (Iterable<Student> studentList);
 }

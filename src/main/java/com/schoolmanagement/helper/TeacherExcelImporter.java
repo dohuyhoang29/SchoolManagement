@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
-public class UserExcelImporter {
+public class TeacherExcelImporter {
   @Autowired
   private RoleRepositories roleRepositories;
 
@@ -51,8 +51,6 @@ public class UserExcelImporter {
         Cell nextCell = cellIterator.next();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-//        DataFormatter formatter = new DataFormatter();
-//        formatter.formatCellValue(nextCell);
         int columnIndex = nextCell.getColumnIndex();
         switch (columnIndex) {
           case 0:

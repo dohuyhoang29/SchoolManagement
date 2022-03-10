@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +37,7 @@ public class Student {
   private Integer id;
 
   @Column(name = "full_name", nullable = false)
+  @NotEmpty(message = "Enter full name")
   private String fullName;
 
   @Column(name = "username", nullable = false, unique = true)
@@ -45,21 +48,26 @@ public class Student {
 
   @Column(name = "dob", nullable = false)
   @DateTimeFormat(pattern = "MM/dd/yyyy")
+  @NotNull(message = "Enter Date of Birth")
   private LocalDate dob;
 
   @Column(name = "address")
+  @NotEmpty(message = "Enter address")
   private String address;
 
   @Column(name = "status", nullable = false)
+  @NotNull(message = "Choose a status")
   private Integer status;
 
-  @Column(name = "image", nullable = false)
+  @Column(name = "image")
   private String image;
 
   @Column(name = "admission_year", nullable = false)
+  @NotNull(message = "Enter admission year")
   private Integer admissionYear;
 
   @Column(name = "graduate_year", nullable = false)
+  @NotNull(message = "Enter graduate year")
   private Integer graduateYear;
 
   @Column(name = "created_date", nullable = false)
@@ -69,6 +77,7 @@ public class Student {
   private LocalDateTime updatedDate;
 
   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @NotNull(message = "Choose a class")
   @JoinColumn(name = "class_id")
   private Class aClass;
 
@@ -82,8 +91,22 @@ public class Student {
       return null;
     }
 
-    return "/images/student-images/" + image;
+    return "/upload/image/student_image/" + image;
   }
 
-
+  public Student(String fullName, String username, String password, LocalDate dob,
+      String address, Integer status, Integer admissionYear, Integer graduateYear,
+      LocalDateTime createdDate, LocalDateTime updatedDate, Class aClass) {
+    this.fullName = fullName;
+    this.username = username;
+    this.password = password;
+    this.dob = dob;
+    this.address = address;
+    this.status = status;
+    this.admissionYear = admissionYear;
+    this.graduateYear = graduateYear;
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
+    this.aClass = aClass;
+  }
 }

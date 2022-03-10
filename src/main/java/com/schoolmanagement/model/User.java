@@ -88,7 +88,6 @@ public class User {
   private LocalDateTime updatedDate;
 
   @Column(name = "image")
-  @NotEmpty(message = "Choose a image")
   private String image;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -106,21 +105,17 @@ public class User {
 	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClassTeacherSubject> users = new ArrayList<>();
 
+	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Mark> marks = new HashSet<>();
 
-//	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private Set<Mark> marks = new HashSet<>();
-//
-//	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private Set<Mark> mark = new HashSet<>();
-//
-//	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private Set<Mark> studentEvaluateCreate = new HashSet<>();
-//
-//	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
+	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Mark> mark = new HashSet<>();
 
-  @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Mark> studentEvaluateUpdate = new HashSet<>();
+	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Mark> studentEvaluateCreate = new HashSet<>();
+
+	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
   public void addRole(Role role) {
     this.roles.add(role);

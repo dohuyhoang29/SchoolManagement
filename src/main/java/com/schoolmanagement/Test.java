@@ -2,6 +2,7 @@ package com.schoolmanagement;
 
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class Test {
   private static StudentRepositories repositories;
 
   public static void main(String[] args) {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    System.out.println(encoder.encode("1"));
+    int year = LocalDateTime.now().getYear();
+    System.out.println(year);
   }
 
   public static int randomString(String text) {

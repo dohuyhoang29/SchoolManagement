@@ -1,7 +1,7 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.helper.UserExcelExporter;
-import com.schoolmanagement.helper.UserExcelImporter;
+import com.schoolmanagement.helper.TeacherExcelExporter;
+import com.schoolmanagement.helper.TeacherExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.UserServiceImp;
@@ -85,7 +85,7 @@ public class TeacherController {
 
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
-    return "/admin/teacher/user_management";
+    return "/admin/teacher/teacher_management";
   }
 
   @GetMapping("/show/teacher")
@@ -111,9 +111,6 @@ public class TeacherController {
   public String saveTeacher(@Valid User user, BindingResult result,
       @RequestParam("fileImage") MultipartFile multipartFile,
       RedirectAttributes rdrAttr) throws IOException {
-
-    user.setCreatedDate(LocalDateTime.now());
-    user.setUpdatedDate(LocalDateTime.now());
 
     Role role = entityManager.find(Role.class, 2);
     user.addRole(role);
@@ -150,6 +147,9 @@ public class TeacherController {
         result.rejectValue("username", "error.user",
             "An account already exists for this username.");
       }
+
+      user.setCreatedDate(LocalDateTime.now());
+      user.setUpdatedDate(LocalDateTime.now());
     } else {
       user.setPassword(user.getPassword());
       if (userService.getUserByEmail(user.getEmail()) != null &&
@@ -162,13 +162,16 @@ public class TeacherController {
         result.rejectValue("username", "error.user",
             "An account already exists for this username.");
       }
+
+      user.setCreatedDate(user.getCreatedDate());
+      user.setUpdatedDate(LocalDateTime.now());
     }
 
     if (result.hasErrors()) {
       return "/admin/teacher/form_user";
     }
 
-    if (user.getImage() == null) {
+    if (user.getId() == null) {
       rdrAttr.addFlashAttribute("message", "Add teacher successfully");
     } else {
       rdrAttr.addFlashAttribute("message", "Edit teacher successfully");
@@ -206,7 +209,7 @@ public class TeacherController {
 
     List<User> listUsers = userService.getAllUser();
 
-    UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
+    TeacherExcelExporter excelExporter = new TeacherExcelExporter(listUsers);
 
     excelExporter.export(response);
   }
@@ -215,7 +218,7 @@ public class TeacherController {
   public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile)
       throws IOException {
     if (multipartFile != null) {
-      UserExcelImporter excelImporter = new UserExcelImporter();
+      TeacherExcelImporter excelImporter = new TeacherExcelImporter();
       Role role = entityManager.find(Role.class, 2);
       Iterable<User> listUser = excelImporter.excelImport(multipartFile, role);
       userService.saveAllUser(listUser);

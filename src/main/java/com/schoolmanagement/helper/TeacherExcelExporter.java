@@ -12,19 +12,19 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class UserExcelExporter {
+public class TeacherExcelExporter {
 
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
 	private List<User> listUsers;
 
-	public UserExcelExporter(List<User> listUsers) {
+	public TeacherExcelExporter(List<User> listUsers) {
 		this.listUsers = listUsers;
 		workbook = new XSSFWorkbook();
 	}
 
 	private void writeHeaderLine() {
-		sheet = workbook.createSheet("Users");
+		sheet = workbook.createSheet("Teachers");
 
 		Row row = sheet.createRow(0);
 

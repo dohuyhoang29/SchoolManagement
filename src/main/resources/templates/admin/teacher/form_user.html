@@ -94,6 +94,7 @@
                     <form th:action="@{/teacher/save}" method="post" th:object="${user}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
+                      <input type="hidden" th:field="*{createdDate}">
                       <div class="row clearfix">
                         <div class="col-sm-12">
                           <div class="form-group">
