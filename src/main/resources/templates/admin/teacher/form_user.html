@@ -25,23 +25,7 @@
 
 <div id="main_content">
   <!-- Start Main top header -->
-  <div id="header_top" class="header_top">
-    <div class="container">
-      <div class="hleft">
-        <a class="header-brand" href="index.html"><i
-            class="fa fa-graduation-cap brand-logo"></i></a>
-        <div class="dropdown">
-          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
-              class="fe fe-align-center"></i></a>
-          <a href="javascript:void(0)" class="nav-link icon settingbar"><i
-              class="fe fe-settings"></i></a>
-        </div>
-      </div>
-      <div class="hright">
-        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
-      </div>
-    </div>
-  </div>
+  <div th:include="partials/header"></div>
   <!-- Start Rightbar setting panel -->
   <div th:include="partials/rightbar"></div>
   <!-- Start Main leftbar navigation -->

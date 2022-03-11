@@ -1,8 +1,11 @@
 package com.schoolmanagement.service.implement;
 
+import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Student;
+import com.schoolmanagement.repositories.ClassTeacherSubjectRepositories;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.StudentService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +19,9 @@ public class StudentServiceImp implements StudentService {
 
 	@Autowired
 	private StudentRepositories repositories;
+
+	@Autowired
+	private ClassTeacherSubjectRepositories classTeacherSubjectRepositories;
 
 	@Override
 	public void saveStudent(Student student) {
@@ -49,7 +55,7 @@ public class StudentServiceImp implements StudentService {
 		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
 
 		if (status.equalsIgnoreCase("all") && grade.equalsIgnoreCase("") && schoolYear.equalsIgnoreCase("")) {
-			return repositories.findStudentByFullName(fullName, className, page);
+			return repositories.findStudentByFullNameAndClass(fullName, className, page);
 		}
 		if (!status.equalsIgnoreCase("all") && grade.equalsIgnoreCase("") && schoolYear.equalsIgnoreCase("")){
 			return repositories.findStudentByFullNameAndStatus(fullName, Integer.parseInt(status), className, page);
@@ -91,6 +97,20 @@ public class StudentServiceImp implements StudentService {
 	}
 
 	@Override
+	public Page<Student> searchStudentByClass(Integer id) {
+		List<Student> listStudent = new ArrayList<>();
+		for (ClassTeacherSubject cts : classTeacherSubjectRepositories.findByTeacherId(id)) {
+			listStudent.addAll(cts.getTheClass().getStudents());
+		}
+
+		for (Student s : listStudent) {
+			System.out.println(s.getUsername());
+		}
+
+		return null;
+	}
+
+	@Override
 	public void saveAlLStudent(Iterable<Student> studentList) {
 		repositories.saveAll(studentList);
 	}
@@ -102,6 +122,5 @@ public class StudentServiceImp implements StudentService {
 
 		return repositories.findByIdClass(classid);
 	}
-
 
 }

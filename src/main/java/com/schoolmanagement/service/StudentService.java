@@ -22,6 +22,8 @@ public interface StudentService {
 	
 	Page<Student> findStudentByClassId(int id , String search , int page);
 
+	Page<Student> searchStudentByClass(Integer id);
+
 	void saveAlLStudent (Iterable<Student> studentList);
 
 	List<Student> findAllStudentByClassId(int classid);

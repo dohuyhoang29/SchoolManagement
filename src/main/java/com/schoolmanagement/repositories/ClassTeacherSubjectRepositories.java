@@ -18,5 +18,7 @@ public interface ClassTeacherSubjectRepositories extends PagingAndSortingReposit
 	
 	@Query(value ="SELECT s FROM ClassTeacherSubject s WHERE s.theClass.id = (:idc) ")
 	Iterable<ClassTeacherSubject> findByClassId(@Param("idc") int id);
-	
+
+	@Query(value = "SELECT cts FROM ClassTeacherSubject cts WHERE cts.users.id = :id")
+	Iterable<ClassTeacherSubject> findByTeacherId(@Param("id") Integer id);
 }

@@ -10,4 +10,6 @@ public interface ClassTeacherSubjectService {
   Iterable<ClassTeacherSubject> findAllByClassId(int id);
 
   Iterable<ClassTeacherSubject> findAllTeacherSubject();
+
+  Iterable<ClassTeacherSubject> findAllByTeacher(Integer id);
 }

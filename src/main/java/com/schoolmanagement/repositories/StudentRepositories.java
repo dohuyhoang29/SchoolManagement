@@ -13,7 +13,10 @@ public interface StudentRepositories extends PagingAndSortingRepository<Student,
 	List<Student> findAllByAdmissionYear(Integer admissionYear);
 
 	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class%")
-	Page<Student> findStudentByFullName(@Param("fullName") String fullName, @Param("class") String className, Pageable pageable);
+	Page<Student> findStudentByFullNameAndClass(@Param("fullName") String fullName, @Param("class") String className, Pageable pageable);
+
+//	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class% AND s.aClass.id = :classId")
+//	Page<Student> findStudentByFullNameAndClassId(@Param("fullName") String fullName, @Param("class") String className, @Param("class_id") Integer classId, Pageable pageable);
 
 	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.status = :status AND s.aClass.className LIKE %:class%")
 	Page<Student> findStudentByFullNameAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,

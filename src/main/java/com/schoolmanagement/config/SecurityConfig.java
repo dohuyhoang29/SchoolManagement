@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
@@ -49,16 +51,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**", "/bundles/**", "/fonts/**")
         .permitAll()
-        .antMatchers("/insert/**").hasAnyAuthority("ADMIN", "TEACHER")
-        .antMatchers("/show/**").hasAnyAuthority("ADMIN", "TEACHER")
-        .antMatchers("/edit/**").hasAnyAuthority("ADMIN")
-        .anyRequest().permitAll()
+        .antMatchers("/insert/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
+        .antMatchers("/show/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
+        .antMatchers("/edit/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
+        .anyRequest().authenticated()
         .and()
         .formLogin().loginPage("/admin/login")
         .usernameParameter("username")
-        .defaultSuccessUrl("/dashboard")
+        .defaultSuccessUrl("/")
+        .failureUrl("/admin/login?error=true")
         .permitAll()
-        .and().csrf().disable()
-        .logout().logoutSuccessUrl("/admin/login").permitAll();
+        .and()
+        .csrf().disable()
+        .logout()
+        .logoutSuccessUrl("/admin/login?logout=true")
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
+        .permitAll()
+        .and()
+        .rememberMe().rememberMeParameter("remember-me-new")
+        .and()
+        .exceptionHandling().accessDeniedPage("/403");
   }
 }

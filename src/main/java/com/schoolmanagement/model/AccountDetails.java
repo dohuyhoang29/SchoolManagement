@@ -9,11 +9,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class AdminAndTeacherAccountDetails implements UserDetails {
+public class AccountDetails implements UserDetails {
 
 	private User user;
 
-	public AdminAndTeacherAccountDetails(User user) {
+	public AccountDetails(User user) {
 		this.user = user;
 	}
 
@@ -36,6 +36,22 @@ public class AdminAndTeacherAccountDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		return user.getUsername();
+	}
+
+	public String getFullName() {
+		return this.user.getFullName();
+	}
+
+	public Class getAClass() {
+		return this.user.getAClass();
+	}
+
+	public Set<Role> getRole () {
+		return this.user.getRoles();
+	}
+
+	public String getImage() {
+		return this.user.getUserImagePath();
 	}
 
 	@Override

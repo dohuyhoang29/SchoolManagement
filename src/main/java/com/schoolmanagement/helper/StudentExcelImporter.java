@@ -24,13 +24,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 public class StudentExcelImporter {
-  @Autowired
-  private StudentRepositories studentRepositories;
+//  @Autowired
+//  private StudentRepositories studentRepositories;
 
-  @Autowired
-  private ClassServiceImp classService;
+//  @Autowired
+//  private ClassServiceImp classService;
 
-  public List<Student> excelImport(MultipartFile multipartFile) throws IOException {
+  public List<Student> excelImport(MultipartFile multipartFile, StudentRepositories studentRepositories, ClassServiceImp classService) throws IOException {
     List<Student> studentList = new ArrayList<>();
 
     String fullName = "";

@@ -34,4 +34,9 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 		
 		return classTeacherSubjectRepositories.findAll();
 	}
+
+	@Override
+	public Iterable<ClassTeacherSubject> findAllByTeacher(Integer id) {
+		return null;
+	}
 }

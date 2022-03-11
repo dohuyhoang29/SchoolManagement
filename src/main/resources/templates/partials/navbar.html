@@ -7,10 +7,14 @@
       </div>
       <div class="right">
         <div class="dropdown d-flex">
-          <a href="javascript:void(0)" class="chip ml-3" data-toggle="dropdown"
-          >
-            <span class="avatar" style="background-image: url(/images/xs/avatar5.jpg)"></span><span
-              sec:authentication="name">Username</span></a>
+          <a href="javascript:void(0)" class="chip ml-3" data-toggle="dropdown">
+            <image class="avatar" th:if="${#authentication.principal.image}"
+                   th:src="${#authentication.principal.image}"></image>
+            <span sec:authorize="isAuthenticated()">
+              <span sec:authentication="principal.fullName">Username</span>
+              <span sec:authentication="principal.authorities">Username</span>
+            </span>
+          </a>
           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
             <a class="dropdown-item" href="page-profile.html"><i
                 class="dropdown-icon fe fe-user"></i> Forgot password</a>

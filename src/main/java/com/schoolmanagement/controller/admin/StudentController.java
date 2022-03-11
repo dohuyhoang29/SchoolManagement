@@ -4,6 +4,7 @@ import com.schoolmanagement.helper.StudentExcelExporter;
 import com.schoolmanagement.helper.StudentExcelImporter;
 import com.schoolmanagement.helper.TeacherExcelExporter;
 import com.schoolmanagement.helper.TeacherExcelImporter;
+import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,8 +68,10 @@ public class StudentController {
   private EntityManager entityManager;
 
   @GetMapping("/show/student")
-  public String listStudent(Model model) {
-    return listStudentByPage(model, 1, "id", "asc", "", "all", "", "", "");
+  public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
+    studentServiceImp.searchStudentByClass(2);
+
+    return listStudentByPage(model, 1, "id", "asc", "", "all", "", "", "", accountDetails);
   }
 
   @GetMapping("/show/student/{page}")
@@ -78,9 +83,13 @@ public class StudentController {
       @Param("status") String status,
       @Param("grade") String grade,
       @Param("class-name") String className,
-      @Param("school-year") String schoolYear) {
-    Page<Student> page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
-        sortDir, grade, className, schoolYear);
+      @Param("school-year") String schoolYear,
+      @AuthenticationPrincipal AccountDetails accountDetails) {
+    Page<Student> page = null;
+//    if (!accountDetails.getRole().equalsIgnoreCase("TEACHER")) {
+      page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
+          sortDir, grade, className, schoolYear);
+//    }
 
     long totalItems = page.getTotalElements();
     int totalPages = page.getTotalPages();
@@ -103,7 +112,13 @@ public class StudentController {
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
 
-    return "/admin/student/student_management";
+    for (Role role : accountDetails.getRole()) {
+      if (role.getRoleName().equalsIgnoreCase("TEACHER")) {
+        return "/admin/student/student_management_teacher";
+      }
+    }
+
+      return "/admin/student/student_management";
   }
 
   @GetMapping("/insert/student")
@@ -191,10 +206,10 @@ public class StudentController {
   @GetMapping("/show/student/search")
   public String searchStudent(@RequestParam("search") String search,
       @RequestParam("status") String status, @RequestParam("grade") String grade,
-      @RequestParam("class-name") String className,
+      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails,
       @RequestParam("school-year") String schoolYear, Model model) {
 
-    return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear);
+    return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear, accountDetails);
   }
 
   @GetMapping("/edit/student/{id}")
@@ -228,10 +243,16 @@ public class StudentController {
       throws IOException {
     if (multipartFile != null) {
       StudentExcelImporter excelImporter = new StudentExcelImporter();
-      Iterable<Student> studentList = excelImporter.excelImport(multipartFile);
+      Iterable<Student> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp);
       studentServiceImp.saveAlLStudent(studentList);
     }
 
     return "redirect:/show/teacher";
+  }
+
+  @PreAuthorize("hasAuthority('TEACHER')")
+  @GetMapping("/insert/student/mark")
+  public String insertStudentMark() {
+    return "/admin/index";
   }
 }

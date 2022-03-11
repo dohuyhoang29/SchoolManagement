@@ -1,6 +1,6 @@
 package com.schoolmanagement.config;
 
-import com.schoolmanagement.model.AdminAndTeacherAccountDetails;
+import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,6 @@ public class UserAccountDetailsService implements UserDetailsService {
     if (user == null) {
       throw new UsernameNotFoundException("User not found");
     }
-    return new AdminAndTeacherAccountDetails(user);
+    return new AccountDetails(user);
   }
 }
