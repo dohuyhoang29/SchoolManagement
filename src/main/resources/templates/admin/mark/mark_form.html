@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>School Management</title>
+
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css"/>
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+  <div class="loader">
+  </div>
+</div>
+
+<div id="main_content">
+  <!-- Start Main top header -->
+  <div th:include="partials/header"></div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
+
+
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Student</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Mark</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div> 
+	<div class="section-body mt-4">
+		<div align="center"> <h1>Student - Mark</h1></div>
+		 <div class="container-fluid">
+        <div class="tab-content">
+        	<div class="tab-pane active" id="Staff-add">
+        		<div class="row clearfix">
+        			<div class="col-lg-12 col-md-12 col-sm-12">
+        				<div class="card">
+        					<div class="card-header">
+        						<form>
+        							<div class="form-group">
+        								<label> Class Name  : <span >
+        								[[${cst.theClass.className}]]
+        								</span> </label>
+        								<input type="hidden" id="classid" th:value ="${cst.theClass.id}">
+        							</div>
+        							<div class="form-group" >
+        								<label> Subject Name  : <span >[[${cst.subjects.subjectName}]]</span> </label>
+        								<input type="hidden" th:value="${cst.subjects.id}">
+        							</div>
+        							<div class="form-group">
+        								<label> Type  : </label>
+        								<select class="form-control w-100" aria-label="Default select example" id="test">
+        									<option th:selected="${type == 1}" value="1">Oral test</option>
+        									<option th:selected="${type == 2}" value="2">15 minutes test</option>
+        									<option th:selected="${type == 3}" value="3">1 hour test</option>
+        									<option th:selected="${type == 4}" value="4">Semester test</option>
+        								</select>
+        							</div>
+        							<div class="form-group">
+        								<label>Semester :  </label>
+        								<select class="form-control  w-100" aria-label="Default select example">
+        									<option value="1">1</option>
+        									<option value="2">2</option>
+        								</select>
+        							</div>
+        						</form>
+        					</div>
+        					<div>
+        						<table class="table">
+        							<thead>
+        								<tr>
+        									<th class="w-25">Student Name</th>
+        									<th class="w-25">DOB</th>
+        									<th class="w-25">Address</th>
+        									<th>Marks</th>
+        								</tr>
+        							</thead>
+        							<tbody>
+        								<tr th:each="listStudent : ${Studentlist}">
+        									<td th:text="${listStudent.fullName}"></td>
+        									<td th:text="${listStudent.dob}"></td>
+        									<td th:text="${listStudent.address}"></td>
+        									<td th:if="${type == 1  || type == 4 }">
+	        									<input type ="number" class="a" min=0 max=10 value="0">
+ 	       									</td>
+        									<td th:if="${type == 3 || type ==1 || type ==2}">
+	        									<input type ="number" class="b" min=0 max=10 value="0" >
+ 	       									</td>
+        									<td th:if="${type == 3 || type == 2 || type == 1}">
+	        									<input type ="number" class="c" min=0 max=10  value="0">
+ 	       									</td>
+        									
+        								</tr>
+        							</tbody>
+        						</table>
+        					</div>
+        				</div>
+        				<a class="btn btn-primary" id="click">Save</a>
+        			</div>
+        		</div>
+        	</div>
+        	</div>
+        </div>
+	</div>
+</div>
+</div>
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#test').change(function(){
+			var val = $('#test').val();
+			var classid = $('#classid').val();
+			$.ajax({
+				type: "GET",
+				contentType: "application/json; charset=utf-8",
+				url: "http://localhost:8080/insert/mark/"+classid +"/"+val,
+				success: function(result) {
+					if (result != null) {
+						
+						window.location = "http://localhost:8080/insert/mark/"+classid +"/"+val;
+					}
+				},
+				error: function(err) {
+					$("#msg").html("<span style='color: red'>Name is required</span>");
+				}
+			});
+		});
+		
+		$("#click").click(function(){
+			const ListData1 = [];
+			const ListData2 = [];
+			const ListData3 = [];
+			$('input.c').each(function(index){
+				ListData.push($(this).val());
+			})
+		});
+	});
+</script>
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+</body>
+</html>

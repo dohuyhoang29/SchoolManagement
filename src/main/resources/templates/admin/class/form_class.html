@@ -84,8 +84,36 @@
                   <div class="card-header">
                     <h3 class="card-title">Basic Information</h3>
                   </div>
+                  	<div align="center" id="message"></div>
+                   <th:block th:if="${class.id >= 1}">
+                   <div><input type="hidden" th:value="${oldTeacher.id}" id="oldTeacher"></div>
+                  	<div class="card-body">
+            			<h3> Teacher Subject </h3>
+	            		<div th:each="subject : ${subjectList}">
+	                	<form id="classInsertForm"  method="post">
+		                    <div class="row clearfix">
+		                      <input type="hidden" name="class" id="classId" th:value="${classz.id}">
+		                      <div class="col-md-12 col-sm-12">
+		                        <div class="form-group">
+		                          	<div class="form-group row" >
+		                            	<label class="col-md-3 col-form-label">[[${subject.subjectName}]]</label>
+		                                <input type="hidden" class="subject" name="subject" th:value="${subject.id}"> 
+		                            	<select class="col-md-5 form-control input-height users" name="users">
+		                              	<option th:each="teacher : ${subject.getUsers()}"
+		                                      th:value="${teacher.id}"
+		                                      th:utext="${teacher.fullName}"></option>
+		                            	</select>
+		                          	  </div>
+		                        	</div>
+	                   			</div>
+	                   		</div>
+	                  	</form>
+	                	</div>
+			        </div>
+                  </th:block>
+                 
                   <div class="card-body">
-                    <form id="classInsertForm" th:action="@{/save/class}" method="post"
+                    <form id="classInsertForm" class="formsubmit" th:action="@{/save/class}" method="post"
                           th:object="${class}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
@@ -93,7 +121,7 @@
                         <div class="col-md-12 col-sm-12">
                           <div class="form-group">
                             <label>Class Name</label>
-                            <input th:field="*{className}" type="text"
+                            <input th:field="*{className}" type="text" id="className"
                                    th:classappend="${#fields.hasErrors('className') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('className')}"
                                th:errors="*{className}"></p>
@@ -102,7 +130,7 @@
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
                             <label>Grade</label>
-                            <select class="form-control input-height" name="department"
+                            <select class="form-control input-height" id="grade"  name="department"
                                     th:field="*{grade}">
                               <option th:field="*{grade}" value="10">10</option>
                               <option th:field="*{grade}" value="11">11</option>
@@ -115,7 +143,7 @@
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
                             <label>School Year</label>
-                            <input th:field="*{schoolYear}" name="start-date"
+                            <input th:field="*{schoolYear}" name="start-date" id="schoolYear"
                                    class="yearpicker" data-date-autoclose="true"
                                    th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
@@ -125,7 +153,7 @@
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
                             <label>Homeroom Teacher</label>
-                            <select class="form-control input-height" name="department"
+                            <select class="form-control input-height" name="department" id="hometeacher"
                                     th:field="*{user}">
                               <option th:each="user : ${userList}"
                                       th:value="${user.id}" th:utext="${user.fullName}"></option>
@@ -135,16 +163,18 @@
                           </div>
                         </div>
                         <div class="col-sm-12">
-                          <button type="submit" class="btn btn-primary">Submit
-                          </button>
-                          <a th:href="@{/show/class}">
-                            <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                          </a>
+                        <th:block th:if="${class.id != null }">
+	                         <button type="submit"  id="Edit" class="btn btn-primary">Save</button>
+                        </th:block>
+                         <th:block th:if="${class.id == null }">
+                         	<button type="submit"  id="addNew" class="btn btn-primary">Create</button>
+                         </th:block>
+                          <a class="btn btn-secondary" th:href="@{/show/class}">Cancel</a>
                         </div>
                       </div>
                     </form>
                   </div>
-                </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -152,7 +182,8 @@
       </div>
     </div>
   </div>
-</div>
+ </div>
+  
 
 <script>
 
@@ -161,8 +192,6 @@
 <script src="/bundles/lib.vendor.bundle.js"></script>
 
 <!-- Start Plugin Js -->
-<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="/plugins/bootstrap-yearpicker/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/dropify/js/dropify.min.js"></script>
 <script src="/bundles/summernote.bundle.js"></script>
 <!--selectPicker-->
@@ -176,16 +205,8 @@
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
 
-<script>
-  $(document).ready(function () {
-    $('.yearpicker').datepicker({
-      format: "yyyy",
-      viewMode: "years",
-      minViewMode: "years",
-      autoclose: true
-    });
-  });
-</script>
+<script src="/js/ClassSubjectTeacher/CrudClassTeacherSubject.js"></script>
+
 </body>
 
 </html>

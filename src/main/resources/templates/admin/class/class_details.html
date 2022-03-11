@@ -54,10 +54,9 @@
               <li  class="breadcrumb-item active" aria-current="page">
                 Class Details
               </li>
-              
             </ol>
           </div>
-          
+          <span id="message"></span>
         </div>
       </div>
     </div>
@@ -239,7 +238,7 @@
 						                              		<option th:selected = "${teacher.id} == ${TeacherSubject.users.id}" th:value = "${teacher.id}" th:utext="${teacher.fullName}"></option>
 						                              	</th:block>
 						                              </select>
-						                              <a class="btn btn-primary text-white ml-4" id="addNew">Change</a>
+						                              <a class="btn btn-primary text-white ml-4" id="change" >Change</a>
 						                            </div>
 						                          </div>
 						                        </div>

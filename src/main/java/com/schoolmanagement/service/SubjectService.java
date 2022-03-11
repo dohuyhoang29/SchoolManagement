@@ -1,10 +1,8 @@
 package com.schoolmanagement.service;
 
-import com.schoolmanagement.model.Subjects;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
+import com.schoolmanagement.model.Subjects;
 
 public interface SubjectService {
   Iterable<Subjects> getAllSubject();

@@ -1,12 +1,14 @@
 package com.schoolmanagement;
 
-import com.schoolmanagement.model.Student;
-import com.schoolmanagement.repositories.StudentRepositories;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import com.schoolmanagement.model.Student;
+import com.schoolmanagement.repositories.StudentRepositories;
 
 @Controller
 public class Test {

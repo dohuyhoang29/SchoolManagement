@@ -1,12 +1,12 @@
 package com.schoolmanagement.model;
 
-import com.schoolmanagement.validation.UniqueEmail;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +22,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "user")
@@ -34,78 +36,75 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor
 public class User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer id;
 
-  @NotEmpty(message = "Enter full name")
-  @Column(name = "full_name", nullable = false)
-  private String fullName;
+	@NotEmpty(message = "Enter full name")
+	@Column(name = "full_name", nullable = false)
+	private String fullName;
 
-  @NotEmpty(message = "Enter username")
-  @Column(name = "username", nullable = false, unique = true)
-  private String username;
+	@NotEmpty(message = "Enter username")
+	@Column(name = "username", nullable = false, unique = true)
+	private String username;
 
-  @Column(name = "password", nullable = false)
-  private String password;
+	@Column(name = "password", nullable = false)
+	private String password;
 
-  @Column(name = "email", nullable = false, unique = true)
-  @NotEmpty(message = "Enter email")
-  private String email;
+	@Column(name = "email", nullable = false, unique = true)
+	@NotEmpty(message = "Enter email")
+	private String email;
 
-  @Column(name = "phone", nullable = false)
-  @NotEmpty(message = "Enter phone number")
-  private String phone;
+	@Column(name = "phone", nullable = false)
+	@NotEmpty(message = "Enter phone number")
+	private String phone;
 
-  @Column(name = "dob", nullable = false)
-  @NotNull(message = "Enter date of birth")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate dob;
+	@Column(name = "dob", nullable = false)
+	@NotNull(message = "Enter date of birth")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private LocalDate dob;
 
-  @Column(name = "address", nullable = false)
-  @NotEmpty(message = "Enter address")
-  private String address;
+	@Column(name = "address", nullable = false)
+	@NotEmpty(message = "Enter address")
+	private String address;
 
-  @Column(name = "start_date", nullable = false)
-  @NotNull(message = "Enter start date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate startDate;
+	@Column(name = "start_date", nullable = false)
+	@NotNull(message = "Enter start date")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private LocalDate startDate;
 
-  @Column(name = "end_date", nullable = false)
-  @NotNull(message = "Enter end date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate endDate;
+	@Column(name = "end_date", nullable = false)
+	@NotNull(message = "Enter end date")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private LocalDate endDate;
 
-  @Column(name = "deleted", nullable = false)
-  @NotNull(message = "Choose status")
-  private Boolean deleted;
+	@Column(name = "deleted", nullable = false)
+	@NotNull(message = "Choose status")
+	private Boolean deleted;
 
-  @Column(name = "created_date", nullable = false)
-  private LocalDateTime createdDate;
+	@Column(name = "created_date", nullable = false)
+	private LocalDateTime createdDate;
 
-  @Column(name = "updated_date", nullable = false)
-  private LocalDateTime updatedDate;
+	@Column(name = "updated_date", nullable = false)
+	private LocalDateTime updatedDate;
 
-  @Column(name = "image")
-  @NotEmpty(message = "Choose a image")
-  private String image;
+	@Column(name = "image")
+	@NotEmpty(message = "Choose a image")
+	private String image;
 
-  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-  @JoinTable(name = "user_role",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Blog> blogs = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Blog> blogs = new HashSet<>();
 
 	@OneToOne(mappedBy = "user")
 	private Class aClass;
 
 	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClassTeacherSubject> users = new ArrayList<>();
-
 
 //	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private Set<Mark> marks = new HashSet<>();
@@ -119,42 +118,40 @@ public class User {
 //	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
-  @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Mark> studentEvaluateUpdate = new HashSet<>();
+	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
 
-  @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-  @JoinTable(name = "teacher_subjects",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "subject_id"))
-  private Set<Subjects> subjects = new HashSet<>();
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+	private Set<Subjects> subjects = new HashSet<>();
 
-  public void addRole(Role role) {
-    this.roles.add(role);
-  }
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 
-  public String getUserImagePath() {
-    if (image == null && id == null) {
-      return null;
-    }
+	public String getUserImagePath() {
+		if (image == null && id == null) {
+			return null;
+		}
 
-    return "/upload/image/user_image/" + image;
-  }
+		return "/upload/image/user_image/" + image;
+	}
 
-  public User(String fullName, String username, String password, String email, String phone,
-      LocalDate dob, String address, LocalDate startDate, LocalDate endDate, boolean deleted,
-      LocalDateTime createdDate, LocalDateTime updatedDate) {
-    this.fullName = fullName;
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.phone = phone;
-    this.dob = dob;
-    this.address = address;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.deleted = deleted;
-    this.createdDate = createdDate;
-    this.updatedDate = updatedDate;
-  }
+	public User(String fullName, String username, String password, String email, String phone, LocalDate dob,
+			String address, LocalDate startDate, LocalDate endDate, boolean deleted, LocalDateTime createdDate,
+			LocalDateTime updatedDate) {
+		this.fullName = fullName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.phone = phone;
+		this.dob = dob;
+		this.address = address;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.deleted = deleted;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
+	}
 
 }

@@ -1,8 +1,11 @@
 package com.schoolmanagement.model;
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +26,13 @@ public class Mark {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_id")
+	private Student students;
+	
+	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	private Subjects subjects;
+	
 	@Column(name = "type")
 	private Integer type;
 
@@ -41,7 +51,7 @@ public class Mark {
 
 	@Column(name = "updated_date")
 	private Date updatedDate;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "updated_by")
 	private User updatedBy;

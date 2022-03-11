@@ -1,21 +1,22 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.model.Blog;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.implement.BlogServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.schoolmanagement.model.Blog;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.service.implement.BlogServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 @Controller
 public class BlogController {
@@ -29,6 +30,7 @@ public class BlogController {
 	public String IndexBlog(Model model, Authentication authentication) {
 		LocalDate date = LocalDate.now();
 		Iterable<Blog> blogs = blogServiceImp.FindAllBlog();
+		
 		model.addAttribute("blogs", blogs);
 		model.addAttribute("datenow", date);
 		

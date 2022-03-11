@@ -21,4 +21,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<Student,
 	
 	@Query(value ="SELECT s FROM Student s WHERE s.aClass.id = (:classId) AND s.fullName LIKE %:fullName%")
 	Page<Student> findByClassId(@Param("classId") int id, @Param("fullName") String search , Pageable page);
+	
+	@Query(value ="SELECT s FROM Student s WHERE s.aClass.id = (:classId)")
+	List<Student> findByIdClass(@Param("classId") int id);
 }

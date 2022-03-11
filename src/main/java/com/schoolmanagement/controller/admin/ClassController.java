@@ -1,15 +1,8 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.ClassTeacherSubject;
-import com.schoolmanagement.model.Student;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
-import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
-
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.ClassTeacherSubject;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.Student;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.service.implement.ClassServiceImp;
+import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
+import com.schoolmanagement.service.implement.StudentServiceImp;
+import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 @Controller
 public class ClassController {
@@ -39,6 +43,10 @@ public class ClassController {
 
 	@Autowired
 	private UserServiceImp userServiceImp;
+	
+	@Autowired
+	private EntityManager entityManager;
+
 //index
 	@GetMapping("/show/class")
 	public String classList(Model model) {
@@ -64,7 +72,6 @@ public class ClassController {
 	public String insertClass(Model model) {
 		model.addAttribute("class", new Class());
 		model.addAttribute("userList", userServiceImp.getAllUser());
-
 		return "/admin/class/form_class";
 	}
 
@@ -72,19 +79,32 @@ public class ClassController {
 	public String EditClass(@PathVariable("id") int id, Model model) {
 		model.addAttribute("class", classServiceImp.getClassById(id));
 		model.addAttribute("userList", userServiceImp.getAllUser());
-
+		model.addAttribute("classz", classServiceImp.getClassById(id));
+		model.addAttribute("studentList", studentServiceImp.getAllStudent());
+		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
+		model.addAttribute("oldTeacher", classServiceImp.getClassById(id).getUser());
 		return "/admin/class/form_class";
 	}
 
 	@PostMapping("/save/class")
-	public String saveClass(Class aClass, BindingResult result) {
+	public String saveClass(Model model, Class aClass, BindingResult result) {
 		if (result.hasErrors()) {
 			return "/admin/class/form_class";
 		}
+		
+		Role role = entityManager.find(Role.class, 3);
+		User u = aClass.getUser();
+		u.addRole(role);
+		
+		userServiceImp.saveUser(u);
 		classServiceImp.saveClass(aClass);
-
+		
+		classList(model);
+		
 		return "redirect:/show/class";
 	}
+	
+	
 //details
 	@GetMapping("/details/class/{id}")
 	public String DetailClass(Model model, @PathVariable("id") int id) {

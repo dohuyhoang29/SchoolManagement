@@ -1,12 +1,9 @@
 package com.schoolmanagement.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,18 +12,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @NoArgsConstructor
 @Getter
@@ -58,17 +54,14 @@ public class Class {
 	private User user;
 
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 
 	@Column(name = "updated_date")
-	private Date updatedDate;
+	private LocalDateTime updatedDate;
 
 	@OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Student> students = new HashSet<>();
 
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	@JoinTable(name = "class_teacher_subject", joinColumns = @JoinColumn(name = "class_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-
-	@MapKeyJoinColumn(name = "user_id")
-	private Map<User, Subjects> teacherSubjects = new HashMap<>();
+	@OneToMany(mappedBy = "theClass" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	private Set<ClassTeacherSubject> teacherSubjects = new HashSet<>();
 }

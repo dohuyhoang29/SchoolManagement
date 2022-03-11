@@ -130,7 +130,7 @@
                 </div>
               </div>
               <div class="col-xl-12 col-md-12">
-                <a th:href="@{/edit/student/{id}(id=${student.id})}">
+                <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${student.id})}">
                   <button type="button" class="btn btn-primary">Edit</button>
                 </a>
                 <a th:href="@{/show/student}">

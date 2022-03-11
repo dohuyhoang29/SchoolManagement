@@ -1,43 +1,102 @@
 $(document).ready(function() {
-	$('.yearpicker').datepicker({
-		format: "yyyy",
-		viewMode: "years",
-		minViewMode: "years",
-		autoclose: true
-	});
-
-	$(document).delegate('#addNew', 'click', function(event) {
+	$('#Edit').click(function(event) {
 		event.preventDefault();
 		const listUser = [];
-		const listSubject = [];
-		$('select.users').each(function() {
-			listUser.push($(this).val());
+		var classId = parseInt($('#classId').val());
+		var hometeacher = parseInt($('#hometeacher').val());
+		var classname = $('#className').val();
+		var schoolYear = parseInt($('#schoolYear').val());
+		var grade = parseInt($('#grade').val());
+
+		const classRequet = { 'classId': classId, 'className': classname, 'grade': grade, 'schoolYear': schoolYear, 'userId': hometeacher };
+
+		$('select.users').each(function(index) {
+			let subject = $('input.subject')[index];
+			let user = $(this).val();
+			listUser.push({ 'userid': parseInt(user), 'subjectId': parseInt(subject.value), 'classid': classId, 'classReq': classRequet });
 		});
 
-		$('input.subject').each(function() {
-			listSubject.push($(this).val());
-		});
-		for (var i = 0; i < listUser.length && i < listSubject.length; i++) {
-			var classId = $('#classId').val();
-			$.ajax({
-				type: "POST",
-				contentType: "application/json; charset=utf-8",
-				url: "http://localhost:8080/classTeacherSubject/save",
-				data: JSON.stringify({ 'userid': listUser[i], 'subjectId': listSubject[i], 'classid': classId }),
-				cache: false,
-				success: function(result) {
-					$("#msg").html("<span style='color: green'>Company added successfully</span>");
-					window.setTimeout(function() { location.reload() }, 1000)
-				},
-				error: function(err) {
-					$("#msg").html("<span style='color: red'>Name is required</span>");
+		$.ajax({
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "http://localhost:8080/classTeacherSubject/save",
+			data: JSON.stringify(listUser),
+			cache: false,
+			success: function(result) {
+				if (result != null) {
+					$('#message').html('<div  id="alertFadeOut" style="color: green">Edit Succesfully !</div>');
+					 	$('#alertFadeOut').fadeOut(3000, function () {
+              				$('#alertFadeOut').text('');
+              				window.location = "http://localhost:8080/show/class";
+          			});
+					
 				}
-			});
+			},
+			error: function(err) {
+				$("#msg").html("<span style='color: red'>Name is required</span>");
+			}
+		});
 
-
-
-		}
 	});
+	
+	
+	$('#change').click(function(event) {
+		event.preventDefault();
+		const listUser = [];
+		var classId = parseInt($('#classId').val());
+		
+		
+		$('select.users').each(function(index) {
+			let subject = $('input.subject')[index];
+			let user = $(this).val();
+			listUser.push({ 'userid': parseInt(user), 'subjectId': parseInt(subject.value), 'classid': classId});
+		});
 
+		$.ajax({
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "http://localhost:8080/classTeacherSubject/change",
+			data: JSON.stringify(listUser),
+			cache: false,
+			success: function(result) {
+				if (result != null) {
+					$('#message').html('<div  id="alertFadeOut" style="color: green">Edit Succesfully !</div>');
+					 	$('#alertFadeOut').fadeOut(3000, function () {
+              				$('#alertFadeOut').text('');
+              				
+          			});
+					
+				}
+			},
+			error: function(err) {
+				$("#msg").html("<span style='color: red'>Name is required</span>");
+			}
+		});
 
+	});
+	
+	$('#hometeacher').change(function(){
+		var oldteacher = $('#oldTeacher').val();
+		var role = 3;
+		
+		if(oldteacher != null){
+		
+			$.ajax({
+				type: "DELETE",
+				url: "http://localhost:8080/teacherrole/delete/" + parseInt(oldteacher) + "/" + parseInt(role),
+				cache: false,
+				succes: function(){
+					location.reload(true);
+				},
+				error: function() {
+					$('#err').html('<span style=\'color:red; font-weight: bold; font-size: 30px;\'>Error deleting record').fadeIn().fadeOut(4000, function() {
+						$(this).remove();
+					});
+				}
+				
+				
+			});
+		}
+		
+	});
 });

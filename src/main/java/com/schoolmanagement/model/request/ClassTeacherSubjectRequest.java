@@ -5,6 +5,7 @@ public class ClassTeacherSubjectRequest {
 	private int userid;
 	private int subjectId;
 	private int classid;
+	private ClassRequest classReq;
 	public int getUserid() {
 		return userid;
 	}
@@ -23,7 +24,11 @@ public class ClassTeacherSubjectRequest {
 	public void setClassid(int classid) {
 		this.classid = classid;
 	}
-	
-	
+	public ClassRequest getClassReq() {
+		return classReq;
+	}
+	public void setClassReq(ClassRequest classReq) {
+		this.classReq = classReq;
+	}
 	
 }

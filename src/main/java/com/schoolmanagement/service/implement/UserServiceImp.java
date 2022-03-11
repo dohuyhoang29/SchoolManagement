@@ -1,12 +1,8 @@
 package com.schoolmanagement.service.implement;
 
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.repositories.RoleRepositories;
-import com.schoolmanagement.repositories.UserRepositories;
-import com.schoolmanagement.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,15 +10,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.repositories.UserRepositories;
+import com.schoolmanagement.service.UserService;
+
 @Service
 public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserRepositories repo;
 
-	@Autowired
-	private RoleRepositories roleRepositories;
-
+	
 	@Override
 	public User saveUser(User user) {
 		return repo.save(user);
@@ -103,5 +102,17 @@ public class UserServiceImp implements UserService {
 	@Override
 	public User getUserByEmail(String email) {
 		return repo.findAllByEmail(email);
+	}
+
+	@Override
+	public List<User> findByFullName(String name) {
+		
+		return null;
+	}
+
+	@Override
+	public void deleterole(int roleid, int userid) {
+		repo.deleterole(roleid, userid);
+		
 	}
 }

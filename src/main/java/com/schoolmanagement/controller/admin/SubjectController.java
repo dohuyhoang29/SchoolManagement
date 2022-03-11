@@ -1,14 +1,7 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.model.Subjects;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.schoolmanagement.model.Subjects;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.implement.UserServiceImp;
 
 @Controller
 public class SubjectController {

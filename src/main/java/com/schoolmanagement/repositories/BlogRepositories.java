@@ -1,9 +1,9 @@
 package com.schoolmanagement.repositories;
 
-import com.schoolmanagement.model.Blog;
-
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+
+import com.schoolmanagement.model.Blog;
 
 @Repository
 public interface BlogRepositories extends PagingAndSortingRepository<Blog , Integer> {
