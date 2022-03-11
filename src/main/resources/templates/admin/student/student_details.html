@@ -87,19 +87,15 @@
                       <img class="" th:src="@{${student.getStudentImagePath}}" alt="">
                     </div>
                     <div class="wid-u-info col-xl-10">
-                      <h5>[[${student.username}]]</h5>
+                      <h5>[[${student.fullName}]]</h5>
                       <p class="text-muted m-b-0">[[${student.address}]]</p>
                     </div>
                   </div>
                   <div class="card-body">
                     <ul class="list-group">
                       <li class="list-group-item">
-                        <b>Full Name </b>
-                        <div>[[${student.fullName}]]</div>
-                      </li>
-                      <li class="list-group-item">
-                        <b>Password </b>
-                        <div>[[${student.password}]]</div>
+                        <b>Username </b>
+                        <div>[[${student.username}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>Date of Birth</b>

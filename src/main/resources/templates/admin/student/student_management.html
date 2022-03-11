@@ -32,7 +32,46 @@
   <!-- Start Main leftbar navigation -->
   <div th:include="partials/leftbar"></div>
 
+  <!-- Modal: modalAbandonedCart-->
+  <div class="modal fade right" id="modalAbandonedCart" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel"
+       aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-side modal-bottom-right modal-notify modal-info"
+         role="document">
+      <!--Content-->
+      <div class="modal-content">
+        <!--Header-->
+        <div class="modal-header">
+          <p class="heading">Import Teacher From Excel
+          </p>
 
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+
+        <!--Body-->
+        <form th:action="@{/import/student}" method="post" enctype="multipart/form-data">
+          <div class="modal-body">
+
+            <div class="row">
+              <input name="fileImage" id="fileImage" type="file" class="dropify"
+                     accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            </div>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer justify-content-center">
+            <input type="submit" class="btn btn-info" value="Import">
+            <a type="button" class="btn btn-outline-info waves-effect"
+               data-dismiss="modal">Cancel</a>
+          </div>
+        </form>
+      </div>
+      <!--/.Content-->
+    </div>
+  </div>
+  <!-- Modal: modalAbandonedCart-->
   <!-- Start project content area -->
   <div class="page">
     <!-- Start Page header -->
@@ -62,6 +101,15 @@
       <div class="container-fluid">
         <div class="tab-content">
           <div class="tab-pane active" id="Staff-all">
+            <div th:if="${message}" class="card bg-green">
+              <div class="card-header">
+                <h3 class="card-title text-white">[[${message}]]</h3>
+                <div class="card-options ">
+                  <a href="#" class="card-options-remove" data-toggle="card-remove"><i
+                      class="fe fe-x text-white"></i></a>
+                </div>
+              </div>
+            </div>
             <div class="card">
               <div class="card-body">
                 <form th:action="@{/show/student/search}" method="get">
@@ -75,34 +123,35 @@
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="department">
-                          <option value="">Grade</option>
-                          <option value="Category 1">Computer</option>
-                          <option value="Category 2">Mechanical</option>
-                          <option value="Category 3">Mathematics</option>
-                          <option value="Category 3">Commerce</option>
+                        <select class="form-control input-height" name="grade">
+                          <option value="" th:selected="${grade == '' ? true : false}" hidden>Grade</option>
+                          <option th:selected="${grade == '10' ? true : false}" value="10">10</option>
+                          <option th:selected="${grade == '11' ? true : false}" value="11">11</option>
+                          <option th:selected="${grade == '12' ? true : false}" value="12">12</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="department">
-                          <option value="">Class</option>
-                          <option value="Category 1">Computer</option>
-                          <option value="Category 2">Mechanical</option>
-                          <option value="Category 3">Mathematics</option>
-                          <option value="Category 3">Commerce</option>
+                        <select class="form-control input-height" name="class-name">
+                          <option th:selected="${className == '' ? true : false}" value="" selected hidden>Class</option>
+                          <th:block th:each="class : ${classList}">
+                            <option th:value="${class.className}"
+                                    th:selected="${className} == ${class.className}"
+                                    th:utext="${class.className}"></option>
+                          </th:block>
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="department">
-                          <option value="">School Year</option>
-                          <option value="Category 1">Computer</option>
-                          <option value="Category 2">Mechanical</option>
-                          <option value="Category 3">Mathematics</option>
-                          <option value="Category 3">Commerce</option>
+                        <select class="form-control input-height" name="school-year">
+                          <option value="" selected hidden>School Year</option>
+                          <th:block th:each="schoolyear : ${schoolYearList}">
+                            <option th:value="${schoolyear.year}"
+                                    th:selected="${schoolYear} == ${schoolyear.year}"
+                                    th:utext="${schoolyear.year}"></option>
+                          </th:block>
                         </select>
                       </div>
                     </div>
@@ -137,12 +186,12 @@
                     <div class="col-lg-1 col-md-4 col-sm-12">
                       <button type="submit" class="btn btn-sm btn-primary btn-block">Search</button>
                     </div>
-                    <div class="col-lg-1 col-md-4 col-sm-12" sec:authorize="hasAnyAuthority('ADMIN')">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-secondary btn-block"
-                         title="">Import</a>
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <a th:href="@{/import/student}" class="btn btn-sm btn-secondary btn-block"
+                         title="" data-toggle="modal" data-target="#modalAbandonedCart">Import</a>
                     </div>
-                    <div class="col-lg-1 col-md-4 col-sm-12" sec:authorize="hasAnyAuthority('ADMIN')">
-                      <a href="javascript:void(0);" class="btn btn-sm btn-success btn-block"
+                    <div class="col-lg-1 col-md-4 col-sm-12">
+                      <a th:href="@{/export/student}" class="btn btn-sm btn-success btn-block"
                          title="">Export</a>
                     </div>
                   </div>
@@ -151,46 +200,48 @@
             </div>
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
-                <thead>
-                <tr>
+                <thead  th:with="pageUrlPostfix = '&sortDir=' + ${sortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
+                <tr th:with="pageUrlPrefix = '/show/student/'">
                   <th>
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status}}">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
                       #
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir} + '&search=' + ${search} +'&status=' + ${status}}">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=fullName' + ${pageUrlPostfix}}">
                       Student Name
                     </a>
                   </th>
 
                   <th class="pr-20">
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir} + '&search=' + ${search} +'&status=' + ${status}}">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=address' + ${pageUrlPostfix}}">
                       Address
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=dob&sortDir=' + ${reverseSortDir} + '&search=' + ${search}+'&status=' + ${status}}">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=dob' + ${pageUrlPostfix}}">
                       Date of Birth
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=status&sortDir=' + ${reverseSortDir} + '&search=' + ${search} +'&status=' + ${status}}">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
                       Status
                     </a>
                   </th>
-                  <th class="text-center">
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=admissionYear&sortDir=' + ${reverseSortDir} + '&search=' + ${search} +'&status=' + ${status}}">
-                      Admission Year
-                    </a>
-                  </th>
-                  <th class="text-center">
-                    <a th:href="@{'/show/student/' + ${currentPage} + '?sortField=graduateYear&sortDir=' + ${reverseSortDir} + '&search=' + ${search}+'&status=' + ${status}}">
-                      Graduate Year
-                    </a>
-                  </th>
                   <th>
-                  	Class
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
+                      Grade
+                    </a>
+                  </th>
+                  <th class="text-center">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
+                      Class
+                    </a>
+                  </th>
+                  <th class="text-center">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
+                      School Year
+                    </a>
                   </th>
                   <th class="text-center">Actions</th>
                 </tr>
@@ -214,9 +265,9 @@
                     <td th:if="${student.status == 3}">
                       <span class="tag tag-secondary">Graduate</span>
                     </td>
-                    <td class="text-center">[[${student.admissionYear}]]</td>
-                    <td class="text-center">[[${student.graduateYear}]]</td>
+                    <td>[[${student.aClass.grade}]]</td>
                     <td class="text-center">[[${student.aClass.className}]]</td>
+                    <td class="text-center">[[${student.aClass.schoolYear}]]</td>
                     <td class="text-center">
                       <a sec:authorize="hasAnyAuthority('ADMIN', 'HOMEROOM_TEACHER')" th:href="@{/show/student/details/{id}(id=${student.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
@@ -247,7 +298,7 @@
               <div class="card-body">
                 <div class="bd-example">
                   <div th:fragment="pagination">
-                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}  +'&status=' + ${status}">
+                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
 	                	<nav>
 		                    <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
 		                      

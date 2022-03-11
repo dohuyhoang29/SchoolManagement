@@ -1,9 +1,12 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.request.SchoolYearClassRequest;
 import com.schoolmanagement.repositories.ClassRepositories;
 
 import com.schoolmanagement.service.ClassService;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,5 +46,20 @@ public class ClassServiceImp implements ClassService {
 		}
 		
 	}
-	
+
+	@Override
+	public List<SchoolYearClassRequest> getSchoolYear() {
+		return classRepositories.getSchoolYear();
+	}
+
+	@Override
+	public Class getClassByClassName(String className) {
+		Optional<Class> aClass = classRepositories.getClassByClassName(className);
+		if (aClass.isPresent()) {
+			return aClass.get();
+		} else {
+			throw  new NullPointerException("No class found named " + className);
+		}
+	}
+
 }

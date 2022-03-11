@@ -1,10 +1,14 @@
 package com.schoolmanagement;
 
+import com.schoolmanagement.model.Student;
+import com.schoolmanagement.repositories.StudentRepositories;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import com.schoolmanagement.model.Student;
@@ -17,13 +21,8 @@ public class Test {
   private static StudentRepositories repositories;
 
   public static void main(String[] args) {
-    String text = "image.jpg";
-    int num = text.lastIndexOf('.');
-    System.out.println(num);
-    System.out.println(text.substring(num));
-    String str_filename = UUID.randomUUID().toString() + text.substring(text.lastIndexOf('.'));
-
-    System.out.println(str_filename);
+    int year = LocalDateTime.now().getYear();
+    System.out.println(year);
   }
 
   public static int randomString(String text) {

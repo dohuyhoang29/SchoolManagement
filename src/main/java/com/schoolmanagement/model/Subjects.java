@@ -45,10 +45,11 @@ public class Subjects {
 
 	@OneToMany(mappedBy = "subjects", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<ClassTeacherSubject> subjects = new ArrayList<>();
-//	
+//
 	@OneToMany(mappedBy = "subjects")
 	private List<Mark> mark = new ArrayList<>();
-	
+
+
 	@Override
 	public String toString() {
 		return subjectName;
