@@ -54,6 +54,10 @@ public class AccountDetails implements UserDetails {
 		return this.user.getUserImagePath();
 	}
 
+	public Integer getId () {
+		return this.user.getId();
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

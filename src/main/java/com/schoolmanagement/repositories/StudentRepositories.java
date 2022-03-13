@@ -15,9 +15,6 @@ public interface StudentRepositories extends PagingAndSortingRepository<Student,
 	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class%")
 	Page<Student> findStudentByFullNameAndClass(@Param("fullName") String fullName, @Param("class") String className, Pageable pageable);
 
-//	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class% AND s.aClass.id = :classId")
-//	Page<Student> findStudentByFullNameAndClassId(@Param("fullName") String fullName, @Param("class") String className, @Param("class_id") Integer classId, Pageable pageable);
-
 	@Query(value = "SELECT s FROM Student s WHERE s.fullName LIKE %:fullName% AND s.status = :status AND s.aClass.className LIKE %:class%")
 	Page<Student> findStudentByFullNameAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,
 			@Param("class") String className, Pageable pageable);
@@ -51,4 +48,11 @@ public interface StudentRepositories extends PagingAndSortingRepository<Student,
 	
 	@Query(value ="SELECT s FROM Student s WHERE s.aClass.id = (:classId)")
 	List<Student> findByIdClass(@Param("classId") int id);
+
+	@Query(value = "SELECT s FROM  User u INNER JOIN ClassTeacherSubject cts ON cts.users.id = u.id INNER JOIN Student s ON s.aClass.id = cts.theClass.id WHERE u.id = :id AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className%")
+	Page<Student> findStudentByTeacher(@Param("id") Integer id, @Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
+
+	@Query(value = "SELECT s FROM  User u INNER JOIN ClassTeacherSubject cts ON cts.users.id = u.id INNER JOIN Student s ON s.aClass.id = cts.theClass.id WHERE u.id = :id AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className% AND s.aClass.grade = :grade")
+	Page<Student> findStudentByTeacherAndGrade(@Param("id") Integer id, @Param("fullName") String fullName, @Param("grade") Integer grade,
+			@Param("className") String className, Pageable pageable);
 }

@@ -69,7 +69,6 @@ public class StudentController {
 
   @GetMapping("/show/student")
   public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
-    studentServiceImp.searchStudentByClass(2);
 
     return listStudentByPage(model, 1, "id", "asc", "", "all", "", "", "", accountDetails);
   }
@@ -86,10 +85,16 @@ public class StudentController {
       @Param("school-year") String schoolYear,
       @AuthenticationPrincipal AccountDetails accountDetails) {
     Page<Student> page = null;
-//    if (!accountDetails.getRole().equalsIgnoreCase("TEACHER")) {
-      page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
-          sortDir, grade, className, schoolYear);
-//    }
+
+    for (Role role : accountDetails.getRole()) {
+      if (role.getRoleName().equalsIgnoreCase("ADMIN")) {
+        page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
+            sortDir, grade, className, schoolYear);
+      } else {
+        page = studentServiceImp.findAllStudentByTeacher(accountDetails.getId(), search, currentPage, sortField,
+            sortDir, grade, className);
+      }
+    }
 
     long totalItems = page.getTotalElements();
     int totalPages = page.getTotalPages();
@@ -100,7 +105,6 @@ public class StudentController {
     model.addAttribute("totalPages", totalPages);
     model.addAttribute("totalItems", totalItems);
     model.addAttribute("sortField", sortField);
-    model.addAttribute("sortDir", sortDir);
     model.addAttribute("search", search);
     model.addAttribute("status", status);
     model.addAttribute("className", className);
@@ -111,12 +115,6 @@ public class StudentController {
 
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
-
-    for (Role role : accountDetails.getRole()) {
-      if (role.getRoleName().equalsIgnoreCase("TEACHER")) {
-        return "/admin/student/student_management_teacher";
-      }
-    }
 
       return "/admin/student/student_management";
   }
@@ -210,6 +208,13 @@ public class StudentController {
       @RequestParam("school-year") String schoolYear, Model model) {
 
     return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear, accountDetails);
+  }
+
+  @GetMapping("/show/student/teacher/search")
+  public String searchStudentForTeacher(@RequestParam("search") String search, @RequestParam("grade") String grade,
+      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails, Model model) {
+
+    return listStudentByPage(model, 1, "id", "asc", search, "all", grade, className, "", accountDetails);
   }
 
   @GetMapping("/edit/student/{id}")

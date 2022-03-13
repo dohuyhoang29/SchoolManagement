@@ -1,11 +1,8 @@
 package com.schoolmanagement.service.implement;
 
-import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Student;
-import com.schoolmanagement.repositories.ClassTeacherSubjectRepositories;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.StudentService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,9 +17,6 @@ public class StudentServiceImp implements StudentService {
 	@Autowired
 	private StudentRepositories repositories;
 
-	@Autowired
-	private ClassTeacherSubjectRepositories classTeacherSubjectRepositories;
-
 	@Override
 	public void saveStudent(Student student) {
 		repositories.save(student);
@@ -31,15 +25,6 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public Iterable<Student> getAllStudent() {
 		return repositories.findAll();
-	}
-
-	@Override
-	public Page<Student> getAllStudentByPages(int pageNumber, String sortField, String sortDir) {
-		Sort sort = Sort.by(sortField);
-		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-
-		return repositories.findAll(page);
 	}
 
 	@Override
@@ -82,32 +67,11 @@ public class StudentServiceImp implements StudentService {
 	}
 
 	@Override
-	public Page<Student> getAllStudentByClass(int pageNumber) {
-		Pageable page = PageRequest.of(pageNumber - 1, 10);
-
-		return repositories.findAll(page);
-	}
-
-	@Override
 	public Page<Student> findStudentByClassId(int id , String search , int page) {
 		Sort sort = Sort.by("fullName");
 		Pageable pageable = PageRequest.of(page -1 , 8 ,sort );
 		
 		return repositories.findByClassId(id, search,pageable);
-	}
-
-	@Override
-	public Page<Student> searchStudentByClass(Integer id) {
-		List<Student> listStudent = new ArrayList<>();
-		for (ClassTeacherSubject cts : classTeacherSubjectRepositories.findByTeacherId(id)) {
-			listStudent.addAll(cts.getTheClass().getStudents());
-		}
-
-		for (Student s : listStudent) {
-			System.out.println(s.getUsername());
-		}
-
-		return null;
 	}
 
 	@Override
@@ -118,9 +82,20 @@ public class StudentServiceImp implements StudentService {
 
 	@Override
 	public List<Student> findAllStudentByClassId(int classid) {
-
-
 		return repositories.findByIdClass(classid);
+	}
+
+	@Override
+	public Page<Student> findAllStudentByTeacher(Integer id, String fullName, int pageNumber, String sortField,
+			String sortDir, String grade, String className) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNumber - 1, 10, sort);
+		if (grade.equalsIgnoreCase("")) {
+			return repositories.findStudentByTeacher(id, fullName, className, pageable);
+		} else {
+			return repositories.findStudentByTeacherAndGrade(id, fullName, Integer.parseInt(grade), className, pageable);
+		}
 	}
 
 }

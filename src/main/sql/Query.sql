@@ -704,3 +704,149 @@ insert into student (address, admission_year, created_date, dob, full_name, grad
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('339 Carey Trail', 2012, '2022-03-10 00:00:00', '2010-03-01 08:11:11', 'Bertie Shankle', 1998, 'QCmZAU6lAH', 1, '2022-03-10 00:00:00', 'bshankledt', 2);
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('604 Victoria Road', 2006, '2022-03-10 00:00:00', '2008-03-04 06:08:53', 'Sibylle Kidde', 1993, 'pZXH8eQ', 2, '2022-03-10 00:00:00', 'skiddedu', 1);
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('3 Main Drive', 2006, '2022-03-10 00:00:00', '2008-05-02 11:49:00', 'Hazlett Newgrosh', 1993, 'XafnLM1', 1, '2022-03-10 00:00:00', 'hnewgroshdv', 4);
+
+
+insert into teacher_subjects (user_id, subject_id) values (1, 3);
+insert into teacher_subjects (user_id, subject_id) values (2, 5);
+insert into teacher_subjects (user_id, subject_id) values (3, 7);
+insert into teacher_subjects (user_id, subject_id) values (4, 6);
+insert into teacher_subjects (user_id, subject_id) values (5, 5);
+insert into teacher_subjects (user_id, subject_id) values (6, 4);
+insert into teacher_subjects (user_id, subject_id) values (7, 7);
+insert into teacher_subjects (user_id, subject_id) values (8, 7);
+insert into teacher_subjects (user_id, subject_id) values (9, 3);
+insert into teacher_subjects (user_id, subject_id) values (10, 7);
+insert into teacher_subjects (user_id, subject_id) values (11, 1);
+insert into teacher_subjects (user_id, subject_id) values (12, 5);
+insert into teacher_subjects (user_id, subject_id) values (13, 6);
+insert into teacher_subjects (user_id, subject_id) values (14, 2);
+insert into teacher_subjects (user_id, subject_id) values (15, 3);
+insert into teacher_subjects (user_id, subject_id) values (16, 7);
+insert into teacher_subjects (user_id, subject_id) values (17, 5);
+insert into teacher_subjects (user_id, subject_id) values (18, 1);
+insert into teacher_subjects (user_id, subject_id) values (19, 3);
+insert into teacher_subjects (user_id, subject_id) values (20, 4);
+insert into teacher_subjects (user_id, subject_id) values (21, 2);
+insert into teacher_subjects (user_id, subject_id) values (22, 1);
+insert into teacher_subjects (user_id, subject_id) values (23, 5);
+insert into teacher_subjects (user_id, subject_id) values (24, 2);
+insert into teacher_subjects (user_id, subject_id) values (25, 5);
+insert into teacher_subjects (user_id, subject_id) values (26, 3);
+insert into teacher_subjects (user_id, subject_id) values (27, 2);
+insert into teacher_subjects (user_id, subject_id) values (28, 1);
+insert into teacher_subjects (user_id, subject_id) values (29, 1);
+insert into teacher_subjects (user_id, subject_id) values (30, 5);
+insert into teacher_subjects (user_id, subject_id) values (31, 1);
+insert into teacher_subjects (user_id, subject_id) values (32, 2);
+insert into teacher_subjects (user_id, subject_id) values (33, 2);
+insert into teacher_subjects (user_id, subject_id) values (34, 3);
+insert into teacher_subjects (user_id, subject_id) values (35, 1);
+insert into teacher_subjects (user_id, subject_id) values (36, 2);
+insert into teacher_subjects (user_id, subject_id) values (37, 1);
+insert into teacher_subjects (user_id, subject_id) values (38, 5);
+insert into teacher_subjects (user_id, subject_id) values (39, 6);
+insert into teacher_subjects (user_id, subject_id) values (40, 6);
+insert into teacher_subjects (user_id, subject_id) values (41, 2);
+insert into teacher_subjects (user_id, subject_id) values (42, 2);
+insert into teacher_subjects (user_id, subject_id) values (43, 7);
+insert into teacher_subjects (user_id, subject_id) values (44, 4);
+insert into teacher_subjects (user_id, subject_id) values (45, 4);
+insert into teacher_subjects (user_id, subject_id) values (46, 5);
+insert into teacher_subjects (user_id, subject_id) values (47, 2);
+insert into teacher_subjects (user_id, subject_id) values (48, 6);
+insert into teacher_subjects (user_id, subject_id) values (49, 1);
+insert into teacher_subjects (user_id, subject_id) values (50, 7);
+insert into teacher_subjects (user_id, subject_id) values (51, 2);
+insert into teacher_subjects (user_id, subject_id) values (52, 6);
+insert into teacher_subjects (user_id, subject_id) values (53, 2);
+insert into teacher_subjects (user_id, subject_id) values (54, 5);
+insert into teacher_subjects (user_id, subject_id) values (55, 7);
+insert into teacher_subjects (user_id, subject_id) values (56, 2);
+insert into teacher_subjects (user_id, subject_id) values (57, 6);
+insert into teacher_subjects (user_id, subject_id) values (58, 6);
+insert into teacher_subjects (user_id, subject_id) values (59, 1);
+insert into teacher_subjects (user_id, subject_id) values (60, 4);
+insert into teacher_subjects (user_id, subject_id) values (61, 5);
+insert into teacher_subjects (user_id, subject_id) values (62, 7);
+insert into teacher_subjects (user_id, subject_id) values (63, 1);
+insert into teacher_subjects (user_id, subject_id) values (64, 5);
+insert into teacher_subjects (user_id, subject_id) values (65, 7);
+insert into teacher_subjects (user_id, subject_id) values (66, 1);
+insert into teacher_subjects (user_id, subject_id) values (67, 5);
+insert into teacher_subjects (user_id, subject_id) values (68, 6);
+insert into teacher_subjects (user_id, subject_id) values (69, 1);
+insert into teacher_subjects (user_id, subject_id) values (70, 2);
+insert into teacher_subjects (user_id, subject_id) values (71, 3);
+insert into teacher_subjects (user_id, subject_id) values (72, 2);
+insert into teacher_subjects (user_id, subject_id) values (73, 1);
+insert into teacher_subjects (user_id, subject_id) values (74, 1);
+insert into teacher_subjects (user_id, subject_id) values (75, 4);
+insert into teacher_subjects (user_id, subject_id) values (76, 7);
+insert into teacher_subjects (user_id, subject_id) values (77, 2);
+insert into teacher_subjects (user_id, subject_id) values (78, 3);
+insert into teacher_subjects (user_id, subject_id) values (79, 7);
+insert into teacher_subjects (user_id, subject_id) values (80, 1);
+insert into teacher_subjects (user_id, subject_id) values (81, 6);
+insert into teacher_subjects (user_id, subject_id) values (82, 3);
+insert into teacher_subjects (user_id, subject_id) values (83, 7);
+insert into teacher_subjects (user_id, subject_id) values (84, 1);
+insert into teacher_subjects (user_id, subject_id) values (85, 3);
+insert into teacher_subjects (user_id, subject_id) values (86, 3);
+insert into teacher_subjects (user_id, subject_id) values (87, 3);
+insert into teacher_subjects (user_id, subject_id) values (88, 4);
+insert into teacher_subjects (user_id, subject_id) values (89, 4);
+insert into teacher_subjects (user_id, subject_id) values (90, 7);
+insert into teacher_subjects (user_id, subject_id) values (91, 6);
+insert into teacher_subjects (user_id, subject_id) values (92, 7);
+insert into teacher_subjects (user_id, subject_id) values (93, 4);
+insert into teacher_subjects (user_id, subject_id) values (94, 2);
+insert into teacher_subjects (user_id, subject_id) values (95, 6);
+insert into teacher_subjects (user_id, subject_id) values (96, 6);
+insert into teacher_subjects (user_id, subject_id) values (97, 1);
+insert into teacher_subjects (user_id, subject_id) values (98, 5);
+insert into teacher_subjects (user_id, subject_id) values (99, 6);
+insert into teacher_subjects (user_id, subject_id) values (100, 1);
+
+
+
+SELECT s.* FROM user AS u 
+			INNER JOIN class_teacher_subject AS cts ON cts.user_id = u.id
+			INNER JOIN student AS s ON s.class_id = cts.class_id
+			WHERE u.id = 100
+			
+SELECT s.* FROM user AS u INNER JOIN class_teacher_subject AS cts ON cts.user_id = u.id INNER JOIN student AS s ON s.class_id = cts.class_id WHERE u.id = 100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
