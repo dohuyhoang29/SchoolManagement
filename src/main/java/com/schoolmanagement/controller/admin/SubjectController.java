@@ -1,10 +1,13 @@
 package com.schoolmanagement.controller.admin;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -87,30 +90,30 @@ public class SubjectController {
 		model.addAttribute("listUser", listUser);
 		model.addAttribute("subjects", subjects);
 
-		return "/admin/subjects/update_subjects";
+		return "/admin/subjects/form_subject";
 	}
 
 	// Post add , save
 	@PostMapping("/subjects/save")
-	public String SaveSubject(@Valid Subjects subjects, BindingResult result) {
+	public String SaveSubject(@Valid Subjects subjects, BindingResult result, Model model) {
+		if (subjects.getId() == null) {
+			if (subjectServiceImp.findSubjectBySubjectName(subjects.getSubjectName()) != null) {
+				result.rejectValue("subjectName", "error.subjects", "Subject Name already exists");
+			}
+		} else {
+			if (subjectServiceImp.findSubjectBySubjectName(subjects.getSubjectName()) != null &&
+					!Objects.equals(subjects.getId(), subjectServiceImp.findSubjectBySubjectName(subjects.getSubjectName()).getId())){
+				result.rejectValue("subjectName", "error.subjects", "Subject Name already exists");
+			}
+		}
 
 		if (result.hasErrors()) {
+			model.addAttribute("listUser", userServiceImp.getAllUser());
+
 			return "/admin/subjects/form_subject";
 		}
 
 		subjectServiceImp.SaveSubject(subjects);
-		return "redirect:/show/subjects";
-	}
-
-	@PostMapping("/subjects/update/{id}")
-	public String updateSubjects(@PathVariable("id") Integer id, @Valid Subjects subjects, BindingResult result) {
-		if (result.hasErrors()) {
-			subjects.setId(id);
-			return "/admin/subjects/update_subjects";
-		}
-
-		subjectServiceImp.SaveSubject(subjects);
-
 		return "redirect:/show/subjects";
 	}
 

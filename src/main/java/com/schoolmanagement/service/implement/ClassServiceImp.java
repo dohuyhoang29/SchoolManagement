@@ -58,7 +58,7 @@ public class ClassServiceImp implements ClassService {
 		if (aClass.isPresent()) {
 			return aClass.get();
 		} else {
-			throw  new NullPointerException("No class found named " + className);
+			return null;
 		}
 	}
 

@@ -1,6 +1,8 @@
 package com.schoolmanagement.service;
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.ClassTeacherSubject;
+import java.util.Set;
 
 public interface ClassTeacherSubjectService {
   void Save(ClassTeacherSubject classTeacherSubject);
@@ -11,5 +13,5 @@ public interface ClassTeacherSubjectService {
 
   Iterable<ClassTeacherSubject> findAllTeacherSubject();
 
-  Iterable<ClassTeacherSubject> findAllByTeacher(Integer id);
+  Set<Class> findAllByTeacher(Integer id);
 }

@@ -36,16 +36,16 @@ public class Subjects {
 	private Integer id;
 
 	@NotEmpty(message = "Enter subject name")
-	@Column(name = "subject_name")
+	@Column(name = "subject_name", unique = true)
 	private String subjectName;
 
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users = new HashSet<>();
 
-	@OneToMany(mappedBy = "subjects", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "subjects", orphanRemoval = true)
 	public List<ClassTeacherSubject> subjects = new ArrayList<>();
-//
+
 	@OneToMany(mappedBy = "subjects")
 	private List<Mark> mark = new ArrayList<>();
 

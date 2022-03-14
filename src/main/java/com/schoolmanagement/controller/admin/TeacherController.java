@@ -63,10 +63,9 @@ public class TeacherController {
     }
     long totalItems = page.getTotalElements();
     int totalPages = page.getTotalPages();
-    List<User> list = page.getContent();
     List<User> listUser = new ArrayList<>();
 
-    for (User user : list) {
+    for (User user : page.getContent()) {
       for (Role role : user.getRoles()) {
         if (role.getRoleID() == 2) {
           listUser.add(user);

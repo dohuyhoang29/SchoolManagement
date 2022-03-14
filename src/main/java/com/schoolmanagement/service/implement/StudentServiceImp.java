@@ -1,9 +1,11 @@
 package com.schoolmanagement.service.implement;
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.StudentService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -86,15 +88,15 @@ public class StudentServiceImp implements StudentService {
 	}
 
 	@Override
-	public Page<Student> findAllStudentByTeacher(Integer id, String fullName, int pageNumber, String sortField,
-			String sortDir, String grade, String className) {
+	public Page<Student> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
+			String sortDir, String fullName, String grade, String className) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNumber - 1, 10, sort);
+		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
 		if (grade.equalsIgnoreCase("")) {
-			return repositories.findStudentByTeacher(id, fullName, className, pageable);
+			return repositories.findStudentByListClass(classList, fullName, className, pageable);
 		} else {
-			return repositories.findStudentByTeacherAndGrade(id, fullName, Integer.parseInt(grade), className, pageable);
+			return repositories.findStudentByListClassAndGrade(classList, fullName, className, Integer.parseInt(grade), pageable);
 		}
 	}
 

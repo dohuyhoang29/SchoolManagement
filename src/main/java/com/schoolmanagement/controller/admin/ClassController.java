@@ -2,8 +2,10 @@ package com.schoolmanagement.controller.admin;
 
 import java.util.List;
 
+import java.util.Objects;
 import javax.persistence.EntityManager;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -87,15 +89,26 @@ public class ClassController {
 	}
 
 	@PostMapping("/save/class")
-	public String saveClass(Model model, Class aClass, BindingResult result) {
-		if (result.hasErrors()) {
-			return "/admin/class/form_class";
+	public String saveClass(Model model, @Valid Class aClass, BindingResult result) {
+		if (aClass.getId() == null) {
+			if (classServiceImp.getClassByClassName(aClass.getClassName()) != null) {
+				result.rejectValue("className", "error.class", "Class Name already exist");
+			}
+		} else {
+			if (classServiceImp.getClassByClassName(aClass.getClassName()) != null && !Objects.equals(
+					classServiceImp.getClassByClassName(aClass.getClassName()).getId(), aClass.getId())) {
+				result.rejectValue("className", "error.class", "Class Name already exist");
+			}
 		}
-		
+
 		Role role = entityManager.find(Role.class, 3);
 		User u = aClass.getUser();
 		u.addRole(role);
-		
+
+		if (result.hasErrors()) {
+			return "/admin/class/form_class";
+		}
+
 		userServiceImp.saveUser(u);
 		classServiceImp.saveClass(aClass);
 		

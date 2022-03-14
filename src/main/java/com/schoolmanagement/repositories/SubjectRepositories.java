@@ -19,7 +19,6 @@ public interface SubjectRepositories extends PagingAndSortingRepository<Subjects
   @Query(value = "SELECT s FROM Subjects s WHERE s.subjectName = (:Data)")
   Optional<Subjects> findByName(@Param("Data") String Data);
 
-  @Query(value = "SELECT s FROM Subjects s WHERE s.subjectName LIKE (:data)")
+  @Query(value = "SELECT s FROM Subjects s WHERE s.subjectName LIKE %:data%")
   Page<Subjects> subjectFind(@Param("data") String data, Pageable pageable);
-
 }

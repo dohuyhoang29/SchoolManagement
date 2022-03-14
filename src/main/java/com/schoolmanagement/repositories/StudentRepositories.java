@@ -1,6 +1,8 @@
 package com.schoolmanagement.repositories;
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Student;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,10 +51,11 @@ public interface StudentRepositories extends PagingAndSortingRepository<Student,
 	@Query(value ="SELECT s FROM Student s WHERE s.aClass.id = (:classId)")
 	List<Student> findByIdClass(@Param("classId") int id);
 
-	@Query(value = "SELECT s FROM  User u INNER JOIN ClassTeacherSubject cts ON cts.users.id = u.id INNER JOIN Student s ON s.aClass.id = cts.theClass.id WHERE u.id = :id AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className%")
-	Page<Student> findStudentByTeacher(@Param("id") Integer id, @Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
+	@Query(value = "SELECT s FROM Student s WHERE s.aClass IN :classList AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className%")
+	Page<Student> findStudentByListClass(@Param("classList") Collection<Class> classList,
+			@Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
 
-	@Query(value = "SELECT s FROM  User u INNER JOIN ClassTeacherSubject cts ON cts.users.id = u.id INNER JOIN Student s ON s.aClass.id = cts.theClass.id WHERE u.id = :id AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className% AND s.aClass.grade = :grade")
-	Page<Student> findStudentByTeacherAndGrade(@Param("id") Integer id, @Param("fullName") String fullName, @Param("grade") Integer grade,
-			@Param("className") String className, Pageable pageable);
+	@Query(value = "SELECT s FROM Student s WHERE s.aClass IN :classList AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className% AND s.aClass.grade = :grade")
+	Page<Student> findStudentByListClassAndGrade(@Param("classList") Collection<Class> classList,
+			@Param("fullName") String fullName, @Param("className") String className, @Param("grade") Integer grade, Pageable pageable);
 }

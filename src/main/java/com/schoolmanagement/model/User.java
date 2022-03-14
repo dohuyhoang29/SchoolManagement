@@ -98,13 +98,17 @@ public class User {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+  private Set<Subjects> subjects = new HashSet<>();
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Blog> blogs = new HashSet<>();
 
 	@OneToOne(mappedBy = "user")
 	private Class aClass;
 
-	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "users", orphanRemoval = true)
 	private List<ClassTeacherSubject> users = new ArrayList<>();
 
 	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)

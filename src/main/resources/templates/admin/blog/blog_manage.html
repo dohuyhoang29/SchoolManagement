@@ -9,6 +9,7 @@
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
 
@@ -49,7 +50,7 @@
           </div>
           <ul class="nav nav-tabs page-header-tab">
             <li class="nav-item"><a class="nav-link active" th:href="@{/show/blog}">List View</a></li>
-            <li class="nav-item"><a class="nav-link"th:href="@{/insert/blog}">Add</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/insert/blog}">Add</a></li>
           </ul>
         </div>
       </div>
@@ -60,14 +61,24 @@
           <div class="tab-pane active" id="Staff-all">
             <div class="card">
               <div class="card-body">
-                <form th:action="@{/admin/subjects/subjects_management/search}" method="get">
+                <form th:action="@{/show/blog/search}" method="get">
                   <div class="row">
-                    <div class="col-lg-9 col-md-6 col-sm-12">
+                    <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-	                      	<input type="text" id="search" name="search" class="form-control w-75" th:value="${search}" placeholder="What you want to find ?">
-	                     	<input type="date" id="dateStart"  class="form-control w-50" name="dateStart" min="2012-01-01" th:max="${datenow}">
-		                    <input type="date" id="dateStart"  class="form-control w-50" name="dateStart" min="2012-01-01" th:max="${datenow}">
-	                   </div>
+                        <input type="text" id="search" name="search" class="form-control w-75" th:value="${search}" placeholder="What you want to find ?">
+	                    </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <input id="fromDate" data-provide="datepicker" th:value="${fromDate}"
+                               data-date-autoclose="true" class="form-control" placeholder="From">
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-group">
+                          <input id="toDate" data-provide="datepicker" th:value="${toDate}"
+                                 data-date-autoclose="true" class="form-control" placeholder="To">
+                      </div>
                     </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
                       <button type="submit" class="btn btn-sm btn-primary btn-block" style="width: 100px;height: 30px; margin-top: 4px">Search</button>
@@ -78,26 +89,123 @@
             </div>
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
-                <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Header</th>
-                  <th>Author</th>
-                  <th>CreateDate</th>
-                  <th>Actions</th>
+                <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&formDate=' + ${fromDate} + '&toDate=' +${toDate}">
+                <tr th:with="pageUrlPrefix = '/show/blog/'">
+                  <th>
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
+                      #
+                    </a>
+                  </th>
+                  <th>
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=header' + ${pageUrlPostfix}}">
+                      Header
+                    </a>
+                  </th>
+                  <th class="pr-20">
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=user.fullName' + ${pageUrlPostfix}}">
+                      Author
+                    </a>
+                  </th>
+                  <th>
+                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=createdDate' + ${pageUrlPostfix}}">
+                      Created Date
+                    </a>
+                  </th>
+                  <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="listBlog : ${blogs}" >
-                  	<td th:text="${listBlog.id}"></td>
-                    <td th:text="${listBlog.header}"></td>
-                    <td th:text="${listBlog.user.fullName}"></td>
-                    <td th:text="${listBlog.getDate()}"></td> 
-                    <td><a th:href="@{/detail/blog/{id}(id=${listBlog.id})}" class="btn btn-icon btn-sm"><i class="fa fa-eye"></i></a></td>
-                    <td><a th:href="@{/edit/blog/{id}(id=${listBlog.id})}" class="btn btn-icon btn-sm text-warning" ><i class="fa fa-edit"></i></a></td> 
+                  <tr th:each="blog : ${blogs}" >
+                  	<td th:text="${blog.id}"></td>
+                    <td th:text="${blog.header}"></td>
+                    <td th:text="${blog.user.fullName}"></td>
+                    <td th:text="${blog.createdDate}"></td>
+                    <td class="text-center">
+                      <a th:href="@{/detail/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm"><i class="fa fa-eye"></i></a>
+                      <a th:href="@{/edit/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm text-warning" ><i class="fa fa-edit"></i></a>
+                    </td>
                   </tr>
                 </tbody>
               </table>
+              <div class="card-body">
+                <div class="bd-example">
+                  <div th:fragment="pagination">
+                    <div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search} + '&fromDate=' + ${fromDate} + '&toDate=' + ${toDate}">
+                      <nav>
+                        <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/blog/'">
+
+                          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
+                          </li>
+                          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+                          </li>
+
+                          <th:block th:if="${totalPages <= 6}" >
+                            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+                              <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                              <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                            </li>
+                          </th:block>
+
+                          <th:block th:if="${totalPages > 6}">
+                            <th:block th:if="${currentPage <= 4}">
+                              <li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                              </li>
+
+                              <button class="page-link">...</button>
+
+                              <li class="page-item">
+                                <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                              </li>
+                            </th:block>
+                            <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+                              <li th:class="page-item">
+                                <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                              </li>
+
+                              <button class="page-link">...</button>
+
+                              <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                              </li>
+
+                              <button th:class="page-link">...</button>
+
+                              <li class="page-item">
+                                <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                              </li>
+                            </th:block>
+                            <th:block th:if="${currentPage >= totalPages - 3}">
+                              <li class="page-item">
+                                <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                              </li>
+
+                              <button class="page-link">...</button>
+
+                              <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                              </li>
+                            </th:block>
+                          </th:block>
+
+                          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+                            <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
+                          </li>
+
+                          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -5,11 +5,13 @@ import com.schoolmanagement.helper.StudentExcelImporter;
 import com.schoolmanagement.helper.TeacherExcelExporter;
 import com.schoolmanagement.helper.TeacherExcelImporter;
 import com.schoolmanagement.model.AccountDetails;
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
+import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +68,7 @@ public class StudentController {
   private ClassServiceImp classServiceImp;
 
   @Autowired
-  private EntityManager entityManager;
+  private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
 
   @GetMapping("/show/student")
   public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
@@ -91,19 +94,19 @@ public class StudentController {
         page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
             sortDir, grade, className, schoolYear);
       } else {
-        page = studentServiceImp.findAllStudentByTeacher(accountDetails.getId(), search, currentPage, sortField,
-            sortDir, grade, className);
+        Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
+
+        page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
       }
     }
 
-    long totalItems = page.getTotalElements();
+    assert page != null;
     int totalPages = page.getTotalPages();
     List<Student> studentList = page.getContent();
 
     model.addAttribute("studentList", studentList);
     model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPages", totalPages);
-    model.addAttribute("totalItems", totalItems);
     model.addAttribute("sortField", sortField);
     model.addAttribute("search", search);
     model.addAttribute("status", status);
@@ -116,7 +119,7 @@ public class StudentController {
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
 
-      return "/admin/student/student_management";
+    return "/admin/student/student_management";
   }
 
   @GetMapping("/insert/student")

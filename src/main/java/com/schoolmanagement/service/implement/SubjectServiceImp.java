@@ -3,6 +3,7 @@ package com.schoolmanagement.service.implement;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.repositories.SubjectRepositories;
 import com.schoolmanagement.service.SubjectService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,5 +48,15 @@ public class SubjectServiceImp implements SubjectService {
 		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
 
 		return subjectRepositories.subjectFind(name, page);
+	}
+
+	@Override
+	public Subjects findSubjectBySubjectName(String name) {
+		Optional<Subjects> subjects = subjectRepositories.findByName(name);
+		if (subjects.isPresent()) {
+			return subjects.get();
+		} else {
+			return null;
+		}
 	}
 }

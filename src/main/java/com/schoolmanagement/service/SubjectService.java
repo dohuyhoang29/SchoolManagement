@@ -15,4 +15,6 @@ public interface SubjectService {
 
   Page<Subjects> findSubjectByName(String name, int pageNumber, String sortField,
       String sortDir);
+
+  Subjects findSubjectBySubjectName(String name);
 }

@@ -14,10 +14,6 @@
   <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
   <!--selectPickercss-->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <!-- <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css">
   --> <!-- Core css -->
   <link rel="stylesheet" href="/css/style.min.css"/>
   <style>
@@ -95,9 +91,9 @@
                   </div>
                   <div class="card-body">
                     <form th:action="@{/subjects/save}" method="post" th:object="${subjects}">
+                      <input type="hidden" th:field="*{id}">
                       <div class="row clearfix">
                         <div class="col-sm-12">
-                          <div id="listSubject" th:data="${listSubject}"></div>
                           <div class="form-group">
                             <label>Subject Name</label>
                             <input th:field="*{subjectName}" type="text"
@@ -108,8 +104,8 @@
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group multi_select_box mt-2 mb-3">
-                            <label>Teachers</label>
-                            <select id="multi_select" class="form-select w-100" multiple
+                            <label class="col-sm-12">Teachers</label>
+                            <select id="multi_select" class="form-select col-sm-12" multiple
                                     th:field="*{users}">
                               <option th:each="user : ${listUser}"
                                       th:field="*{users}"

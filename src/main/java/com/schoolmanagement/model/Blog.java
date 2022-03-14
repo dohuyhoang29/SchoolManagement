@@ -40,15 +40,9 @@ public class Blog {
 	private User user;
 
 	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+	private LocalDate createdDate;
 
 	@Column(name = "updated_date")
 	private LocalDateTime updatedDate;
-
-	
-	public LocalDate getDate() {
-		LocalDate date = createdDate.toLocalDate();
-		return date;
-	}
 	
 }

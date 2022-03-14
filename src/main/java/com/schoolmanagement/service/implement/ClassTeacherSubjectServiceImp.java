@@ -1,7 +1,10 @@
 package com.schoolmanagement.service.implement;
 
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.service.ClassTeacherSubjectService;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +39,12 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 	}
 
 	@Override
-	public Iterable<ClassTeacherSubject> findAllByTeacher(Integer id) {
-		return null;
+	public Set<Class> findAllByTeacher(Integer id) {
+		Set<Class> classList = new HashSet<>();
+		for (ClassTeacherSubject cts : classTeacherSubjectRepositories.findByTeacherId(id)) {
+			classList.add(cts.getTheClass());
+		}
+
+		return classList;
 	}
 }

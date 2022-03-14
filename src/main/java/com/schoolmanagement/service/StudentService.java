@@ -1,7 +1,9 @@
 package com.schoolmanagement.service;
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Student;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Student;
@@ -22,6 +24,6 @@ public interface StudentService {
 
 	List<Student> findAllStudentByClassId(int classid);
 
-	Page<Student> findAllStudentByTeacher(Integer id, String fullName, int pageNumber, String sortField,
-			String sortDir, String grade, String className);
+	Page<Student> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
+			String sortDir, String fullName, String grade, String className);
 }

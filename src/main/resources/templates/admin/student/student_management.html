@@ -236,52 +236,101 @@
             </div>
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
-                <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
-                <tr th:with="pageUrlPrefix = '/show/student/'">
-                  <th>
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
-                      #
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=fullName' + ${pageUrlPostfix}}">
-                      Student Name
-                    </a>
-                  </th>
-                  <th class="pr-20">
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=address' + ${pageUrlPostfix}}">
-                      Address
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=dob' + ${pageUrlPostfix}}">
-                      Date of Birth
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
-                      Status
-                    </a>
-                  </th>
-                  <th>
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
-                      Grade
-                    </a>
-                  </th>
-                  <th class="text-center">
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
-                      Class
-                    </a>
-                  </th>
-                  <th class="text-center">
-                    <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
-                      School Year
-                    </a>
-                  </th>
-                  <th class="text-center">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
+                <th:block sec:authorize="hasAnyAuthority('ADMIN')">
+                  <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
+                  <tr th:with="pageUrlPrefix = '/show/student/'">
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
+                        #
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=fullName' + ${pageUrlPostfix}}">
+                        Student Name
+                      </a>
+                    </th>
+                    <th class="pr-20">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=address' + ${pageUrlPostfix}}">
+                        Address
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=dob' + ${pageUrlPostfix}}">
+                        Date of Birth
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
+                        Status
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
+                        Grade
+                      </a>
+                    </th>
+                    <th class="text-center">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
+                        Class
+                      </a>
+                    </th>
+                    <th class="text-center">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
+                        School Year
+                      </a>
+                    </th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                  </thead>
+                </th:block>
+                <th:block sec:authorize="hasAnyAuthority('TEACHER')">
+                  <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}">
+                  <tr th:with="pageUrlPrefix = '/show/student/'">
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
+                        #
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=fullName' + ${pageUrlPostfix}}">
+                        Student Name
+                      </a>
+                    </th>
+                    <th class="pr-20">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=address' + ${pageUrlPostfix}}">
+                        Address
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=dob' + ${pageUrlPostfix}}">
+                        Date of Birth
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
+                        Status
+                      </a>
+                    </th>
+                    <th>
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
+                        Grade
+                      </a>
+                    </th>
+                    <th class="text-center">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
+                        Class
+                      </a>
+                    </th>
+                    <th class="text-center">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
+                        School Year
+                      </a>
+                    </th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                </th:block>
                 <th:block th:each="student : ${studentList}">
                   <tr>
                     <td>[[${student.id}]]</td>
@@ -330,86 +379,170 @@
                 </th:block>
                 </tbody>
               </table>
-              <div class="card-body">
-                <div class="bd-example">
-                  <div th:fragment="pagination">
-                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
-	                	<nav>
-		                    <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
-		                      
-		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
-		                      </li>
-		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
-		                      </li>
-		                      
-		                      <th:block th:if="${totalPages <= 6}" >
-		                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
-		                          <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+              <th:block sec:authorize="hasAnyAuthority('ADMIN')">
+                <div class="card-body">
+                  <div class="bd-example">
+                    <div th:fragment="pagination">
+                      <div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
+                        <nav>
+                          <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
+
+                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
+                            </li>
+                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+                            </li>
+
+                            <th:block th:if="${totalPages <= 6}" >
+                              <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                              </li>
+                            </th:block>
+
+                            <th:block th:if="${totalPages > 6}">
+                              <th:block th:if="${currentPage <= 4}">
+                                <li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
                                   <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        </li>
-		                      </th:block>
-		                      
-		                      <th:block th:if="${totalPages > 6}">
-		                      		<th:block th:if="${currentPage <= 4}">
-		                      			<li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
-		                        		
-		                        		<button class="page-link">...</button>
-		                        		
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-		                        		</li>
-		                      		</th:block>
-		                      		<th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
-		                        		<li th:class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-		                        		</li>
-		                        		
-		                        		<button class="page-link">...</button>
-		                        		
-		                      			<li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
-		                        		
-		                        		<button th:class="page-link">...</button>
-		                        		
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-		                        		</li>
-		                      		</th:block>
-		                      		<th:block th:if="${currentPage >= totalPages - 3}">
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-		                        		</li>
-		                        		
-		                        		<button class="page-link">...</button>
-		                        		
-		                      			<li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
-		                      		</th:block>
-		                      </th:block>
-		                      
-		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
-		                      </li>
-		                      
-		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
-		                      </li>
-		                      
-		                    </ul>
-	                  </nav>
-	                </div>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                                </li>
+                              </th:block>
+                              <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+                                <li th:class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                                </li>
+
+                                <button th:class="page-link">...</button>
+
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                                </li>
+                              </th:block>
+                              <th:block th:if="${currentPage >= totalPages - 3}">
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                                </li>
+                              </th:block>
+                            </th:block>
+
+                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
+                            </li>
+
+                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
+                            </li>
+
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </th:block>
+              <th:block sec:authorize="hasAnyAuthority('TEACHER')">
+                <div class="card-body">
+                  <div class="bd-example">
+                    <div th:fragment="pagination">
+                      <div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}">
+                        <nav>
+                          <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
+
+                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
+                            </li>
+                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+                            </li>
+
+                            <th:block th:if="${totalPages <= 6}" >
+                              <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                              </li>
+                            </th:block>
+
+                            <th:block th:if="${totalPages > 6}">
+                              <th:block th:if="${currentPage <= 4}">
+                                <li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                                </li>
+                              </th:block>
+                              <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+                                <li th:class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                                </li>
+
+                                <button th:class="page-link">...</button>
+
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+                                </li>
+                              </th:block>
+                              <th:block th:if="${currentPage >= totalPages - 3}">
+                                <li class="page-item">
+                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+                                </li>
+
+                                <button class="page-link">...</button>
+
+                                <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
+                                </li>
+                              </th:block>
+                            </th:block>
+
+                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
+                            </li>
+
+                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
+                            </li>
+
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </th:block>
             </div>
           </div>
         </div>

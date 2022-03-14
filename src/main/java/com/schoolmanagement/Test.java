@@ -2,7 +2,10 @@ package com.schoolmanagement;
 
 import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -21,8 +24,10 @@ public class Test {
   private static StudentRepositories repositories;
 
   public static void main(String[] args) {
-    int year = LocalDateTime.now().getYear();
-    System.out.println(year);
+    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().append(DateTimeFormatter.ofPattern("MM-dd-yyyy")).toFormatter();
+    String date = "02-12-2002";
+    LocalDate localDateTime = LocalDate.parse(date, dateTimeFormatter);
+    System.out.println(localDateTime);
   }
 
   public static int randomString(String text) {

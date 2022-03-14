@@ -62,6 +62,6 @@ public class Class {
 	@OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Student> students = new HashSet<>();
 
-	@OneToMany(mappedBy = "theClass" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "theClass", fetch = FetchType.LAZY)
 	private Set<ClassTeacherSubject> teacherSubjects = new HashSet<>();
 }
