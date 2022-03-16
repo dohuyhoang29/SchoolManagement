@@ -5,6 +5,7 @@ import com.schoolmanagement.helper.StudentExcelImporter;
 import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
@@ -45,14 +46,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.schoolmanagement.helper.StudentExcelExporter;
-import com.schoolmanagement.helper.StudentExcelImporter;
-import com.schoolmanagement.model.AccountDetails;
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
-
 @Controller
 public class StudentController {
   @Autowired
@@ -85,15 +78,13 @@ public class StudentController {
       @AuthenticationPrincipal AccountDetails accountDetails) {
     Page<User> page = null;
 
-    for (Role role : accountDetails.getRole()) {
-      if (role.getRoleName().equalsIgnoreCase("ADMIN")) {
-        page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
-            sortDir, grade, className, schoolYear);
-      } else {
-        Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
+    if (accountDetails.hasRole("ADMIN")) {
+      page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
+          sortDir, grade, className, schoolYear);
+    } else {
+      Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
 
-        page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
-      }
+      page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
     }
 
     assert page != null;
@@ -284,4 +275,5 @@ public class StudentController {
   public String insertStudentMark() {
     return "/admin/index";
   }
+
 }

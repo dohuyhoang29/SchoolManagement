@@ -1,5 +1,6 @@
 package com.schoolmanagement.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,30 +30,50 @@ public class StudentEvaluate {
 	private Integer id;
 
 	@Column(name = "semester")
+	@NotNull(message = "Choose a semester")
 	private Integer semester;
 
 	@Column(name = "evaluate")
+	@NotEmpty(message = "Enter evaluate")
 	private String evaluate;
 
 	@Column(name = "conduct")
+	@NotNull(message = "Choose a conduct")
 	private Integer conduct;
 
 	@Column(name = "academic_ability")
 	private Integer academicAbility;
 
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDate createdDate;
 
-	@ManyToOne
-	@JoinColumn(name = "created_by")
-	private User createdBy;
+	@OneToOne
+	@JoinColumn(name = "student_id", referencedColumnName = "id")
+	private User student;
 
 	@Column(name = "updated_date")
-	private Date updatedDate;
+	private LocalDate updatedDate;
 
-	@ManyToOne
-	@JoinColumn(name = "updated_by")
+	@OneToOne
+	@JoinColumn(name = "created_by", referencedColumnName = "id")
+	private User createdBy;
+
+	@OneToOne
+	@JoinColumn(name = "updated_by", referencedColumnName = "id")
 	private User updatedBy;
 	
-	
+	public Integer getAcademicAbility() {
+		if (student.getAverageMarks() > 0) {
+			if (student.getAverageMarks() < 3) {
+				this.academicAbility = 1;
+			} else if (3 <= student.getAverageMarks() && student.getAverageMarks() < 5) {
+				this.academicAbility = 2;
+			} else if (5 <= student.getAverageMarks() && student.getAverageMarks() < 8) {
+				this.academicAbility = 3;
+			} else {
+				this.academicAbility = 4;
+			}
+		}
+		return this.academicAbility;
+	}
 }

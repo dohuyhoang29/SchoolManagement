@@ -118,13 +118,13 @@
 			                  				<td th:text="${student.fullName}"></td>
 			                  				<td th:text="${student.dob}"></td>
 			                  				<td th:text="${student.address}"></td>
-			                  				<td th:if="${student.status == 1}">
+			                  				<td th:if="${student.userInfo.status == 1}">
 			                   					<span class="tag tag-success">Studying</span>
 						                    </td>
-			                    			<td th:if="${student.status == 2}">
+			                    			<td th:if="${student.userInfo.status == 2}">
 			                      				<span class="tag tag-warning">Absent</span>
 			                    			</td>
-			                    			<td th:if="${student.status == 3}">
+			                    			<td th:if="${student.userInfo.status == 3}">
 			                   					<span class="tag tag-secondary ">Graduate</span>
 			                    			</td>
 			                  				<td><a class="btn btn-sm btn-warning text-white">Edit</a></td>

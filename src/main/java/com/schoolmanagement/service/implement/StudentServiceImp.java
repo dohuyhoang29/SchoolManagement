@@ -1,7 +1,6 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.StudentService;
@@ -28,14 +27,10 @@ public class StudentServiceImp implements StudentService {
 
 	@Override
 	public Iterable<User> getAllStudent() {
-		List<User> users = (List<User>) repositories.findAll();
 		List<User> list = new ArrayList<>();
-
 		for (User user : repositories.findAll()) {
-			for (Role role : user.getRoles()) {
-				if (role.getRoleID() == 4) {
-					list.add(user);
-				}
+			if (user.hasRole("STUDENT")) {
+				list.add(user);
 			}
 		}
 

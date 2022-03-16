@@ -21,7 +21,7 @@ public class MarkRequest {
 
 	private Integer semester;
 
-	private List<Integer> coefficient;
+	private List<Float> coefficient;
 
 	private Integer createdBy;
 	

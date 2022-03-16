@@ -364,12 +364,11 @@
                         </button>
                       </a>
                       <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Add Marks" data-type="confirm" th:href="@{'/insert/mark/'+ ${user.aClass.id} +'/' + 1}"><i
+                              title="Add Marks" data-type="confirm" th:href="@{/insert/mark/{classid}(classid = ${user.userInfo.aClass.id})}"><i
                           class="fe fe-file-plus text-danger" ></i></a>
-                      <button sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')"
-                              type="button" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Add Evaluate" data-type="confirm"><i
-                          class="fa fa-comment-o text-danger"></i></button>
+                      <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
+                              title="Add Marks" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}"><i
+                          class="fa fa-comment-o text-danger"></i></a>
                       <button sec:authorize="hasAnyAuthority('ADMIN', 'HOMEROOM_TEACHER')"
                               type="button" class="btn btn-icon btn-sm js-sweetalert"
                               title="Marks Details" data-type="confirm"><i

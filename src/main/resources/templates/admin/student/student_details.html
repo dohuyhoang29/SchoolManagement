@@ -114,12 +114,19 @@
                         </div>
                       </li>
                       <li class="list-group-item">
-                        <b>Start Date</b>
+                        <b>Admission Year</b>
                         <div>[[${student.userInfo.admissionYear}]]</div>
                       </li>
                       <li class="list-group-item">
-                        <b>End Date</b>
+                        <b>Graduate Year</b>
                         <div>[[${student.userInfo.graduateYear}]]</div>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Class</b>
+                        <div class="row">
+                          <span class="col-md-1 col-sm-1">[[${student.userInfo.aClass.className}]]</span>
+                          <a th:href="@{/details/class/{id}(id=${student.userInfo.AClass.id})}" class="btn btn-sm btn-primary btn-block col-md-1 col-sm-1">Details</a>
+                        </div>
                       </li>
                     </ul>
                   </div>

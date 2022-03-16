@@ -61,6 +61,15 @@
       <div class="container-fluid">
         <div class="tab-content">
           <div class="tab-pane active" id="Staff-all">
+            <div th:if="${message}" class="card bg-green">
+              <div class="card-header">
+                <h3 class="card-title text-white">[[${message}]]</h3>
+                <div class="card-options ">
+                  <a href="#" class="card-options-remove" data-toggle="card-remove"><i
+                      class="fe fe-x text-white"></i></a>
+                </div>
+              </div>
+            </div>
             <div class="card">
               <div class="card-body">
                 <form th:action="@{/show/class/search}" method="get">

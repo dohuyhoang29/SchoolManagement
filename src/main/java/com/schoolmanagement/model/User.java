@@ -102,17 +102,23 @@ public class User {
 	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClassTeacherSubject> users = new ArrayList<>();
 
-	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> marks = new HashSet<>();
-
-	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> mark = new HashSet<>();
+  @OneToMany(mappedBy = "students")
+  private Set<Mark> marks = new HashSet<>();
 
 	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> studentEvaluateCreate = new HashSet<>();
+	private Set<Mark> createMark = new HashSet<>();
 
 	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> studentEvaluateUpdate = new HashSet<>();
+	private Set<Mark> updateMark = new HashSet<>();
+
+  @OneToOne(mappedBy = "student")
+  private StudentEvaluate studentEvaluate;
+
+  @OneToOne(mappedBy = "createdBy")
+  private StudentEvaluate createEvaluate;
+
+  @OneToOne(mappedBy = "updatedBy")
+  private StudentEvaluate updateEvaluate;
 
   public void addRole(Role role) {
     this.roles.add(role);
@@ -135,14 +141,24 @@ public class User {
   }
 
   public boolean hasRole (String roleName) {
-    Iterator<Role> iterator = this.roles.iterator();
-    while (iterator.hasNext()) {
-      Role role = iterator.next();
-      if (role.getRoleName().equalsIgnoreCase(roleName)) {
+    for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext(); ) {
+      Role next = iterator.next();
+      if (next.getRoleName().equalsIgnoreCase(roleName)){
         return true;
       }
     }
     return false;
+  }
+
+  public float getAverageMarks () {
+    for (Iterator<Mark> iterator = marks.iterator(); iterator.hasNext(); ) {
+      Mark next = iterator.next();
+      if (next.getType() == 4) {
+        return next.getCoefficient();
+      }
+    }
+
+    return 0.0f;
   }
 
   public User(String fullName, String username, String password, String email, String phone,

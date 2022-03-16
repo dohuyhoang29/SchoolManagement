@@ -26,6 +26,7 @@ import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import com.schoolmanagement.service.implement.SubjectServiceImp;
 import com.schoolmanagement.service.implement.TeacherServiceImp;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ClassController {
@@ -85,7 +86,8 @@ public class ClassController {
 	}
 
 	@PostMapping("/save/class")
-	public String saveClass(Model model, @Valid Class aClass, BindingResult result) {
+	public String saveClass(Model model, @Valid Class aClass, BindingResult result,
+			RedirectAttributes redirectAttributes) {
 		if (aClass.getId() == null) {
 			if (classServiceImp.getClassByClassName(aClass.getClassName()) != null) {
 				result.rejectValue("className", "error.class", "Class Name already exist");
@@ -107,8 +109,12 @@ public class ClassController {
 
 		teacherServiceImp.saveUser(u);
 		classServiceImp.saveClass(aClass);
-		
-		classList(model);
+
+		if (aClass.getId() == null) {
+			redirectAttributes.addFlashAttribute("message", "Add class successfully");
+		} else {
+			redirectAttributes.addFlashAttribute("message", "Edit class successfully");
+		}
 		
 		return "redirect:/show/class";
 	}

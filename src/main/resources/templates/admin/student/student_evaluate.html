@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>School Management</title>
+
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
+  <!-- Core css -->
+  <link rel="stylesheet" href="/css/style.min.css"/>
+</head>
+
+<body class="font-muli theme-cyan gradient">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+  <div class="loader">
+  </div>
+</div>
+
+<div id="main_content">
+  <!-- Start Main top header -->
+  <div th:include="partials/header"></div>
+  <!-- Start Rightbar setting panel -->
+  <div th:include="partials/rightbar"></div>
+  <!-- Start Main leftbar navigation -->
+  <div th:include="partials/leftbar"></div>
+
+  <!-- Modal: modalAbandonedCart-->
+  <div class="modal fade right" id="modalAbandonedCart" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel"
+       aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-side modal-bottom-right modal-notify modal-info"
+         role="document">
+      <!--Content-->
+      <div class="modal-content">
+        <!--Header-->
+        <div class="modal-header">
+          <p class="heading">Import Teacher From Excel
+          </p>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+
+        <!--Body-->
+        <form th:action="@{/import/student}" method="post" enctype="multipart/form-data">
+          <div class="modal-body">
+
+            <div class="row">
+              <input name="fileImage" id="fileImage" type="file" class="dropify"
+                     accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            </div>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer justify-content-center">
+            <input type="submit" class="btn btn-info" value="Import">
+            <a type="button" class="btn btn-outline-info waves-effect"
+               data-dismiss="modal">Cancel</a>
+          </div>
+        </form>
+      </div>
+      <!--/.Content-->
+    </div>
+  </div>
+  <!-- Modal: modalAbandonedCart-->
+  <!-- Start project content area -->
+  <div class="page">
+    <!-- Start Page header -->
+    <div th:include="partials/navbar"></div>
+    <!-- Start Page title and tab -->
+    <div class="section-body">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="header-action">
+            <h1 class="page-title">Student</h1>
+            <ol class="breadcrumb page-breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Student Evaluate</li>
+            </ol>
+          </div>
+          <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item">
+              <a class="nav-link active" th:href="@{/show/student}">List View</a>
+            </li>
+            <li class="nav-item">
+              <a sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link" th:href="@{/insert/student}">Add</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section-body mt-4">
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-add">
+            <div class="row clearfix">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Evaluate</h3>
+                  </div>
+                  <form th:action="@{/evaluate/save}" method="post" th:object="${studentEvaluate}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="card-body">
+                      <div class="row clearfix">
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label for="class_name">Class Name</label>
+                            <input id="class_name" type="text" th:value="${student.userInfo.AClass.className}" class="form-control" disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label for="student_name">Student Name</label>
+                            <input id="student_name" th:value="${student.fullName}" type="text" class="form-control" disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label for="semester">Semester</label>
+                            <select id="semester" th:field="*{semester}" class="form-control show-tick">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label for="conduct">Conduct</label>
+                            <select id="conduct" th:field="*{conduct}" class="form-control show-tick">
+                              <option value="1">Below Average</option>
+                              <option value="2">Average</option>
+                              <option value="3">Good</option>
+                              <option value="4">Excellent</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                          <label for="evaluate">Evaluate</label>
+                          <textarea th:field="*{evaluate}" id="evaluate" rows="4" class="form-control no-resize"></textarea>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label for="average_marks">Average Marks</label>
+                            <input id="average_marks" th:value="${student.getAverageMarks()}" type="text" class="form-control" disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>Academic Ability</label>
+                            <input type="hidden" th:field="*{academicAbility}">
+                            <input th:if="${studentEvaluate.getAcademicAbility() == 1}" type="text" value="Below Average" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.getAcademicAbility() == 2}" type="text" value="Average" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.getAcademicAbility() == 3}" type="text" value="Good" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.getAcademicAbility() == 4}" type="text" value="Excellent" class="form-control" disabled>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                          <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Start Main project js, jQuery, Bootstrap -->
+<script src="/bundles/lib.vendor.bundle.js"></script>
+
+<!-- Start Plugin Js -->
+<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/plugins/dropify/js/dropify.min.js"></script>
+<script src="/bundles/summernote.bundle.js"></script>
+
+<!-- Start project main js  and page js -->
+<script src="/js/core.js"></script>
+<script src="/assets/js/form/dropify.js"></script>
+<script src="/assets/js/page/summernote.js"></script>
+</body>
+</html>

@@ -12,7 +12,6 @@
                    th:src="${#authentication.principal.image}"></image>
             <span sec:authorize="isAuthenticated()">
               <span sec:authentication="principal.fullName">Username</span>
-              <span sec:authentication="principal.authorities">Username</span>
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">

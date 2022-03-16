@@ -40,7 +40,7 @@ public class Mark {
 	private Integer semester;
 
 	@Column(name = "coefficient")
-	private Integer coefficient;
+	private Float coefficient;
 
 	@Column(name = "created_date")
 	private LocalDate createdDate;
