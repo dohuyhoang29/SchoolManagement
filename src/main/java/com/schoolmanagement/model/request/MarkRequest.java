@@ -1,5 +1,7 @@
 package com.schoolmanagement.model.request;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +21,7 @@ public class MarkRequest {
 
 	private Integer semester;
 
-	private Integer coefficient;
+	private List<Integer> coefficient;
 
 	private Integer createdBy;
 	

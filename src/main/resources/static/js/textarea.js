@@ -9,16 +9,25 @@ $(document).ready(function() {
 				for (var i = files.length - 1; i >= 0; i--) {
 					let maxSize = 1048576; // according to the database validator
 					if (files[i].size > maxSize) {
-						alert('Image too large. Images must be less than 100 million bytes (9KB). Less than 1MB is recommended.');
+						alert('Image too large. Images must be less than 100 million bytes (999KB). Less than 1MB is recommended.');
 						return;
 					} else {
 						sendFile(files[i], this);
 					}
+				}
+			},
+			onMediaDelete: function(files) {
+				for (var i = files.length - 1; i >= 0; i--) {
+
+					deleteFile(files[i].src);
 
 				}
+
 			}
 		}
 	});
+
+
 
 	function sendFile(file, el) {
 		var form_data = new FormData();
@@ -44,4 +53,23 @@ $(document).ready(function() {
 		});
 	}
 
+	function deleteFile(src) {
+		var form_data = new FormData();
+		form_data.append('src', src);
+		$.ajax({
+			data: form_data,
+			type: "POST",
+			url: "/delete/image", // replace with your url
+			cache: false,
+			contentType: false,
+			enctype: 'multipart/form-data',
+			processData: false,
+			success: function(resp) {
+				console.log("Tạch");
+			},
+			error: function(data) {
+				console.log("Tạch nốt");
+			}
+		});
+	}
 });

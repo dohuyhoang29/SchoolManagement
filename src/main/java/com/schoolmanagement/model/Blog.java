@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,10 +42,12 @@ public class Blog {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "created_date")
+	@Column(name = "created_date")  
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDate createdDate;
 
 	@Column(name = "updated_date")
+	  @DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDateTime updatedDate;
 	
 }

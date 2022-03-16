@@ -1,8 +1,7 @@
 package com.schoolmanagement.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,11 +26,11 @@ public class Mark {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
 	private User students;
 	
-	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@ManyToOne( fetch = FetchType.LAZY)
 	private Subjects subjects;
 	
 	@Column(name = "type")
@@ -43,14 +43,14 @@ public class Mark {
 	private Integer coefficient;
 
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDate createdDate;
 
 	@ManyToOne
 	@JoinColumn(name = "created_by")
 	private User createdBy;
 
 	@Column(name = "updated_date")
-	private Date updatedDate;
+	private LocalDate updatedDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "updated_by")

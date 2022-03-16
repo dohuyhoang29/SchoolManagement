@@ -84,34 +84,7 @@
                   <div class="card-header">
                     <h3 class="card-title">Basic Information</h3>
                   </div>
-                  	<div align="center" id="message"></div>
-                   <th:block th:if="${class.id >= 1}">
-                   <div><input type="hidden" th:value="${oldTeacher.id}" id="oldTeacher"></div>
-                  	<div class="card-body">
-            			<h3> Teacher Subject </h3>
-	            		<div th:each="subject : ${subjectList}">
-	                	<form id="classInsertForm"  method="post">
-		                    <div class="row clearfix">
-		                      <input type="hidden" name="class" id="classId" th:value="${classz.id}">
-		                      <div class="col-md-12 col-sm-12">
-		                        <div class="form-group">
-		                          	<div class="form-group row" >
-		                            	<label class="col-md-3 col-form-label">[[${subject.subjectName}]]</label>
-		                                <input type="hidden" class="subject" name="subject" th:value="${subject.id}"> 
-		                            	<select class="col-md-5 form-control input-height users" name="users">
-		                              	<option th:each="teacher : ${subject.getUsers()}"
-		                                      th:value="${teacher.id}"
-		                                      th:utext="${teacher.fullName}"></option>
-		                            	</select>
-		                          	  </div>
-		                        	</div>
-	                   			</div>
-	                   		</div>
-	                  	</form>
-	                	</div>
-			        </div>
-                  </th:block>
-                 
+                  	<div align="center" id="message"></div>             
                   <div class="card-body">
                     <form id="classInsertForm" class="formsubmit" th:action="@{/save/class}" method="post"
                           th:object="${class}"
@@ -163,12 +136,7 @@
                           </div>
                         </div>
                         <div class="col-sm-12">
-                        <th:block th:if="${class.id != null }">
-	                         <button type="submit"  id="Edit" class="btn btn-primary">Save</button>
-                        </th:block>
-                         <th:block th:if="${class.id == null }">
-                         	<button type="submit"  id="addNew" class="btn btn-primary">Create</button>
-                         </th:block>
+	                         <button type="submit"  class="btn btn-primary">Save</button>
                           <a class="btn btn-secondary" th:href="@{/show/class}">Cancel</a>
                         </div>
                       </div>

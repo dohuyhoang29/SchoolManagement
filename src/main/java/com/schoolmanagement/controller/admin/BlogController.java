@@ -2,6 +2,7 @@ package com.schoolmanagement.controller.admin;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -61,7 +62,6 @@ public class BlogController {
 	
 	@GetMapping("/insert/blog")
 	public String InsertBlog(Model model) {
-		User user = teacherServiceImp.findByUserId(8);
 		model.addAttribute("blogs", new Blog());
 		model.addAttribute("users", user);
 
@@ -77,7 +77,7 @@ public class BlogController {
 		blogs.setUpdatedDate(LocalDateTime.now());
 		blogServiceImp.SaveBlog(blogs);
 
-		return "redirect:/insert/blog";
+		return "redirect:/show/blog";
 	}
 //    
 	@GetMapping("/edit/blog/{id}")
@@ -95,7 +95,7 @@ public class BlogController {
 		Blog blogs = blogServiceImp.findByIdBlog(id);
 	
 		model.addAttribute("blogs", blogs);
-		
+
 		return "/admin/blog/blog_detail";
 	}
 

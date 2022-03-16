@@ -59,9 +59,10 @@
         		<div class="row clearfix">
         			<div class="col-lg-12 col-md-12 col-sm-12">
         				<div class="card">
-        					<div class="card-header">
+        					<div class="card-header">	
         						<form>
         							<div class="form-group">
+        								<input type="hidden" id="userId" th:value="${cst.users.id}">
         								<label> Class Name  : <span >
         								[[${cst.theClass.className}]]
         								</span> </label>
@@ -69,7 +70,7 @@
         							</div>
         							<div class="form-group" >
         								<label> Subject Name  : <span >[[${cst.subjects.subjectName}]]</span> </label>
-        								<input type="hidden" th:value="${cst.subjects.id}">
+        								<input type="hidden" id="subjectId" th:value="${cst.subjects.id}">
         							</div>
         							<div class="form-group">
         								<label> Type  : </label>
@@ -82,7 +83,7 @@
         							</div>
         							<div class="form-group">
         								<label>Semester :  </label>
-        								<select class="form-control  w-100" aria-label="Default select example">
+        								<select class="form-control  w-100" aria-label="Default select example" id="semester">
         									<option value="1">1</option>
         									<option value="2">2</option>
         								</select>
@@ -90,7 +91,7 @@
         						</form>
         					</div>
         					<div>
-        						<table class="table">
+        						<table class="table" id="tblB">
         							<thead>
         								<tr>
         									<th class="w-25">Student Name</th>
@@ -99,20 +100,21 @@
         									<th>Marks</th>
         								</tr>
         							</thead>
-        							<tbody>
+        							<tbody class="bodyTable">
         								<tr th:each="listStudent : ${Studentlist}">
         									<td th:text="${listStudent.fullName}"></td>
         									<td th:text="${listStudent.dob}"></td>
         									<td th:text="${listStudent.address}"></td>
-        									<td th:if="${type == 1  || type == 4 }">
-	        									<input type ="number" class="a" min=0 max=10 value="0">
+        									<td>
+	        									<input type ="number" class="a form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
  	       									</td>
-        									<td th:if="${type == 3 || type ==1 || type ==2}">
-	        									<input type ="number" class="b" min=0 max=10 value="0" >
+        									<td>
+	        									<input type ="number" class="b form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
  	       									</td>
-        									<td th:if="${type == 3 || type == 2 || type == 1}">
-	        									<input type ="number" class="c" min=0 max=10  value="0">
+        									<td>
+	        									<input type ="number" class="c form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
  	       									</td>
+        									<td><input type="hidden" th:value="${listStudent.id}" class="studentId"></td>
         									
         								</tr>
         							</tbody>
@@ -135,37 +137,7 @@
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/dropify/js/dropify.min.js"></script>
 <script src="/bundles/summernote.bundle.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#test').change(function(){
-			var val = $('#test').val();
-			var classid = $('#classid').val();
-			$.ajax({
-				type: "GET",
-				contentType: "application/json; charset=utf-8",
-				url: "http://localhost:8080/insert/mark/"+classid +"/"+val,
-				success: function(result) {
-					if (result != null) {
-						
-						window.location = "http://localhost:8080/insert/mark/"+classid +"/"+val;
-					}
-				},
-				error: function(err) {
-					$("#msg").html("<span style='color: red'>Name is required</span>");
-				}
-			});
-		});
-		
-		$("#click").click(function(){
-			const ListData1 = [];
-			const ListData2 = [];
-			const ListData3 = [];
-			$('input.c').each(function(index){
-				ListData.push($(this).val());
-			})
-		});
-	});
-</script>
+<script type="text/javascript" src="/js/MarkStudentAjax/markStudent.js"></script>
 <!-- Start project main js  and page js -->
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>

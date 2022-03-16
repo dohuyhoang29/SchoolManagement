@@ -110,6 +110,9 @@
                           <i class="fa fa-edit text-warning"></i>
                         </button>
                       </a>
+                      <a sec:authorize="hasAnyAuthority('ADMIN')" class="btn btn-icon btn-sm js-sweetalert"
+                              title="Update Class Teacher " data-type="confirm" th:href="@{/updateClassTeacher/class/{id}(id=${class.id})}"><i
+                          class="fe fe-file-plus text-danger" ></i></a>
                     </td>
                   </tr>
                 </th:block>

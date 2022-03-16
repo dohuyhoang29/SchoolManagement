@@ -1,12 +1,11 @@
 package com.schoolmanagement.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.request.SchoolYearClassRequest;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 public interface ClassService {
   void saveClass(Class aClass);

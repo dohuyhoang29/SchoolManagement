@@ -7,91 +7,176 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>School Management</title>
 
-  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
-  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css" />
   <!-- Core css -->
-  <link rel="stylesheet" href="/css/style.min.css"/>
+  <link rel="stylesheet" href="/css/style.min.css" />
 </head>
 
 <body class="font-muli theme-cyan gradient">
-<!-- Page Loader -->
-<div class="page-loader-wrapper">
-  <div class="loader">
-  </div>
-</div>
-
-<div id="main_content">
-  <!-- Start Main top header -->
-  <div th:include="partials/header"></div>
-  <!-- Start Rightbar setting panel -->
-  <div th:include="partials/rightbar"></div>
-  <!-- Start Main leftbar navigation -->
-  <div th:include="partials/leftbar"></div>
-
-
-  <!-- Start project content area -->
-  <div class="page">
-    <!-- Start Page header -->
-    <div th:include="partials/navbar"></div>
-    <!-- Start Page title and tab -->
-    <div class="section-body">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center ">
-          <div class="header-action">
-            <h1 class="page-title">Blog</h1>
-            <ol class="breadcrumb page-breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Add Blog</li>
-            </ol>
-          </div>
-          <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item"><a class="nav-link " th:href="@{/show/blog}">List
-              View</a></li>
-            <li class="nav-item"><a class="nav-link active" th:href="@{/insert/blog}">Add</a></li>
-          </ul>
-        </div>
-      </div>
+  <!-- Page Loader -->
+  <div class="page-loader-wrapper">
+    <div class="loader">
     </div>
-    <div class="container-fluid">
-      <div class="tab-content">
-        <div class="tab-pane active" id="Staff-all">
-          <div class="card">
-            <div class="card-body">
-              <form th:action="@{/save/blog}" method="post" th:object="${blogs}">
-                <div class="form-group">
-                  <label>Header : </label>
-                  <input type="text" th:field="*{header}">
-                </div>
-                <div class="form-group">
-                  <textarea th:field="*{content}" class="form-control" rows="6" required
-                            id="showEvent" name="showEvent"></textarea>
-                </div>
-                <div>
-                  <input type="submit" class="btn btn-warning text-white" id="click_blog"
-                         value="Save">
-                  <a th:href="@{/show/blog}" class="btn btn-secondary text-white">Cancel</a>
-                </div>
-              </form>
+  </div>
+
+  <div id="main_content">
+    <!-- Start Main top header -->
+    <div th:include="partials/header"></div>
+    <!-- Start Rightbar setting panel -->
+    <div th:include="partials/rightbar"></div>
+    <!-- Start Main leftbar navigation -->
+    <div th:include="partials/leftbar"></div>
+
+
+    <!-- Start project content area -->
+    <div class="page">
+      <!-- Start Page header -->
+      <div th:include="partials/navbar"></div>
+      <!-- Start Page title and tab -->
+      <div class="section-body">
+        <div class="container-fluid">
+          <div class="d-flex justify-content-between align-items-center ">
+            <div class="header-action">
+              <h1 class="page-title">Blog</h1>
+              <ol class="breadcrumb page-breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Blog</li>
+              </ol>
             </div>
+            <ul class="nav nav-tabs page-header-tab">
+              <li class="nav-item"><a class="nav-link " th:href="@{/show/blog}">List
+                  View</a></li>
+              <li class="nav-item"><a class="nav-link active" th:href="@{/insert/blog}">Add</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="tab-content">
+          <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+              <div class="card-body">
+                <form th:action="@{/save/blog}" method="post" th:object="${blogs}">
+                  <div class="form-group">
+                    <label>Header : </label>
+                    <input type="hidden" th:field="*{id}">
+                    <input type="text" th:field="*{header}">
+                  </div>
+                  <div class="form-group">
+                    <textarea th:field="*{content}" class="form-control" rows="6" required id="showEvent"
+                      name="showEvent"></textarea>
+                  </div>
+                  <div>
+                    <input type="submit" class="btn btn-warning text-white" id="click_blog" value="Save">
+                    <a th:href="@{/show/blog}" class="btn btn-secondary text-white">Cancel</a>
+                  </div>
+                </form>
+              </div>
 
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Start Main project js, jQuery, Bootstrap -->
-<script src="/bundles/lib.vendor.bundle.js"></script>
-<!-- Start Plugin Js -->
-<script src="/plugins/dropify/js/dropify.min.js"></script>
-<script src="/bundles/summernote.bundle.js"></script>
-<!-- Start project main js  and page js -->
-<script src="/js/core.js"></script>
-<script src="/assets/js/form/dropify.js"></script>
-<script src="/js/textarea.js"></script>
-<!-- Start project main js  and page js -->
+  <!-- Start Main project js, jQuery, Bootstrap -->
+  <script src="/bundles/lib.vendor.bundle.js"></script>
+  <!-- Start Plugin Js -->
+  <script src="/plugins/dropify/js/dropify.min.js"></script>
+  <script src="/bundles/summernote.bundle.js"></script>
+  <!-- Start project main js  and page js -->
+  <script src="/js/core.js"></script>
+  <script src="/assets/js/form/dropify.js"></script>
+  <script src="/js/textarea.js"></script>
+  <script>
+    $(document).ready(function () {
+
+      $('#test').change(function () {
+
+        var val = $('#test').val();
+
+        let a = '<td><input type ="number" class="a" name="mark" min=0 max=10 value="0"></td>';
+        let b = '<td><input type ="number" class="b" name="mark" min=0 max=10 value="0"></td>';
+        let c = '<td><input type ="number" class="c" name="mark" min=0 max=10 value="0"></td>';
+
+        if (val == 1) {
+          $("table tbody").find('input[name="mark"]').each(function () {
+            $(this).parents("td").remove();
+          });
+          $('#tblB').find("tbody.bodyTable").find("tr").append($(a + b + c));
+        } else if (val == 2 || val == 3) {
+          $("table tbody").find('input[name="mark"]').each(function () {
+            $(this).parents("td").remove();
+          });
+          $('#tblB').find("tbody.bodyTable").find("tr").append($(b + c));
+        } else {
+          $("table tbody").find('input[name="mark"]').each(function () {
+            $(this).parents("td").remove();
+          });
+          $('#tblB').find("tbody.bodyTable").find("tr").append($(a));
+        }
+      });
+
+      $('#click').click(function () {
+        const lista = [];
+        const listb = [];
+        const listc = [];
+        const lists = [];
+        const listAll = [];
+        $('.studentId').each(function (index) {
+          let s = parseInt($(this).val());
+          let a = $('input.a')[index];
+          let b = $('input.b')[index];
+          let c = $('input.c')[index];
+          lists.push(s);
+          if (a != null) {
+            lista.push(parseInt(a.value));
+          }
+          if (b != null && c != null) {
+            listb.push(parseInt(b.value));
+            listc.push(parseInt(c.value));
+          }
+
+        });
+
+        if (lista.length > 0 && listb.length > 0 && listc.length > 0) {
+          for (var i = 0; i < lists.length; i++) {
+            listAll.push({
+              'datas': lists[i],
+              'dataa': lista[i],
+              'datab': listb[i],
+              'datac': listc[i]
+            })
+          }
+        } else if (listb.length > 0 && listc.length > 0) {
+          for (var i = 0; i < lists.length; i++) {
+            listAll.push({
+              'datas': lists[i],
+              'datab': listb[i],
+              'datac': listc[i]
+            })
+          }
+        } else if (lista.length > 0) {
+          for (var i = 0; i < lists.length; i++) {
+            listAll.push({
+              'datas': lists[i],
+              'dataa': lista[i]
+            })
+          }
+        }
+
+        console.log(lists);
+        console.log(lista);
+        console.log(listb);
+        console.log(listc);
+        console.log(listAll);
+      });
+    });
+  </script>
+  <!-- Start project main js  and page js -->
 </body>
 
 </html>

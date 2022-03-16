@@ -80,10 +80,7 @@ public class ClassController {
 	public String EditClass(@PathVariable("id") int id, Model model) {
 		model.addAttribute("class", classServiceImp.getClassById(id));
 		model.addAttribute("userList", teacherServiceImp.getAllUser());
-		model.addAttribute("classz", classServiceImp.getClassById(id));
-		model.addAttribute("studentList", studentServiceImp.getAllStudent());
-		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
-		model.addAttribute("oldTeacher", classServiceImp.getClassById(id).getUser());
+
 		return "/admin/class/form_class";
 	}
 

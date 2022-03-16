@@ -40,5 +40,4 @@ public interface UserRepositories extends PagingAndSortingRepository<User, Integ
 	@Query(value ="DELETE FROM  user_role WHERE role_id = :role_id AND user_id = :user_id", nativeQuery = true )
 	void deleterole(@Param("role_id") int roleid , @Param("user_id") int userid);
 
-
 }

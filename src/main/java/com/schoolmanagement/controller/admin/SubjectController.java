@@ -75,7 +75,6 @@ public class SubjectController {
 		
 		model.addAttribute("listUser", listUser);
 		model.addAttribute("subjects", new Subjects());
-		model.addAttribute("listSubject", subjectServiceImp.getAllSubject());
 
 		return "/admin/subjects/form_subject";
 	}
@@ -114,6 +113,8 @@ public class SubjectController {
 		subjectServiceImp.SaveSubject(subjects);
 		return "redirect:/show/subjects";
 	}
+
+
 
 	// Detail
 	@GetMapping("/show/subjects/details/{id}")
