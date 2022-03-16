@@ -63,7 +63,6 @@ public class BlogController {
 	@GetMapping("/insert/blog")
 	public String InsertBlog(Model model) {
 		model.addAttribute("blogs", new Blog());
-		model.addAttribute("users", user);
 
 		return "/admin/blog/form_blog";
 	}

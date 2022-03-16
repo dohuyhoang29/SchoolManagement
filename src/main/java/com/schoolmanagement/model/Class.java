@@ -4,16 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -58,7 +49,7 @@ public class Class {
 	@Column(name = "updated_date")
 	private LocalDateTime updatedDate;
 
-	@OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "aClass", fetch = FetchType.LAZY)
 	private Set<UserInfo> students = new HashSet<>();
 
 	@OneToMany(mappedBy = "theClass", fetch = FetchType.LAZY)

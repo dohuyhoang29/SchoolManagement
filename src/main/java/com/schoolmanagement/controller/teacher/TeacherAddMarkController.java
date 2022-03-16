@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Mark;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.MarkRequest;
@@ -28,6 +27,7 @@ import com.schoolmanagement.service.implement.MarkServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import com.schoolmanagement.service.implement.TeacherServiceImp;
 import com.schoolmanagement.service.implement.SubjectServiceImp;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class TeacherAddMarkController {
@@ -72,8 +72,8 @@ public class TeacherAddMarkController {
 			}
 			for (int i = 0; i < m.getCoefficient().size(); i++) {
 				Mark mark = new Mark();
-				User user = userServiceImp.findByUserId(m.getCreatedBy());
-				Student student = studentServiceImp.getStudentById(m.getStudents());
+				User user = teacherServiceImp.findByUserId(m.getCreatedBy());
+				User student = studentServiceImp.getStudentById(m.getStudents());
 				Subjects subjects = subjectServiceImp.findBySubjectID(m.getSubjects());
 
 				if(list.size() > 0  && list.get(i).getId() != 0) {

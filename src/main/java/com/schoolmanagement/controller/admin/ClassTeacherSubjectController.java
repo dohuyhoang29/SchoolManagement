@@ -39,7 +39,7 @@ public class ClassTeacherSubjectController {
 
 	@GetMapping("/updateClassTeacher/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
-		model.addAttribute("userList", userServiceImp.getAllUser());
+		model.addAttribute("userList", teacherServiceImp.getAllUser());
 		model.addAttribute("class", classServiceImp.getClassById(id));
 		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
 

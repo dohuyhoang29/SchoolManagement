@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -48,7 +49,6 @@ import com.schoolmanagement.helper.StudentExcelExporter;
 import com.schoolmanagement.helper.StudentExcelImporter;
 import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
