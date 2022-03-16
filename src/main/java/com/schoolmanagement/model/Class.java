@@ -60,7 +60,7 @@ public class Class {
 	private LocalDateTime updatedDate;
 
 	@OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Student> students = new HashSet<>();
+	private Set<UserInfo> students = new HashSet<>();
 
 	@OneToMany(mappedBy = "theClass", fetch = FetchType.LAZY)
 	private Set<ClassTeacherSubject> teacherSubjects = new HashSet<>();

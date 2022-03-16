@@ -20,7 +20,7 @@ import com.schoolmanagement.model.request.ClassTeacherSubjectRequest;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 
 @Controller
 public class ClassTeacherSubjectController {
@@ -37,13 +37,13 @@ public class ClassTeacherSubjectController {
 	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
 
 	@Autowired
-	private UserServiceImp userServiceImp;
+	private TeacherServiceImp teacherServiceImp;
 	
 	@PostMapping("/classTeacherSubject/save")
 	public ResponseEntity<Void> saveOrUpdateClassTeacherSubject(@RequestBody List<ClassTeacherSubjectRequest> dr) {
 		for(int i = 0 ; i < dr.size() ; i++) {
 			ClassTeacherSubject cts = new ClassTeacherSubject();
-			User users = userServiceImp.findByUserId(dr.get(i).getUserid());
+			User users = teacherServiceImp.findByUserId(dr.get(i).getUserid());
 			Subjects subjects = subjectServiceImp.findBySubjectID(dr.get(i).getSubjectId());
 			com.schoolmanagement.model.Class class_u = classServiceImp.getClassById(dr.get(i).getClassid());
 			ClassTeacherSubject e = classTeacherSubjectServiceImp.findByIdOther(subjects.getId(), class_u.getId());
@@ -51,7 +51,7 @@ public class ClassTeacherSubjectController {
 			class_u.setClassName(dr.get(i).getClassReq().getClassName());
 			class_u.setGrade(dr.get(i).getClassReq().getGrade());
 			class_u.setSchoolYear(dr.get(i).getClassReq().getSchoolYear());
-			class_u.setUser(userServiceImp.findByUserId(dr.get(i).getClassReq().getUserId()));
+			class_u.setUser(teacherServiceImp.findByUserId(dr.get(i).getClassReq().getUserId()));
 			class_u.setUpdatedDate(LocalDateTime.now());
 			
 			
@@ -69,7 +69,7 @@ public class ClassTeacherSubjectController {
 			User u = class_u.getUser();
 			u.addRole(role);
 			
-			userServiceImp.saveUser(u);
+			teacherServiceImp.saveUser(u);
 			classServiceImp.saveClass(class_u);
 			classTeacherSubjectServiceImp.Save(cts);
 			
@@ -83,7 +83,7 @@ public class ClassTeacherSubjectController {
 	public ResponseEntity<Void> ChangeClassTeacherSubject(@RequestBody List<ClassTeacherSubjectRequest> dr) {
 		for(int i = 0 ; i < dr.size() ; i++) {
 			ClassTeacherSubject cts = new ClassTeacherSubject();
-			User users = userServiceImp.findByUserId(dr.get(i).getUserid());
+			User users = teacherServiceImp.findByUserId(dr.get(i).getUserid());
 			Subjects subjects = subjectServiceImp.findBySubjectID(dr.get(i).getSubjectId());
 			com.schoolmanagement.model.Class class_u = classServiceImp.getClassById(dr.get(i).getClassid());
 			ClassTeacherSubject e = classTeacherSubjectServiceImp.findByIdOther(subjects.getId(), class_u.getId());

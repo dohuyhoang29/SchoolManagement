@@ -2,26 +2,22 @@ package com.schoolmanagement.controller.admin;
 
 import com.schoolmanagement.helper.StudentExcelExporter;
 import com.schoolmanagement.helper.StudentExcelImporter;
-import com.schoolmanagement.helper.TeacherExcelExporter;
-import com.schoolmanagement.helper.TeacherExcelImporter;
 import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +34,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,26 +44,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.schoolmanagement.SchoolManagementApplication;
-import com.schoolmanagement.model.Student;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
-
 @Controller
 public class StudentController {
-
   @Autowired
   private StudentServiceImp studentServiceImp;
-
   @Autowired
   private StudentRepositories studentRepositories;
-
   @Autowired
   private ClassServiceImp classServiceImp;
-
   @Autowired
   private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
+  @Autowired
+  private EntityManager entityManager;
 
   @GetMapping("/show/student")
   public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
@@ -87,7 +74,7 @@ public class StudentController {
       @Param("class-name") String className,
       @Param("school-year") String schoolYear,
       @AuthenticationPrincipal AccountDetails accountDetails) {
-    Page<Student> page = null;
+    Page<User> page = null;
 
     for (Role role : accountDetails.getRole()) {
       if (role.getRoleName().equalsIgnoreCase("ADMIN")) {
@@ -102,7 +89,14 @@ public class StudentController {
 
     assert page != null;
     int totalPages = page.getTotalPages();
-    List<Student> studentList = page.getContent();
+    List<User> studentList = new ArrayList<>();
+    for (User user : page.getContent()) {
+      for (Role role : user.getRoles()) {
+        if (role.getRoleName().equalsIgnoreCase("STUDENT")) {
+          studentList.add(user);
+        }
+      }
+    }
 
     model.addAttribute("studentList", studentList);
     model.addAttribute("currentPage", currentPage);
@@ -124,14 +118,14 @@ public class StudentController {
 
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
-    model.addAttribute("student", new Student());
+    model.addAttribute("user", new User());
     model.addAttribute("classList", classServiceImp.getAllClass());
 
     return "/admin/student/form_student";
   }
 
   @PostMapping("/save/student")
-  public String saveStudent(@Valid Student student, BindingResult result,
+  public String saveStudent(@Valid User user, BindingResult result,
       @RequestParam("fileImage") MultipartFile multipartFile, Model model,
       RedirectAttributes rdrAttr) throws IOException {
 
@@ -148,47 +142,64 @@ public class StudentController {
       Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
           StandardCopyOption.REPLACE_EXISTING);
 
-      student.setImage(str_filename);
+      user.setImage(str_filename);
     }
-    if (student.getId() == null) {
-      int size = studentRepositories.findAllByAdmissionYear(student.getAdmissionYear()).size();
-      student.setUsername("std_" + student.getAdmissionYear() + "_" + (size+ 1));
+    if (user.getId() == null) {
+      int size = studentRepositories.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
+      user.setUsername("std_" + user.getUserInfo().getAdmissionYear() + "_" + (size+ 1));
+      if (user.getUserInfo().getAdmissionYear()== null) {
+        result.rejectValue("userInfo.admissionYear", "error.user.userInfo", "Enter Admission Year");
+      }
+      if (user.getUserInfo().getGraduateYear()== null) {
+        result.rejectValue("userInfo.graduateYear", "error.user.userInfo", "Enter Graduate Year");
+      }
+      if (user.getUserInfo().getStatus()== null) {
+        result.rejectValue("userInfo.status", "error.user.userInfo", "Choose a status");
+      }
+      if (user.getUserInfo().getAClass()== null) {
+        result.rejectValue("userInfo.aClass", "error.user.userInfo", "Choose a class");
+      }
+      if (user.getUsername().equalsIgnoreCase("")) {
+        result.rejectValue("username", "error.user", "Enter username");
+      }
 
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       String rawPassword = "123456";
       String encoderPassword = encoder.encode(rawPassword);
-      student.setPassword(encoderPassword);
+      user.setPassword(encoderPassword);
 
-      student.setCreatedDate(LocalDateTime.now());
-      student.setUpdatedDate(LocalDateTime.now());
+      user.setCreatedDate(LocalDateTime.now());
+      user.setUpdatedDate(LocalDateTime.now());
     } else {
-      student.setUsername(student.getUsername());
-      student.setPassword(student.getPassword());
+      user.setUsername(user.getUsername());
+      user.setPassword(user.getPassword());
 
-      student.setCreatedDate(student.getCreatedDate());
-      student.setUpdatedDate(LocalDateTime.now());
+      user.setCreatedDate(user.getCreatedDate());
+      user.setUpdatedDate(LocalDateTime.now());
     }
 
-    if (student.getGraduateYear() != null && student.getAdmissionYear() != null) {
-      if (student.getAdmissionYear() > student.getGraduateYear()) {
+    if (user.getUserInfo().getGraduateYear() != null && user.getUserInfo().getAdmissionYear() != null) {
+      if (user.getUserInfo().getAdmissionYear() > user.getUserInfo().getGraduateYear()) {
         result.rejectValue("graduateYear", "error.student", "Graduate Year must be greater than Admission Year");
       }
     }
 
-    if (student.getDob() != null) {
-      if (LocalDateTime.now().getYear() - student.getDob().getYear() < 16) {
+    if (user.getDob() != null) {
+      if (LocalDateTime.now().getYear() - user.getDob().getYear() < 16) {
         result.rejectValue("dob", "error.student", "Students must be 16 years old");
       }
     }
+    Role role = entityManager.find(Role.class, 4);
+    user.addRole(role);
 
     if (result.hasErrors()) {
       model.addAttribute("classList", classServiceImp.getAllClass());
 
       return "/admin/student/form_student";
     }
-    studentServiceImp.saveStudent(student);
+    studentServiceImp.saveStudent(user);
 
-    if (student.getId() == null) {
+    if (user.getId() == null) {
       rdrAttr.addFlashAttribute("message", "Add student successfully");
     } else {
       rdrAttr.addFlashAttribute("message", "Edit student successfully");
@@ -222,7 +233,7 @@ public class StudentController {
 
   @GetMapping("/edit/student/{id}")
   public String editStudent(@PathVariable("id") Integer id, Model model){
-    model.addAttribute("student", studentServiceImp.getStudentById(id));
+    model.addAttribute("user", studentServiceImp.getStudentById(id));
     model.addAttribute("classList", classServiceImp.getAllClass());
 
     return "/admin/student/form_student";
@@ -239,7 +250,7 @@ public class StudentController {
     String headerValue = "attachment; filename=students_" + currentDateTime + ".xlsx";
     response.setHeader(headerKey, headerValue);
 
-    List<Student> studentList = (List<Student>) studentServiceImp.getAllStudent();
+    List<User> studentList = (List<User>) studentServiceImp.getAllStudent();
 
     StudentExcelExporter excelExporter = new StudentExcelExporter(studentList);
 
@@ -251,7 +262,8 @@ public class StudentController {
       throws IOException {
     if (multipartFile != null) {
       StudentExcelImporter excelImporter = new StudentExcelImporter();
-      Iterable<Student> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp);
+      Role role = entityManager.find(Role.class, 4);
+      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp, role);
       studentServiceImp.saveAlLStudent(studentList);
     }
 

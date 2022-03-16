@@ -2,8 +2,8 @@ package com.schoolmanagement.helper;
 
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.UserInfo;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import java.io.IOException;
@@ -24,16 +24,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 public class StudentExcelImporter {
-//  @Autowired
-//  private StudentRepositories studentRepositories;
+  @Autowired
+  private StudentRepositories studentRepositories;
 
-//  @Autowired
-//  private ClassServiceImp classService;
+  @Autowired
+  private ClassServiceImp classService;
 
-  public List<Student> excelImport(MultipartFile multipartFile, StudentRepositories studentRepositories, ClassServiceImp classService) throws IOException {
-    List<Student> studentList = new ArrayList<>();
+  public List<User> excelImport(MultipartFile multipartFile, StudentRepositories studentRepositories, ClassServiceImp classService, Role role) throws IOException {
+    List<User> studentList = new ArrayList<>();
 
     String fullName = "";
+    String email = "";
+    String phone = "";
     String address = "";
     LocalDate dob = null;
     Integer status = null;
@@ -60,13 +62,19 @@ public class StudentExcelImporter {
             fullName = nextCell.getStringCellValue();
             break;
           case 1:
-            address = nextCell.getStringCellValue();
+            email = nextCell.getStringCellValue();
             break;
           case 2:
+            phone = nextCell.getStringCellValue();
+            break;
+          case 3:
+            address = nextCell.getStringCellValue();
+            break;
+          case 4:
             String dateDob = dataFormatter.formatCellValue(nextCell);
             dob = LocalDate.parse(dateDob, formatter);
             break;
-          case 3:
+          case 5:
             if (nextCell.getStringCellValue().equalsIgnoreCase("Studying")) {
               status = 1;
             } else if (nextCell.getStringCellValue().equalsIgnoreCase("Absent")) {
@@ -75,13 +83,13 @@ public class StudentExcelImporter {
               status = 3;
             }
             break;
-          case 4:
+          case 6:
             admissionYear = nextCell.getNumericCellValue();
             break;
-          case 5:
+          case 7:
             graduateYear = nextCell.getNumericCellValue();
             break;
-          case 6:
+          case 8:
             className = nextCell.getStringCellValue();
             break;
         }
@@ -93,9 +101,14 @@ public class StudentExcelImporter {
       String password = encoder.encode("123456");
       Class aClass = classService.getClassByClassName(className);
 
-      Student student = new Student(fullName, username, password, dob, address, status, (int) admissionYear,
-          (int) graduateYear, LocalDateTime.now(), LocalDateTime.now(), aClass);
-      studentList.add(student);
+      UserInfo userInfo = new UserInfo();
+      userInfo.setAdmissionYear((int) admissionYear);
+      userInfo.setGraduateYear((int) graduateYear);
+      userInfo.setStatus(status);
+      User user = new User(fullName, username, password, email, phone, dob, address,
+          LocalDateTime.now(), LocalDateTime.now(), userInfo);
+      user.addRole(role);
+      studentList.add(user);
     }
     workbook.close();
     return studentList;

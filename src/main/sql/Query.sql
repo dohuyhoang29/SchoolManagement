@@ -102,6 +102,7 @@ insert into user (address, created_date, deleted, email, end_date, full_name, pa
 insert into user (address, created_date, deleted, email, end_date, full_name, password, phone, start_date, updated_date, username, dob) values ('2 Orin Alley', '2022-06-01 00:39:22', 0, 'cchoak2p@washingtonpost.com', '2025-07-27 07:10:40', 'Corenda Choak', 'CWb5NON2s', '3944828593', '2022-04-01 03:40:13', '2022-03-12 23:32:40', 'cchoak2p', '2002-09-14 15:23:57');
 insert into user (address, created_date, deleted, email, end_date, full_name, password, phone, start_date, updated_date, username, dob) values ('554 Burrows Place', '2022-02-16 12:48:10', 1, 'bguillerman2q@tumblr.com', '2025-04-28 12:27:01', 'Blondy Guillerman', 'KNyOwIBy49e3', '8313285555', '2022-03-25 07:27:36', '2022-05-04 15:35:45', 'bguillerman2q', '2002-08-31 02:54:53');
 insert into user (address, created_date, deleted, email, end_date, full_name, password, phone, start_date, updated_date, username, dob) values ('3 Del Sol Circle', '2022-04-27 01:09:03', 0, 'hgarden2r@blinklist.com', '2025-11-15 16:27:42', 'Hulda Garden', 'fM2xuvp', '7472902717', '2022-06-03 08:27:06', '2022-07-13 02:37:58', 'hgarden2r', '2002-06-08 11:26:52');
+insert into user (address, created_date, deleted, email, end_date, full_name, password, phone, start_date, updated_date, username, dob) values ('3 Del Sol Circle', '2022-04-27 01:09:03', 0, 'admin@gmail.com', '2025-11-15 16:27:42', 'Admin', 'fM2xuvp', '7472902717', '2022-06-03 08:27:06', '2022-07-13 02:37:58', 'admin', '2002-06-08 11:26:52');
 
 insert into user_role (user_id, role_id) values (1, 2);
 insert into user_role (user_id, role_id) values (2, 2);
@@ -704,6 +705,31 @@ insert into student (address, admission_year, created_date, dob, full_name, grad
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('339 Carey Trail', 2012, '2022-03-10 00:00:00', '2010-03-01 08:11:11', 'Bertie Shankle', 1998, 'QCmZAU6lAH', 1, '2022-03-10 00:00:00', 'bshankledt', 2);
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('604 Victoria Road', 2006, '2022-03-10 00:00:00', '2008-03-04 06:08:53', 'Sibylle Kidde', 1993, 'pZXH8eQ', 2, '2022-03-10 00:00:00', 'skiddedu', 1);
 insert into student (address, admission_year, created_date, dob, full_name, graduate_year, password, status, updated_date, username, class_id) values ('3 Main Drive', 2006, '2022-03-10 00:00:00', '2008-05-02 11:49:00', 'Hazlett Newgrosh', 1993, 'XafnLM1', 1, '2022-03-10 00:00:00', 'hnewgroshdv', 4);
+
+INSERT INTO `subjects` (`id`, `subject_name`) VALUES
+	(1, 'Maths'),
+	(2, 'Literature'),
+	(3, 'English'),
+	(4, 'History'),
+	(5, 'Physics'),
+	(6, 'Chemistry'),
+	(7, 'Civic Education'),
+	(8, 'Biology'),
+	(9, 'Physical Education');
+	
+INSERT INTO `class` (`id`, `class_name`, `created_date`, `grade`, `school_year`, `updated_date`, `user_id`) VALUES
+	(1, '10A1', NULL, 10, 1990, NULL, 6),
+	(2, '10A2', '2022-03-10 00:00:00.000000', 10, 1997, '2022-03-11 16:58:17.000000', 6),
+	(3, '10A3', '2022-03-10 00:00:00.000000', 10, 2005, '2022-03-11 16:50:15.000000', 1),
+	(4, '10A4', '2022-03-10 00:00:00.000000', 10, 1999, '2022-03-10 00:00:00.000000', 4),
+	(5, '11A1', '2022-03-10 00:00:00.000000', 11, 2001, '2022-03-10 00:00:00.000000', 5),
+	(6, '11A2', '2022-03-10 00:00:00.000000', 11, 1991, '2022-03-10 00:00:00.000000', 6),
+	(7, '11A3', '2022-03-10 00:00:00.000000', 11, 2006, '2022-03-10 00:00:00.000000', 7),
+	(8, '11A4', '2022-03-10 00:00:00.000000', 11, 2012, '2022-03-10 00:00:00.000000', 8),
+	(9, '12A1', '2022-03-10 00:00:00.000000', 12, 2016, '2022-03-10 14:40:22.000000', 9),
+	(10, '12A2', '2022-03-10 00:00:00.000000', 12, 2009, '2022-03-10 14:39:42.000000', 10),
+	(11, '12A3', '2022-03-10 00:00:00.000000', 12, 2008, '2022-03-10 00:00:00.000000', 11),
+	(12, '12A4', '2022-03-10 00:00:00.000000', 12, 1992, '2022-03-10 00:00:00.000000', 12);
 		
 insert into teacher_subjects (user_id, subject_id) values (1, 9);
 insert into teacher_subjects (user_id, subject_id) values (2, 5);
@@ -836,3 +862,4 @@ insert into teacher_subjects (user_id, subject_id) values (100, 4);
 
 
 
+school_management

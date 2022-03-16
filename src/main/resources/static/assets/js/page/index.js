@@ -11,10 +11,10 @@ $(function() {
 $(document).ready(function() {
     var options = {
         chart: {
-            height: 350,
+            height: 400,
             type: 'line',
             toolbar: {
-                show: false,
+                show: true,
             },
         },
         colors: ['#7568a7', '#fed284'],
@@ -30,11 +30,8 @@ $(document).ready(function() {
         stroke: {
             width: [0, 4]
         },        
-        // labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        labels: ['01 Jan 2001', '02 Jan 2001', '03 Jan 2001', '04 Jan 2001', '05 Jan 2001', '06 Jan 2001', '07 Jan 2001', '08 Jan 2001', '09 Jan 2001', '10 Jan 2001', '11 Jan 2001', '12 Jan 2001'],
-        xaxis: {
-            type: 'datetime'
-        },
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        //labels: ['01 Jan 2001', '02 Jan 2001', '03 Jan 2001', '04 Jan 2001', '05 Jan 2001', '06 Jan 2001', '07 Jan 2001', '08 Jan 2001', '09 Jan 2001', '10 Jan 2001', '11 Jan 2001', '12 Jan 2001'],
         yaxis: [{
             title: {
                 text: 'Fees',

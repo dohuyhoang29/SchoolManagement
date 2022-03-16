@@ -16,7 +16,7 @@ import com.schoolmanagement.repositories.UserRepositories;
 import com.schoolmanagement.service.UserService;
 
 @Service
-public class UserServiceImp implements UserService {
+public class TeacherServiceImp implements UserService {
 
 	@Autowired
 	private UserRepositories repo;

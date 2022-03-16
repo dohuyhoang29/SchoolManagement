@@ -106,18 +106,18 @@
                       </li>
                       <li class="list-group-item">
                         <b>Status </b>
-                        <div th:if="${user.deleted}"><span class="tag tag-danger">Retirement</span>
+                        <div th:if="${user.userInfo.deleted}"><span class="tag tag-danger">Retirement</span>
                         </div>
-                        <div th:if="${!user.deleted}"><span class="tag tag-success">Working</span>
+                        <div th:if="${!user.userInfo.deleted}"><span class="tag tag-success">Working</span>
                         </div>
                       </li>
                       <li class="list-group-item">
                         <b>Start Date</b>
-                        <div>[[${user.startDate}]]</div>
+                        <div>[[${user.userInfo.startDate}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>End Date</b>
-                        <div>[[${user.endDate}]]</div>
+                        <div>[[${user.userInfo.endDate}]]</div>
                       </li>
                       <li class="list-group-item" th:if="${user.subjects.size() > 0}">
                         <b>Subjects</b>

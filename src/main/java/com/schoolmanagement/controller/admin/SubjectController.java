@@ -1,13 +1,11 @@
 package com.schoolmanagement.controller.admin;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 
 @Controller
 public class SubjectController {
@@ -28,7 +26,7 @@ public class SubjectController {
 	private SubjectServiceImp subjectServiceImp;
 
 	@Autowired
-	private UserServiceImp userServiceImp;
+	private TeacherServiceImp teacherServiceImp;
 
 	// index
 	@GetMapping("/show/subjects")
@@ -72,7 +70,7 @@ public class SubjectController {
 	// New
 	@GetMapping("/insert/subjects")
 	public String SubjectIndexAdd(Model model) {
-		Iterable<User> listUser = userServiceImp.getAllUser();
+		Iterable<User> listUser = teacherServiceImp.getAllUser();
 		
 		
 		model.addAttribute("listUser", listUser);
@@ -86,7 +84,7 @@ public class SubjectController {
 	@GetMapping("/edit/subjects/{id}")
 	public String SubjectEdit(Model model, @PathVariable("id") int id) {
 		Subjects subjects = subjectServiceImp.findBySubjectID(id);
-		Iterable<User> listUser = userServiceImp.getAllUser();
+		Iterable<User> listUser = teacherServiceImp.getAllUser();
 		model.addAttribute("listUser", listUser);
 		model.addAttribute("subjects", subjects);
 
@@ -108,7 +106,7 @@ public class SubjectController {
 		}
 
 		if (result.hasErrors()) {
-			model.addAttribute("listUser", userServiceImp.getAllUser());
+			model.addAttribute("listUser", teacherServiceImp.getAllUser());
 
 			return "/admin/subjects/form_subject";
 		}
@@ -130,7 +128,7 @@ public class SubjectController {
 	@GetMapping("/show/subjects/details/{id}/{userid}")
 	public String DetailSubjectDelete(Model model, @PathVariable("id") int id, @PathVariable("userid") int userid) {
 		Subjects subjects = subjectServiceImp.findBySubjectID(id);
-		User user = userServiceImp.findByUserId(userid);
+		User user = teacherServiceImp.findByUserId(userid);
 
 		subjects.getUsers().remove(user);
 

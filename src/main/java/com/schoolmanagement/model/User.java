@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class User {
   @Column(name = "full_name", nullable = false)
   private String fullName;
 
-  @NotEmpty(message = "Enter username")
+//  @NotEmpty(message = "Enter username")
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
@@ -69,20 +70,6 @@ public class User {
   @NotEmpty(message = "Enter address")
   private String address;
 
-  @Column(name = "start_date", nullable = false)
-  @NotNull(message = "Enter start date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate startDate;
-
-  @Column(name = "end_date", nullable = false)
-  @NotNull(message = "Enter end date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate endDate;
-
-  @Column(name = "deleted", nullable = false)
-  @NotNull(message = "Choose status")
-  private Boolean deleted;
-
   @Column(name = "created_date", nullable = false)
   private LocalDateTime createdDate;
 
@@ -91,6 +78,10 @@ public class User {
 
   @Column(name = "image")
   private String image;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_info_id", referencedColumnName = "id")
+  private UserInfo userInfo;
 
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "user_role",
@@ -135,9 +126,27 @@ public class User {
     return "/upload/image/user_image/" + image;
   }
 
+  public String getStudentImagePath() {
+    if (image == null && id == null) {
+      return null;
+    }
+
+    return "/upload/image/student_image/" + image;
+  }
+
+  public boolean hasRole (String roleName) {
+    Iterator<Role> iterator = this.roles.iterator();
+    while (iterator.hasNext()) {
+      Role role = iterator.next();
+      if (role.getRoleName().equalsIgnoreCase(roleName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public User(String fullName, String username, String password, String email, String phone,
-      LocalDate dob, String address, LocalDate startDate, LocalDate endDate, boolean deleted,
-      LocalDateTime createdDate, LocalDateTime updatedDate) {
+      LocalDate dob, String address, LocalDateTime createdDate, LocalDateTime updatedDate, UserInfo userInfo) {
     this.fullName = fullName;
     this.username = username;
     this.password = password;
@@ -145,11 +154,9 @@ public class User {
     this.phone = phone;
     this.dob = dob;
     this.address = address;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.deleted = deleted;
     this.createdDate = createdDate;
     this.updatedDate = updatedDate;
+    this.userInfo = userInfo;
   }
 
 }

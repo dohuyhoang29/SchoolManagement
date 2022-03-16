@@ -20,4 +20,6 @@ public interface ClassService {
   List<SchoolYearClassRequest> getSchoolYear();
 
   Class getClassByClassName (String className);
+
+  List<Class> getAllClassInCurrentYear();
 }

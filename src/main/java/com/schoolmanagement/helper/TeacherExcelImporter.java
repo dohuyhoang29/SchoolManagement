@@ -2,6 +2,7 @@ package com.schoolmanagement.helper;
 
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.UserInfo;
 import com.schoolmanagement.repositories.RoleRepositories;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -86,8 +87,12 @@ public class TeacherExcelImporter {
             break;
         }
       }
-      User user = new User(fullName, username, password, email, phone, dob, address, startDate,
-          endDate, false, LocalDateTime.now(), LocalDateTime.now());
+      UserInfo userInfo = new UserInfo();
+      userInfo.setStartDate(startDate);
+      userInfo.setEndDate(endDate);
+      userInfo.setDeleted(false);
+      User user = new User(fullName, username, password, email, phone, dob, address,
+          LocalDateTime.now(), LocalDateTime.now(), userInfo);
       user.addRole(role);
       listUser.add(user);
     }

@@ -20,13 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 
 @Controller
 public class ClassController {
@@ -44,7 +43,7 @@ public class ClassController {
 	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
 
 	@Autowired
-	private UserServiceImp userServiceImp;
+	private TeacherServiceImp teacherServiceImp;
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -73,14 +72,14 @@ public class ClassController {
 	@GetMapping("/insert/class")
 	public String insertClass(Model model) {
 		model.addAttribute("class", new Class());
-		model.addAttribute("userList", userServiceImp.getAllUser());
+		model.addAttribute("userList", teacherServiceImp.getAllUser());
 		return "/admin/class/form_class";
 	}
 
 	@GetMapping("/edit/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
 		model.addAttribute("class", classServiceImp.getClassById(id));
-		model.addAttribute("userList", userServiceImp.getAllUser());
+		model.addAttribute("userList", teacherServiceImp.getAllUser());
 		model.addAttribute("classz", classServiceImp.getClassById(id));
 		model.addAttribute("studentList", studentServiceImp.getAllStudent());
 		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
@@ -109,7 +108,7 @@ public class ClassController {
 			return "/admin/class/form_class";
 		}
 
-		userServiceImp.saveUser(u);
+		teacherServiceImp.saveUser(u);
 		classServiceImp.saveClass(aClass);
 		
 		classList(model);
@@ -131,11 +130,11 @@ public class ClassController {
 			, @PathVariable("page") int currentPage , @Param("search") String search) {
 		Iterable<ClassTeacherSubject> cts = classTeacherSubjectServiceImp.findAllByClassId(id);
 		
-		Page<Student> studentPage = studentServiceImp.findStudentByClassId(id,search, currentPage);
+		Page<User> studentPage = studentServiceImp.findStudentByClassId(id,search, currentPage);
 		
 		int totalPages = studentPage.getTotalPages();
 		
-		List<Student> listStudent = studentPage.getContent();
+		List<User> listStudent = studentPage.getContent();
 		
 		model.addAttribute("classTeacherSubject", cts);
 		model.addAttribute("class", classServiceImp.getClassById(id));

@@ -331,40 +331,40 @@
                   </thead>
                   <tbody>
                 </th:block>
-                <th:block th:each="student : ${studentList}">
+                <th:block th:each="user : ${studentList}">
                   <tr>
-                    <td>[[${student.id}]]</td>
+                    <td>[[${user.id}]]</td>
                     <td class="">
-                      <img class="avatar" th:src="${student.getStudentImagePath}" alt="">
-                      <span class="font-16">[[${student.fullName}]]</span>
+                      <img class="avatar" th:src="${user.getStudentImagePath}" alt="">
+                      <span class="font-16">[[${user.fullName}]]</span>
                     </td>
-                    <td class="pr-20">[[${student.address}]]</td>
-                    <td>[[${student.dob}]]</td>
-                    <td th:if="${student.status == 1}">
+                    <td class="pr-20">[[${user.address}]]</td>
+                    <td>[[${user.dob}]]</td>
+                    <td th:if="${user.userInfo.status == 1}">
                       <span class="tag tag-success">Studying</span>
                     </td>
-                    <td th:if="${student.status == 2}">
+                    <td th:if="${user.userInfo.status == 2}">
                       <span class="tag tag-warning">Absent</span>
                     </td>
-                    <td th:if="${student.status == 3}">
+                    <td th:if="${user.userInfo.status == 3}">
                       <span class="tag tag-secondary">Graduate</span>
                     </td>
-                    <td>[[${student.aClass.grade}]]</td>
-                    <td class="text-center">[[${student.aClass.className}]]</td>
-                    <td class="text-center">[[${student.aClass.schoolYear}]]</td>
+                    <td>[[${user.userInfo.aClass.grade}]]</td>
+                    <td class="text-center">[[${user.userInfo.aClass.className}]]</td>
+                    <td class="text-center">[[${user.userInfo.aClass.schoolYear}]]</td>
                     <td class="text-center">
-                      <a th:href="@{/show/student/details/{id}(id=${student.id})}"  sec:authorize="hasAnyAuthority('ADMIN')">
+                      <a th:href="@{/show/student/details/{id}(id=${user.id})}"  sec:authorize="hasAnyAuthority('ADMIN')">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
                           <i class="fa fa-address-card text-success"></i>
                         </button>
                       </a>
-                      <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${student.id})}">
+                      <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="Edit">
                           <i class="fa fa-edit text-warning"></i>
                         </button>
                       </a>
                       <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Add Marks" data-type="confirm" th:href="@{'/insert/mark/'+ ${student.aClass.id} +'/' + 1}"><i
+                              title="Add Marks" data-type="confirm" th:href="@{'/insert/mark/'+ ${user.aClass.id} +'/' + 1}"><i
                           class="fe fe-file-plus text-danger" ></i></a>
                       <button sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')"
                               type="button" class="btn btn-icon btn-sm js-sweetalert"

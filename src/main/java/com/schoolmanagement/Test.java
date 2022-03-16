@@ -1,21 +1,16 @@
 package com.schoolmanagement;
 
-import com.schoolmanagement.model.Student;
+import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-
-import com.schoolmanagement.model.Student;
-import com.schoolmanagement.repositories.StudentRepositories;
 
 @Controller
 public class Test {
@@ -28,6 +23,9 @@ public class Test {
     String date = "02-12-2002";
     LocalDate localDateTime = LocalDate.parse(date, dateTimeFormatter);
     System.out.println(localDateTime);
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    System.out.println(encoder.encode("1"));
   }
 
   public static int randomString(String text) {
@@ -41,7 +39,7 @@ public class Test {
         .limit(targetStringLength)
         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
-    List<Student> list = (List<Student>) repositories.findAllByAdmissionYear(2022);
+    List<User> list = (List<User>) repositories.findAllByAdmissionYear(2022);
 
     return list.size();
   }

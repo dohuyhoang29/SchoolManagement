@@ -1,9 +1,11 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Student;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.StudentService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +22,33 @@ public class StudentServiceImp implements StudentService {
 	private StudentRepositories repositories;
 
 	@Override
-	public void saveStudent(Student student) {
+	public void saveStudent(User student) {
 		repositories.save(student);
 	}
 
 	@Override
-	public Iterable<Student> getAllStudent() {
-		return repositories.findAll();
+	public Iterable<User> getAllStudent() {
+		List<User> users = (List<User>) repositories.findAll();
+		List<User> list = new ArrayList<>();
+
+		for (User user : repositories.findAll()) {
+			for (Role role : user.getRoles()) {
+				if (role.getRoleID() == 4) {
+					list.add(user);
+				}
+			}
+		}
+
+		return list;
 	}
 
 	@Override
-	public Student getStudentById(Integer id) {
+	public User getStudentById(Integer id) {
 		return repositories.findById(id).get();
 	}
 
 	@Override
-	public Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField,
+	public Page<User> searchStudent(String fullName, String status, int pageNumber, String sortField,
 			String sortDir, String grade, String className, String schoolYear) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
@@ -69,7 +82,7 @@ public class StudentServiceImp implements StudentService {
 	}
 
 	@Override
-	public Page<Student> findStudentByClassId(int id , String search , int page) {
+	public Page<User> findStudentByClassId(int id , String search , int page) {
 		Sort sort = Sort.by("fullName");
 		Pageable pageable = PageRequest.of(page -1 , 8 ,sort );
 		
@@ -77,18 +90,18 @@ public class StudentServiceImp implements StudentService {
 	}
 
 	@Override
-	public void saveAlLStudent(Iterable<Student> studentList) {
+	public void saveAlLStudent(Iterable<User> studentList) {
 		repositories.saveAll(studentList);
 	}
 
 
 	@Override
-	public List<Student> findAllStudentByClassId(int classid) {
+	public List<User> findAllStudentByClassId(int classid) {
 		return repositories.findByIdClass(classid);
 	}
 
 	@Override
-	public Page<Student> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
+	public Page<User> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
 			String sortDir, String fullName, String grade, String className) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
@@ -98,6 +111,20 @@ public class StudentServiceImp implements StudentService {
 		} else {
 			return repositories.findStudentByListClassAndGrade(classList, fullName, className, Integer.parseInt(grade), pageable);
 		}
+	}
+
+	@Override
+	public List<User> findAllStudentStudying() {
+		Iterable<User> users = repositories.findAll();
+		List<User> list = new ArrayList<>();
+		for (User student : users) {
+			if (student.hasRole("STUDENT")) {
+				if (student.getUserInfo().getStatus() != 3) {
+					list.add(student);
+				}
+			}
+		}
+		return list;
 	}
 
 }

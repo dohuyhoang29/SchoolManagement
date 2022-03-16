@@ -1,6 +1,5 @@
 package com.schoolmanagement.helper;
 
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
 import java.io.IOException;
 import java.util.List;
@@ -16,9 +15,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class StudentExcelExporter {
   private XSSFWorkbook workbook;
   private XSSFSheet sheet;
-  private List<Student> studentList;
+  private List<User> studentList;
 
-  public StudentExcelExporter(List<Student> studentList) {
+  public StudentExcelExporter(List<User> studentList) {
     this.studentList = studentList;
     workbook = new XSSFWorkbook();
   }
@@ -65,7 +64,7 @@ public class StudentExcelExporter {
     font.setFontHeight(14);
     style.setFont(font);
 
-    for (Student student : studentList) {
+    for (User student : studentList) {
       Row row = sheet.createRow(rowCount++);
       int columnCount = 0;
 
@@ -73,16 +72,16 @@ public class StudentExcelExporter {
       createCell(row, columnCount++, student.getFullName(), style);
       createCell(row, columnCount++, student.getAddress(), style);
       createCell(row, columnCount++, student.getDob().toString(), style);
-      createCell(row, columnCount++, student.getAdmissionYear(), style);
-      createCell(row, columnCount++, student.getGraduateYear(), style);
-      if (student.getStatus() == 1) {
+      createCell(row, columnCount++, student.getUserInfo().getAdmissionYear(), style);
+      createCell(row, columnCount++, student.getUserInfo().getGraduateYear(), style);
+      if (student.getUserInfo().getStatus() == 1) {
         createCell(row, columnCount++, "Studying", style);
-      } else if (student.getStatus() == 2) {
+      } else if (student.getUserInfo().getStatus() == 2) {
         createCell(row, columnCount++, "Absent", style);
       } else {
         createCell(row, columnCount++, "Graduate", style);
       }
-      createCell(row, columnCount++, student.getAClass().getClassName(), style);
+      createCell(row, columnCount++, student.getUserInfo().getAClass().getClassName(), style);
     }
   }
 

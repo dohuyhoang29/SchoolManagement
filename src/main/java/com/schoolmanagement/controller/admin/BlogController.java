@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.schoolmanagement.model.Blog;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.BlogServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -28,7 +28,7 @@ public class BlogController {
 	private BlogServiceImp blogServiceImp;
 
 	@Autowired
-	private UserServiceImp userServiceImp;
+	private TeacherServiceImp teacherServiceImp;
 	
 	@GetMapping("/show/blog")
 	public String IndexBlog(Model model, Authentication authentication) {
@@ -61,7 +61,7 @@ public class BlogController {
 	
 	@GetMapping("/insert/blog")
 	public String InsertBlog(Model model) {
-		User user = userServiceImp.findByUserId(8);
+		User user = teacherServiceImp.findByUserId(8);
 		model.addAttribute("blogs", new Blog());
 		model.addAttribute("users", user);
 
@@ -71,7 +71,7 @@ public class BlogController {
 	@PostMapping("/save/blog")
 	public String save(Model model, @Valid Blog blogs , Authentication authentication) {
 		
-		User user = userServiceImp.getUserByUsername(authentication.getName());
+		User user = teacherServiceImp.getUserByUsername(authentication.getName());
 		blogs.setUser(user);
 		blogs.setCreatedDate(LocalDate.now());
 		blogs.setUpdatedDate(LocalDateTime.now());
@@ -83,7 +83,7 @@ public class BlogController {
 	@GetMapping("/edit/blog/{id}")
 	public String Edit(Model model , @PathVariable("id") int id) {
 		Blog blogs = blogServiceImp.findByIdBlog(id);
-		User user = userServiceImp.findByUserId(blogs.getUser().getId());
+		User user = teacherServiceImp.findByUserId(blogs.getUser().getId());
 		model.addAttribute("blogs", blogs);
 		model.addAttribute("users", user);
 

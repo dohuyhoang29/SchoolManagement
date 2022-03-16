@@ -4,7 +4,7 @@ import com.schoolmanagement.helper.TeacherExcelExporter;
 import com.schoolmanagement.helper.TeacherExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,7 +40,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TeacherController {
 
   @Autowired
-  private UserServiceImp userService;
+  private TeacherServiceImp userService;
 
   @Autowired
   private EntityManager entityManager;
@@ -66,10 +66,8 @@ public class TeacherController {
     List<User> listUser = new ArrayList<>();
 
     for (User user : page.getContent()) {
-      for (Role role : user.getRoles()) {
-        if (role.getRoleID() == 2) {
-          listUser.add(user);
-        }
+      if (user.hasRole("TEACHER")) {
+        listUser.add(user);
       }
     }
 
@@ -96,14 +94,14 @@ public class TeacherController {
   public String teacherDetails(@PathVariable("id") Integer id, Model model) {
     model.addAttribute("user", userService.getUserById(id));
 
-    return "/admin/teacher/user_details";
+    return "/admin/teacher/teacher_details";
   }
 
   @GetMapping("/insert/teacher")
   public String insertTeacher(Model model) {
     model.addAttribute("user", new User());
 
-    return "/admin/teacher/form_user";
+    return "/admin/teacher/form_teacher";
   }
 
   @PostMapping("/teacher/save")
@@ -167,7 +165,7 @@ public class TeacherController {
     }
 
     if (result.hasErrors()) {
-      return "/admin/teacher/form_user";
+      return "/admin/teacher/form_teacher";
     }
 
     if (user.getId() == null) {
@@ -185,7 +183,7 @@ public class TeacherController {
   public String editTeacher(@PathVariable("id") Integer id, Model model) {
     model.addAttribute("user", userService.getUserById(id));
 
-    return "/admin/teacher/form_user";
+    return "/admin/teacher/form_teacher";
   }
 
   @GetMapping("/show/teacher/search")

@@ -5,6 +5,8 @@ import com.schoolmanagement.model.request.SchoolYearClassRequest;
 import com.schoolmanagement.repositories.ClassRepositories;
 
 import com.schoolmanagement.service.ClassService;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +62,17 @@ public class ClassServiceImp implements ClassService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<Class> getAllClassInCurrentYear() {
+		List<Class> classList = new ArrayList<>();
+		for (Class c : classRepositories.findAll()) {
+			if (c.getSchoolYear() == LocalDate.now().getYear()) {
+				classList.add(c);
+			}
+		}
+		return classList;
 	}
 
 }

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 
 @Controller
 public class UserRoleController {
 	
 	@Autowired
-	private UserServiceImp imp;
+	private TeacherServiceImp imp;
 	
 	@DeleteMapping("/teacherrole/delete/{teacherId}/{roleId}")
 	public ResponseEntity<Void> deletehomeroomteacher(@PathVariable Integer teacherId,@PathVariable Integer roleId) {

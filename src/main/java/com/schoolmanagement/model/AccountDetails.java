@@ -42,8 +42,12 @@ public class AccountDetails implements UserDetails {
 		return this.user.getFullName();
 	}
 
+	public boolean hasRole (String roleName) {
+		return this.user.hasRole(roleName);
+	}
+
 	public Class getAClass() {
-		return this.user.getAClass();
+		return this.user.getUserInfo().getAClass();
 	}
 
 	public Set<Role> getRole () {
@@ -75,6 +79,11 @@ public class AccountDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return !user.getDeleted();
+		for (Role role : this.user.getRoles()) {
+			if (!role.getRoleName().equalsIgnoreCase("STUDENT")) {
+				return !user.getUserInfo().getDeleted();
+			}
+		}
+		return true;
 	}
 }

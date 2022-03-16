@@ -28,7 +28,7 @@ public class Mark {
 
 	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
-	private Student students;
+	private User students;
 	
 	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
 	private Subjects subjects;

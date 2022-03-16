@@ -80,9 +80,9 @@ public class TeacherExcelExporter {
 			createCell(row, columnCount++, user.getPhone(), style);
 			createCell(row, columnCount++, user.getDob().toString(), style);
 			createCell(row, columnCount++, user.getAddress(), style);
-			createCell(row, columnCount++, user.getStartDate().toString(), style);
-			createCell(row, columnCount++, user.getEndDate().toString(), style);
-			createCell(row, columnCount++, user.getDeleted(), style);
+			createCell(row, columnCount++, user.getUserInfo().getStartDate().toString(), style);
+			createCell(row, columnCount++, user.getUserInfo().getEndDate().toString(), style);
+			createCell(row, columnCount++, user.getUserInfo().getDeleted(), style);
 			createCell(row, columnCount++, user.getCreatedDate().toString(), style);
 			createCell(row, columnCount++, user.getUpdatedDate().toString(), style);
 		}

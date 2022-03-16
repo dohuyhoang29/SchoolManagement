@@ -103,23 +103,23 @@
                       </li>
                       <li class="list-group-item">
                         <b>Status </b>
-                        <div th:if="${student.status == 1}">
+                        <div th:if="${student.userInfo.status == 1}">
                           <span class="tag tag-success">Studying</span>
                         </div>
-                        <div th:if="${student.status == 2}">
+                        <div th:if="${student.userInfo.status == 2}">
                           <span class="tag tag-warning">Absent</span>
                         </div>
-                        <div th:if="${student.status == 3}">
+                        <div th:if="${student.userInfo.status == 3}">
                           <span class="tag tag-secondary">Graduate</span>
                         </div>
                       </li>
                       <li class="list-group-item">
                         <b>Start Date</b>
-                        <div>[[${student.admissionYear}]]</div>
+                        <div>[[${student.userInfo.admissionYear}]]</div>
                       </li>
                       <li class="list-group-item">
                         <b>End Date</b>
-                        <div>[[${student.graduateYear}]]</div>
+                        <div>[[${student.userInfo.graduateYear}]]</div>
                       </li>
                     </ul>
                   </div>

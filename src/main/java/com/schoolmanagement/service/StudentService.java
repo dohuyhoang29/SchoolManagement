@@ -1,29 +1,29 @@
 package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Student;
+import com.schoolmanagement.model.User;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 
-import com.schoolmanagement.model.Student;
-
 public interface StudentService {
-	void saveStudent(Student student);
+	void saveStudent(User user);
 
-	Iterable<Student> getAllStudent();
+	Iterable<User> getAllStudent();
 
-	Student getStudentById(Integer id);
+	User getStudentById(Integer id);
 
-	Page<Student> searchStudent(String fullName, String status, int pageNumber, String sortField,
+	Page<User> searchStudent(String fullName, String status, int pageNumber, String sortField,
 			String sortDir, String grade, String className, String schoolYear);
 	
-	Page<Student> findStudentByClassId(int id , String search , int page);
+	Page<User> findStudentByClassId(int id , String search , int page);
 
-	void saveAlLStudent (Iterable<Student> studentList);
+	void saveAlLStudent (Iterable<User> studentList);
 
-	List<Student> findAllStudentByClassId(int classid);
+	List<User> findAllStudentByClassId(int classid);
 
-	Page<Student> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
+	Page<User> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
 			String sortDir, String fullName, String grade, String className);
+
+	List<User> findAllStudentStudying();
 }

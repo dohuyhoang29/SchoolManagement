@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.schoolmanagement.model.ClassTeacherSubject;
-import com.schoolmanagement.model.Student;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
-import com.schoolmanagement.service.implement.UserServiceImp;
+import com.schoolmanagement.service.implement.TeacherServiceImp;
 
 @Controller
 public class TeacherAddMarkController {
@@ -29,7 +28,7 @@ public class TeacherAddMarkController {
 	private StudentServiceImp studentServiceImp;
 	
 	@Autowired
-	private UserServiceImp userServiceImp;
+	private TeacherServiceImp teacherServiceImp;
 	
 	@Autowired
 	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
@@ -37,8 +36,8 @@ public class TeacherAddMarkController {
 	@GetMapping("/insert/mark/{classid}/{value}")
 	public String IndexAddMark(Model model , @PathVariable("classid") int id , Authentication authentication ,@PathVariable("value") int type) {
 		com.schoolmanagement.model.Class c = classServiceImpl.getClassById(id);	
-		User u = userServiceImp.getUserByUsername(authentication.getName());
-		List<Student> s = studentServiceImp.findAllStudentByClassId(id);
+		User u = teacherServiceImp.getUserByUsername(authentication.getName());
+		List<User> s = studentServiceImp.findAllStudentByClassId(id);
 		
 		ClassTeacherSubject cts = classTeacherSubjectServiceImp.findByIdOther(u.getId(), c.getId());
 		

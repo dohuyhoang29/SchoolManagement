@@ -25,23 +25,7 @@
 
 <div id="main_content">
   <!-- Start Main top header -->
-  <div id="header_top" class="header_top">
-    <div class="container">
-      <div class="hleft">
-        <a class="header-brand" href="index.html"><i
-            class="fa fa-graduation-cap brand-logo"></i></a>
-        <div class="dropdown">
-          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
-              class="fe fe-align-center"></i></a>
-          <a href="javascript:void(0)" class="nav-link icon settingbar"><i
-              class="fe fe-settings"></i></a>
-        </div>
-      </div>
-      <div class="hright">
-        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
-      </div>
-    </div>
-  </div>
+  <di th:include="partials/header"></di>
   <!-- Start Rightbar setting panel -->
   <div th:include="partials/rightbar"></div>
   <!-- Start Main leftbar navigation -->
@@ -206,16 +190,20 @@
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/show/teacher/' + ${currentPage} + '?sortField=startDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
+                    <a th:href="@{'/show/teacher/' + ${currentPage} + '?sortField=userInfo.startDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search}}">
                       Start Date
                     </a>
                   </th>
                   <th>
-                    <a th:href="@{'/show/teacher/' + ${currentPage} + '?sortField=endDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search} }">
+                    <a th:href="@{'/show/teacher/' + ${currentPage} + '?sortField=userInfo.endDate&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search} }">
                       End Date
                     </a>
                   </th>
-                  <th><a href="#">Status</a></th>
+                  <th>
+                    <a th:href="@{'/show/teacher/' + ${currentPage} + '?sortField=userInfo.status&sortDir=' + ${reverseSortDir} + '&status=' + ${status} + '&search=' + ${search} }">
+                      Status
+                    </a>
+                  </th>
                   <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -231,11 +219,11 @@
                     <td class="font-weight-bold">[[${users.email}]]</td>
                     <td>[[${users.phone}]]</td>
                     <td>[[${users.address}]]</td>
-                    <td>[[${users.startDate}]]</td>
-                    <td>[[${users.endDate}]]</td>
-                    <td th:if="${users.deleted}"><span class="tag tag-danger">Retirement</span>
+                    <td>[[${users.userInfo.startDate}]]</td>
+                    <td>[[${users.userInfo.endDate}]]</td>
+                    <td th:if="${users.userInfo.deleted}"><span class="tag tag-danger">Retirement</span>
                     </td>
-                    <td th:if="${!users.deleted}"><span class="tag tag-success">Working</span>
+                    <td th:if="${!users.userInfo.deleted}"><span class="tag tag-success">Working</span>
                     </td>
                     <td class="text-center">
                       <a th:href="@{/show/teacher/details/{id}(id=${users.id})}">
@@ -244,13 +232,13 @@
                       <a th:href="@{/edit/teacher/{id}(id=${users.id})}">
                         <button type="button" class="btn btn-warning btn-sm">Edit</button>
                       </a>
-                      <a th:if="${!users.deleted}"
+                      <a th:if="${!users.userInfo.deleted}"
                          th:href="@{/update/teacher/retired/{id}(id = ${users.id})}">
                         <button type="button" class="btn btn-danger btn-sm js-sweetalert"
                                 title="Delete" data-type="confirm">Make Retired
                         </button>
                       </a>
-                      <a th:if="${users.deleted}"
+                      <a th:if="${users.userInfo.deleted}"
                          th:href="@{/update/teacher/working/{id}(id = ${users.id})}">
                         <button type="button" class="btn btn-danger btn-sm js-sweetalert"
                                 title="Delete" data-type="confirm">Make Retired
