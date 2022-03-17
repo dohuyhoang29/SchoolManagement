@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,26 +28,41 @@ public class StudentEvaluateController {
   @PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
   @GetMapping("/insert/evaluate/{id}")
   public String insertStudentEvaluate(@PathVariable("id") Integer id, Model model) {
-    User student = studentServiceImp.getStudentById(id);
-    StudentEvaluate studentEvaluate= new StudentEvaluate();
+    StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(id);
+    if (evaluate == null) {
+      User student = studentServiceImp.getStudentById(id);
+      StudentEvaluate studentEvaluate= new StudentEvaluate();
 
-    studentEvaluate.setStudent(student);
+      studentEvaluate.setStudent(student);
 
-    model.addAttribute("student", student);
-    model.addAttribute("studentEvaluate", studentEvaluate);
+      model.addAttribute("student", student);
+      model.addAttribute("studentEvaluate", studentEvaluate);
+    } else {
+      model.addAttribute("student", evaluate.getStudent());
+      model.addAttribute("studentEvaluate", evaluate);
+    }
 
     return "/admin/student/student_evaluate";
   }
 
   @PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
-  @PostMapping("/evaluate/save")
-  public String saveStudentEvaluate (@Valid StudentEvaluate studentEvaluate, BindingResult result, AccountDetails accountDetails) {
-    studentEvaluate.setCreatedBy(accountDetails.getUser());
-    studentEvaluate.setUpdatedBy(accountDetails.getUser());
+  @PostMapping("/evaluate/save/{id}")
+  public String saveStudentEvaluate (@Valid StudentEvaluate studentEvaluate, BindingResult result,
+      @AuthenticationPrincipal AccountDetails accountDetails, @PathVariable("id") Integer id, Model model) {
+    User student = studentServiceImp.getStudentById(id);
+    User user = accountDetails.getUser();
+    studentEvaluate.setCreatedBy(user);
+    studentEvaluate.setUpdatedBy(user);
     studentEvaluate.setCreatedDate(LocalDate.now());
     studentEvaluate.setUpdatedDate(LocalDate.now());
+    studentEvaluate.setStudent(student);
 
     if (result.hasErrors()) {
+      studentEvaluate.setStudent(student);
+
+      model.addAttribute("student", student);
+      model.addAttribute("studentEvaluate", studentEvaluate);
+
       return "/admin/student/student_evaluate";
     }
 

@@ -329,53 +329,52 @@
                     <th class="text-center">Actions</th>
                   </tr>
                   </thead>
-                  <tbody>
                 </th:block>
-                <th:block th:each="user : ${studentList}">
-                  <tr>
-                    <td>[[${user.id}]]</td>
-                    <td class="">
-                      <img class="avatar" th:src="${user.getStudentImagePath}" alt="">
-                      <span class="font-16">[[${user.fullName}]]</span>
-                    </td>
-                    <td class="pr-20">[[${user.address}]]</td>
-                    <td>[[${user.dob}]]</td>
-                    <td th:if="${user.userInfo.status == 1}">
-                      <span class="tag tag-success">Studying</span>
-                    </td>
-                    <td th:if="${user.userInfo.status == 2}">
-                      <span class="tag tag-warning">Absent</span>
-                    </td>
-                    <td th:if="${user.userInfo.status == 3}">
-                      <span class="tag tag-secondary">Graduate</span>
-                    </td>
-                    <td>[[${user.userInfo.aClass.grade}]]</td>
-                    <td class="text-center">[[${user.userInfo.aClass.className}]]</td>
-                    <td class="text-center">[[${user.userInfo.aClass.schoolYear}]]</td>
-                    <td class="text-center">
-                      <a th:href="@{/show/student/details/{id}(id=${user.id})}"  sec:authorize="hasAnyAuthority('ADMIN')">
-                        <button type="button" class="btn btn-icon btn-sm" title="View">
-                          <i class="fa fa-address-card text-success"></i>
-                        </button>
-                      </a>
-                      <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
-                        <button type="button" class="btn btn-icon btn-sm" title="Edit">
-                          <i class="fa fa-edit text-warning"></i>
-                        </button>
-                      </a>
-                      <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Add Marks" data-type="confirm" th:href="@{/insert/mark/{classid}(classid = ${user.userInfo.aClass.id})}"><i
-                          class="fe fe-file-plus text-danger" ></i></a>
-                      <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Add Marks" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}"><i
-                          class="fa fa-comment-o text-danger"></i></a>
-                      <button sec:authorize="hasAnyAuthority('ADMIN', 'HOMEROOM_TEACHER')"
-                              type="button" class="btn btn-icon btn-sm js-sweetalert"
-                              title="Marks Details" data-type="confirm"><i
-                          class="fa fa-info-circle text-danger"></i></button>
-                    </td>
-                  </tr>
-                </th:block>
+                <tbody>
+                  <th:block th:each="user : ${studentList}">
+                    <tr>
+                      <td>[[${user.id}]]</td>
+                      <td class="">
+                        <img class="avatar" th:src="${user.getStudentImagePath}" alt="">
+                        <span class="font-16">[[${user.fullName}]]</span>
+                      </td>
+                      <td class="pr-20">[[${user.address}]]</td>
+                      <td>[[${user.dob}]]</td>
+                      <td th:if="${user.userInfo.status == 1}">
+                        <span class="tag tag-success">Studying</span>
+                      </td>
+                      <td th:if="${user.userInfo.status == 2}">
+                        <span class="tag tag-warning">Absent</span>
+                      </td>
+                      <td th:if="${user.userInfo.status == 3}">
+                        <span class="tag tag-secondary">Graduate</span>
+                      </td>
+                      <td>[[${user.userInfo.aClass.grade}]]</td>
+                      <td class="text-center">[[${user.userInfo.aClass.className}]]</td>
+                      <td class="text-center">[[${user.userInfo.aClass.schoolYear}]]</td>
+                      <td class="text-center">
+                        <a th:href="@{/show/student/details/{id}(id=${user.id})}"  sec:authorize="hasAnyAuthority('ADMIN')">
+                          <button type="button" class="btn btn-success btn-sm">Detail</button>
+                        </a>
+                        <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
+                          <button type="button" class="btn btn-success btn-sm">Edit</button>
+                        </a>
+                        <a sec:authorize="hasAnyAuthority('TEACHER')"
+                           class="btn btn-icon btn-sm js-sweetalert" title="Add Marks" data-type="confirm"
+                           th:href="@{/insert/mark/{classid}(classid = ${user.userInfo.aClass.id})}">
+                          <button type="button" class="btn btn-success btn-sm">Add Marks</button>
+                        </a>
+                        <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
+                                title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}">
+                          <button type="button" class="btn btn-success btn-sm">Student Evaluate</button>
+                        </a>
+                        <a sec:authorize="hasAnyAuthority('TEACHER', 'HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
+                           title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}">
+                          <button type="button" class="btn btn-success btn-sm">Details Marks</button>
+                        </a>
+                      </td>
+                    </tr>
+                  </th:block>
                 </tbody>
               </table>
               <th:block sec:authorize="hasAnyAuthority('ADMIN')">

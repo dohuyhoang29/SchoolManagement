@@ -108,7 +108,7 @@
                   <div class="card-header">
                     <h3 class="card-title">Evaluate</h3>
                   </div>
-                  <form th:action="@{/evaluate/save}" method="post" th:object="${studentEvaluate}">
+                  <form th:action="@{/evaluate/save/{id}(id=${student.id})}" method="post" th:object="${studentEvaluate}">
                     <input type="hidden" th:field="*{id}">
                     <div class="card-body">
                       <div class="row clearfix">
@@ -146,7 +146,11 @@
                         </div>
                         <div class="col-md-12 col-sm-12">
                           <label for="evaluate">Evaluate</label>
-                          <textarea th:field="*{evaluate}" id="evaluate" rows="4" class="form-control no-resize"></textarea>
+                          <textarea th:field="*{evaluate}" id="evaluate"
+                                    th:classappend="${#fields.hasErrors('evaluate') ? 'form-control error-input' : 'form-control'}" rows="4" class="form-control no-resize"></textarea>
+
+                          <p class="error-message" th:if="${#fields.hasErrors('evaluate')}"
+                             th:errors="*{evaluate}"></p>
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">

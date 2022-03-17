@@ -13,7 +13,7 @@ import com.schoolmanagement.model.ClassTeacherSubject;
 @Repository
 public interface ClassTeacherSubjectRepositories extends PagingAndSortingRepository<ClassTeacherSubject, Integer> {
 	@Query(value ="SELECT s FROM ClassTeacherSubject s WHERE "
-			+ "s.subjects.id = (:dataU) AND s.theClass.id = (:dataC)")
+			+ "s.users.id = (:dataU) AND s.theClass.id = (:dataC)")
   ClassTeacherSubject findByIdTeacherClass(@Param("dataU") int idu , @Param("dataC") int idC);
 	
 	@Query(value ="SELECT s FROM ClassTeacherSubject s WHERE s.theClass.id = (:idc) ")

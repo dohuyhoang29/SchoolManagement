@@ -13,7 +13,12 @@ public class StudentEvaluateServiceImp implements StudentEvaluateService {
 
 
   @Override
-  public StudentEvaluate saveStudentEvaluate(StudentEvaluate studentEvaluate) {
-    return studentEvaluateRepositories.save(studentEvaluate);
+  public void saveStudentEvaluate(StudentEvaluate studentEvaluate) {
+    studentEvaluateRepositories.save(studentEvaluate);
+  }
+
+  @Override
+  public StudentEvaluate findStudentEvaluateByStudentId(Integer id) {
+    return studentEvaluateRepositories.findStudentEvaluateByStudentId(id);
   }
 }
