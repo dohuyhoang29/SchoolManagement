@@ -3,6 +3,8 @@ package com.schoolmanagement.service.implement;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.repositories.SubjectRepositories;
 import com.schoolmanagement.service.SubjectService;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,5 +60,11 @@ public class SubjectServiceImp implements SubjectService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<Subjects> findAllSubjectAscId() {
+		
+		return subjectRepositories.findAllMarkByASC();
 	}
 }

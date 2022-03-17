@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.schoolmanagement.model.Blog;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.service.implement.BlogServiceImp;
 import com.schoolmanagement.service.implement.TeacherServiceImp;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BlogController {

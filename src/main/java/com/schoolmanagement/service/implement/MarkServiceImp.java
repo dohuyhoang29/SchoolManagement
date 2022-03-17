@@ -26,4 +26,34 @@ public class MarkServiceImp implements MarkService {
 		return markReponsitories.findByClassSubjectId(sbid, sid, type, semester);
 	}
 
+	@Override
+	public List<Mark> findByStudentSubject(int sbid, int sid, int semester) {
+		
+		return markReponsitories.finbyStudentSubect(sbid, sid, semester);
+	}
+
+	@Override
+	public Mark findMediumScore(int sbid, int sid, int type, int semester) {
+		
+		return markReponsitories.findMediumscore(sbid, sid, type, semester);
+	}
+
+	@Override
+	public Iterable<Mark> findAllMark() {
+		
+		return markReponsitories.findAll();
+	}
+	
+	@Override
+	public List<Mark> findAllMarkByMedium(int type) {
+		
+		return markReponsitories.findAllMarkByMedium(type);
+	}
+
+	@Override
+	public List<Mark> find(int sbid, int sid, int type) {
+		
+		return markReponsitories.find(sbid, sid, type);
+	}
+
 }

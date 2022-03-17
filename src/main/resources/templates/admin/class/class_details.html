@@ -85,6 +85,7 @@
                   		</div>
                   	</form>
                   	<hr>
+                  	
                   	<div class="row">
                   		<div class="col-lg-6 " th:if="${studentList.size() >=1}">
                   			<label class="font-weight-bold">Student</label>
@@ -127,8 +128,7 @@
 			                    			<td th:if="${student.userInfo.status == 3}">
 			                   					<span class="tag tag-secondary ">Graduate</span>
 			                    			</td>
-			                  				<td><a class="btn btn-sm btn-warning text-white">Edit</a></td>
-			                  				<td><a class="btn btn-sm btn-danger text-white">Remove</a></td>
+			                  				<td><a class="btn btn-sm btn-warning text-white" th:href="@{/edit/student/{id}(id=${student.id})}">Edit</a></td>
 			                  				
 			                  			</tr>
 			                  		</tbody>

@@ -42,12 +42,13 @@ public class Blog {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "created_date")  
+	@Column(name = "created_date")
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDate createdDate;
 
 	@Column(name = "updated_date")
-	  @DateTimeFormat(pattern = "MM/dd/yyyy")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDateTime updatedDate;
+	
 	
 }

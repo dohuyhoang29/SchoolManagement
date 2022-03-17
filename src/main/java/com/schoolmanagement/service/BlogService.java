@@ -1,13 +1,8 @@
 package com.schoolmanagement.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Blog;
-import java.time.LocalDateTime;
-import org.springframework.data.domain.Page;
 
 public interface BlogService {
   void SaveBlog(Blog blog);

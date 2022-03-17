@@ -12,7 +12,7 @@
           <li><a th:href="@{/show/student}"><i class="fa fa-user"></i><span>Student</span></a></li>
           <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/show/subjects}"><i class="fa fa-book"></i><span>Subject</span></a></li>
           <li><a th:href="@{/show/class}"><i class="fa fa-users"></i><span>Class</span></a></li>
-          <li><a sec:authorize="hasAnyAuthority('ADMIN')" href=""><i class="fa fa-pencil"></i><span>Mark</span></a></li>
+          <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/show/mark}"><i class="fa fa-pencil"></i><span>Mark</span></a></li>
           <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/show/blog}"><i class="fa fa-calendar-check-o"></i><span>Content</span></a></li>
         </ul>
       </nav>

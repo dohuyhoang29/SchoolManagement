@@ -33,19 +33,19 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 	Page<User> findStudentBySchoolYearAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,
 			@Param("schoolYear") Integer schoolYear, @Param("class") String className, Pageable pageable);
 
-	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.aClass.grade = :grade AND s.aClass.className LIKE %:class%")
+	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.userInfo.aClass.grade = :grade AND s.aClass.className LIKE %:class%")
 	Page<User> findStudentByGrade(@Param("fullName") String fullName, @Param("grade") Integer grade,
 			@Param("class") String className, Pageable pageable);
 
-	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class% AND s.aClass.schoolYear = :schoolYear")
+	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.userInfo.aClass.className LIKE %:class% AND s.aClass.schoolYear = :schoolYear")
 	Page<User> findStudentBySchoolYear(@Param("fullName") String fullName, @Param("class") String className,
 			@Param("schoolYear") Integer schoolYear, Pageable pageable);
 
-	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:class% AND s.aClass.schoolYear = :schoolYear AND s.aClass.grade = :grade")
+	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.userInfo.aClass.className LIKE %:class% AND s.aClass.schoolYear = :schoolYear AND s.aClass.grade = :grade")
 	Page<User> findStudentBySchoolYearAndGrade(@Param("fullName") String fullName, @Param("class") String className,
 			@Param("schoolYear") Integer schoolYear, @Param("grade") Integer grade, Pageable pageable);
 
-	@Query(value ="SELECT s FROM User s WHERE s.aClass.id = (:classId) AND s.fullName LIKE %:fullName%")
+	@Query(value ="SELECT s FROM User s WHERE s.userInfo.aClass.id = (:classId) AND s.fullName LIKE %:fullName%")
 	Page<User> findByClassId(@Param("classId") int id, @Param("fullName") String search , Pageable page);
 	
 	@Query(value ="SELECT s FROM User s WHERE s.aClass.id = (:classId)")
@@ -55,7 +55,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 	Page<User> findStudentByListClass(@Param("classList") Collection<Class> classList,
 			@Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
 
-	@Query(value = "SELECT s FROM User s WHERE s.aClass IN :classList AND s.fullName LIKE %:fullName% AND s.aClass.className LIKE %:className% AND s.aClass.grade = :grade")
+	@Query(value = "SELECT s FROM User s WHERE s.userInfo.aClass IN :classList AND s.fullName LIKE %:fullName% AND s.userInfo.aClass.className LIKE %:className% AND s.aClass.grade = :grade")
 	Page<User> findStudentByListClassAndGrade(@Param("classList") Collection<Class> classList,
 			@Param("fullName") String fullName, @Param("className") String className, @Param("grade") Integer grade, Pageable pageable);
 }

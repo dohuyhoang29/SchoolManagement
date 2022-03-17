@@ -104,6 +104,8 @@ public class ClassController {
 		u.addRole(role);
 
 		if (result.hasErrors()) {
+			model.addAttribute("userList", teacherServiceImp.getAllUser());
+			
 			return "/admin/class/form_class";
 		}
 

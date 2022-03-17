@@ -108,11 +108,10 @@ $(document).ready(function() {
 			cache: false,
 			success: function(result) {
 				if (result != null) {
-					$('#message').html('<div  id="alertFadeOut" style="color: green">Edit Succesfully !</div>');
+					$('#messges').html('<div  id="alertFadeOut" style="color: green">Add Mark Succesfully !</div>');
 					console.log("succes");
-					$('#alertFadeOut').fadeOut(1000, function() {
+					$('#alertFadeOut').fadeOut(3000, function() {
 						$('#alertFadeOut').text('');
-						window.location.reload(true);
 					});
 
 				}
