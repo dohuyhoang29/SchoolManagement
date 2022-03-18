@@ -1,5 +1,17 @@
 package com.schoolmanagement.controller.admin;
 
+import com.schoolmanagement.helper.StudentExcelExporter;
+import com.schoolmanagement.helper.StudentExcelImporter;
+import com.schoolmanagement.model.AccountDetails;
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.StudentEvaluate;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.repositories.StudentEvaluateRepositories;
+import com.schoolmanagement.repositories.StudentRepositories;
+import com.schoolmanagement.service.implement.ClassServiceImp;
+import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
+import com.schoolmanagement.service.implement.StudentServiceImp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -48,229 +60,242 @@ import com.schoolmanagement.service.implement.StudentServiceImp;
 
 @Controller
 public class StudentController {
-	@Autowired
-	private StudentServiceImp studentServiceImp;
-	@Autowired
-	private StudentRepositories studentRepositories;
-	@Autowired
-	private ClassServiceImp classServiceImp;
-	@Autowired
-	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
-	@Autowired
-	private EntityManager entityManager;
+  @Autowired
+  private StudentServiceImp studentServiceImp;
+  @Autowired
+  private StudentRepositories studentRepositories;
+  @Autowired
+  private ClassServiceImp classServiceImp;
+  @Autowired
+  private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
+  @Autowired
+  private StudentEvaluateRepositories repositories;
+  @Autowired
+  private EntityManager entityManager;
 
-	@GetMapping("/show/student")
-	public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
+  @GetMapping("/show/student")
+  public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
 
-		return listStudentByPage(model, 1, "id", "asc", "", "all", "", "", "", accountDetails);
-	}
+    return listStudentByPage(model, 1, "id", "asc", "", "all", "", "", "", accountDetails);
+  }
 
-	@GetMapping("/show/student/{page}")
-	public String listStudentByPage(Model model, @PathVariable("page") int currentPage,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("search") String search,
-			@Param("status") String status, @Param("grade") String grade, @Param("class-name") String className,
-			@Param("school-year") String schoolYear, @AuthenticationPrincipal AccountDetails accountDetails) {
-		Page<User> page = null;
+  @GetMapping("/show/student/{page}")
+  public String listStudentByPage(Model model,
+      @PathVariable("page") int currentPage,
+      @Param("sortField") String sortField,
+      @Param("sortDir") String sortDir,
+      @Param("search") String search,
+      @Param("status") String status,
+      @Param("grade") String grade,
+      @Param("class-name") String className,
+      @Param("school-year") String schoolYear,
+      @AuthenticationPrincipal AccountDetails accountDetails) {
+    Page<User> page;
 
-		if (accountDetails.hasRole("ADMIN")) {
-			page = studentServiceImp.searchStudent(search, status, currentPage, sortField, sortDir, grade, className,
-					schoolYear);
-		} else {
-			Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
+    if (accountDetails.hasRole("ADMIN")) {
+      page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
+          sortDir, grade, className, schoolYear);
+    } else {
+      Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
 
-			page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search,
-					grade, className);
-		}
+      page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
+    }
 
-		assert page != null;
-		int totalPages = page.getTotalPages();
-		List<User> studentList = new ArrayList<>();
-		for (User user : page.getContent()) {
-			for (Role role : user.getRoles()) {
-				if (role.getRoleName().equalsIgnoreCase("STUDENT")) {
-					studentList.add(user);
-				}
-			}
-		}
+    assert page != null;
+    int totalPages = page.getTotalPages();
+    List<User> studentList = new ArrayList<>();
+    for (User user : page.getContent()) {
+      if (user.hasRole("STUDENT")) {
+        studentList.add(user);
+      }
+    }
 
-		model.addAttribute("studentList", studentList);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("search", search);
-		model.addAttribute("status", status);
-		model.addAttribute("className", className);
-		model.addAttribute("grade", grade);
-		model.addAttribute("schoolYear", schoolYear);
-		model.addAttribute("classList", classServiceImp.getAllClass());
-		model.addAttribute("schoolYearList", classServiceImp.getSchoolYear());
+    model.addAttribute("studentList", studentList);
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("sortField", sortField);
+    model.addAttribute("search", search);
+    model.addAttribute("status", status);
+    model.addAttribute("className", className);
+    model.addAttribute("grade", grade);
+    model.addAttribute("schoolYear", schoolYear);
+    model.addAttribute("classList", classServiceImp.getAllClass());
+    model.addAttribute("schoolYearList", classServiceImp.getSchoolYear());
 
-		String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
-		model.addAttribute("reverseSortDir", reverseSortDir);
+    String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
+    model.addAttribute("reverseSortDir", reverseSortDir);
 
-		return "/admin/student/student_management";
-	}
+    return "/admin/student/student_management";
+  }
 
-	@GetMapping("/insert/student")
-	public String insertStudent(Model model) {
-		model.addAttribute("user", new User());
-		model.addAttribute("classList", classServiceImp.getAllClass());
+  @GetMapping("/insert/student")
+  public String insertStudent(Model model) {
+    model.addAttribute("user", new User());
+    model.addAttribute("classList", classServiceImp.getAllClass());
 
-		return "/admin/student/form_student";
-	}
+    return "/admin/student/form_student";
+  }
 
-	@PostMapping("/save/student")
-	public String saveStudent(@Valid User user, BindingResult result,
-			@RequestParam("fileImage") MultipartFile multipartFile, Model model, RedirectAttributes rdrAttr)
-			throws IOException {
+  @PostMapping("/save/student")
+  public String saveStudent(@Valid User user, BindingResult result,
+      @RequestParam("fileImage") MultipartFile multipartFile, Model model,
+      RedirectAttributes rdrAttr) throws IOException {
 
-		String root = "src/main/";
-		String folder = "upload/image/student_image/";
-		String org_filename = multipartFile.getOriginalFilename();
-		String str_filename = "";
-		if (org_filename != null && !org_filename.isEmpty()) {
-			str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
+    String root = "src/main/";
+    String folder = "upload/image/student_image/";
+    String org_filename = multipartFile.getOriginalFilename();
+    String str_filename = "";
+    if (org_filename != null && !org_filename.isEmpty()) {
+      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
 
-			if (!Files.exists(Paths.get(root + folder))) {
-				Files.createDirectories(Paths.get(root + folder));
-			}
-			Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
-					StandardCopyOption.REPLACE_EXISTING);
+      if (!Files.exists(Paths.get(root + folder))) {
+        Files.createDirectories(Paths.get(root + folder));
+      }
+      Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
+          StandardCopyOption.REPLACE_EXISTING);
 
-			user.setImage(str_filename);
-		}
-		if (user.getId() == null) {
-			int size = studentRepositories.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
-			user.setUsername("std_" + user.getUserInfo().getAdmissionYear() + "_" + (size + 1));
-			if (user.getUserInfo().getAdmissionYear() == null) {
-				result.rejectValue("userInfo.admissionYear", "error.user.userInfo", "Enter Admission Year");
-			}
-			if (user.getUserInfo().getGraduateYear() == null) {
-				result.rejectValue("userInfo.graduateYear", "error.user.userInfo", "Enter Graduate Year");
-			}
-			if (user.getUserInfo().getStatus() == null) {
-				result.rejectValue("userInfo.status", "error.user.userInfo", "Choose a status");
-			}
-			if (user.getUserInfo().getAClass() == null) {
-				result.rejectValue("userInfo.aClass", "error.user.userInfo", "Choose a class");
-			}
-			if (user.getUsername().equalsIgnoreCase("")) {
-				result.rejectValue("username", "error.user", "Enter username");
-			}
+      user.setImage(str_filename);
+    }
+    if (user.getId() == null) {
+      int size = studentRepositories.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
+      user.setUsername("std_" + user.getUserInfo().getAdmissionYear() + "_" + (size+ 1));
+      if (user.getUserInfo().getAdmissionYear()== null) {
+        result.rejectValue("userInfo.admissionYear", "error.user.userInfo", "Enter Admission Year");
+      }
+      if (user.getUserInfo().getGraduateYear()== null) {
+        result.rejectValue("userInfo.graduateYear", "error.user.userInfo", "Enter Graduate Year");
+      }
+      if (user.getUserInfo().getStatus()== null) {
+        result.rejectValue("userInfo.status", "error.user.userInfo", "Choose a status");
+      }
+      if (user.getUserInfo().getAClass()== null) {
+        result.rejectValue("userInfo.aClass", "error.user.userInfo", "Choose a class");
+      }
+      if (user.getUsername().equalsIgnoreCase("")) {
+        result.rejectValue("username", "error.user", "Enter username");
+      }
 
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String rawPassword = "123456";
-			String encoderPassword = encoder.encode(rawPassword);
-			user.setPassword(encoderPassword);
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      String rawPassword = "123456";
+      String encoderPassword = encoder.encode(rawPassword);
+      user.setPassword(encoderPassword);
 
-			user.setCreatedDate(LocalDateTime.now());
-			user.setUpdatedDate(LocalDateTime.now());
-		} else {
-			user.setUsername(user.getUsername());
-			user.setPassword(user.getPassword());
+      user.setCreatedDate(LocalDateTime.now());
+      user.setUpdatedDate(LocalDateTime.now());
+    } else {
+      user.setUsername(user.getUsername());
+      user.setPassword(user.getPassword());
 
-			user.setCreatedDate(user.getCreatedDate());
-			user.setUpdatedDate(LocalDateTime.now());
-		}
+      user.setCreatedDate(user.getCreatedDate());
+      user.setUpdatedDate(LocalDateTime.now());
+    }
 
-		if (user.getUserInfo().getGraduateYear() != null && user.getUserInfo().getAdmissionYear() != null) {
-			if (user.getUserInfo().getAdmissionYear() > user.getUserInfo().getGraduateYear()) {
-				result.rejectValue("graduateYear", "error.student",
-						"Graduate Year must be greater than Admission Year");
-			}
-		}
+    if (user.getUserInfo().getGraduateYear() != null && user.getUserInfo().getAdmissionYear() != null) {
+      if (user.getUserInfo().getAdmissionYear() > user.getUserInfo().getGraduateYear()) {
+        result.rejectValue("graduateYear", "error.student", "Graduate Year must be greater than Admission Year");
+      }
+    }
 
-		if (user.getDob() != null) {
-			if (LocalDateTime.now().getYear() - user.getDob().getYear() < 16) {
-				result.rejectValue("dob", "error.student", "Students must be 16 years old");
-			}
-		}
-		Role role = entityManager.find(Role.class, 4);
-		user.addRole(role);
+    if (user.getDob() != null) {
+      if (LocalDateTime.now().getYear() - user.getDob().getYear() < 16) {
+        result.rejectValue("dob", "error.student", "Students must be 16 years old");
+      }
+    }
+    Role role = entityManager.find(Role.class, 4);
+    user.addRole(role);
 
-		if (result.hasErrors()) {
-			model.addAttribute("classList", classServiceImp.getAllClass());
+    if (result.hasErrors()) {
+      model.addAttribute("classList", classServiceImp.getAllClass());
 
-			return "/admin/student/form_student";
-		}
-		studentServiceImp.saveStudent(user);
+      return "/admin/student/form_student";
+    }
+    studentServiceImp.saveStudent(user);
 
-		if (user.getId() == null) {
-			rdrAttr.addFlashAttribute("message", "Add student successfully");
-		} else {
-			rdrAttr.addFlashAttribute("message", "Edit student successfully");
-		}
+    if (user.getId() == null) {
+      rdrAttr.addFlashAttribute("message", "Add student successfully");
+    } else {
+      rdrAttr.addFlashAttribute("message", "Edit student successfully");
+    }
 
-		return "redirect:/show/student";
-	}
+    return "redirect:/show/student";
+  }
 
-	@GetMapping("/show/student/details/{id}")
-	public String studentDetails(Model model, @PathVariable("id") Integer id) {
-		model.addAttribute("student", studentServiceImp.getStudentById(id));
+  @GetMapping("/show/student/details/{id}")
+  public String studentDetails(Model model, @PathVariable("id") Integer id) {
+    model.addAttribute("student", studentServiceImp.getStudentById(id));
 
-		return "/admin/student/student_details";
-	}
+    return "/admin/student/student_details";
+  }
 
-	@GetMapping("/show/student/search")
-	public String searchStudent(@RequestParam("search") String search, @RequestParam("status") String status,
-			@RequestParam("grade") String grade, @RequestParam("class-name") String className,
-			@AuthenticationPrincipal AccountDetails accountDetails, @RequestParam("school-year") String schoolYear,
-			Model model) {
+  @GetMapping("/show/student/search")
+  public String searchStudent(@RequestParam("search") String search,
+      @RequestParam("status") String status, @RequestParam("grade") String grade,
+      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestParam("school-year") String schoolYear, Model model) {
 
-		return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear, accountDetails);
-	}
+    return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear, accountDetails);
+  }
 
-	@GetMapping("/show/student/teacher/search")
-	public String searchStudentForTeacher(@RequestParam("search") String search, @RequestParam("grade") String grade,
-			@RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails,
-			Model model) {
+  @GetMapping("/show/student/teacher/search")
+  public String searchStudentForTeacher(@RequestParam("search") String search, @RequestParam("grade") String grade,
+      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails, Model model) {
 
-		return listStudentByPage(model, 1, "id", "asc", search, "all", grade, className, "", accountDetails);
-	}
+    return listStudentByPage(model, 1, "id", "asc", search, "all", grade, className, "", accountDetails);
+  }
 
-	@GetMapping("/edit/student/{id}")
-	public String editStudent(@PathVariable("id") Integer id, Model model) {
-		model.addAttribute("user", studentServiceImp.getStudentById(id));
-		model.addAttribute("classList", classServiceImp.getAllClass());
+  @GetMapping("/edit/student/{id}")
+  public String editStudent(@PathVariable("id") Integer id, Model model){
+    model.addAttribute("user", studentServiceImp.getStudentById(id));
+    model.addAttribute("classList", classServiceImp.getAllClass());
 
-		return "/admin/student/form_student";
-	}
+    return "/admin/student/form_student";
+  }
 
-	@RequestMapping("/export/student")
-	@ResponseBody
-	public void exportToExcel(HttpServletResponse response) throws IOException {
-		response.setContentType("application/octet-stream");
-		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-		String currentDateTime = dateFormatter.format(new Date());
+  @RequestMapping("/export/student")
+  @ResponseBody
+  public void exportToExcel(HttpServletResponse response) throws IOException {
+    response.setContentType("application/octet-stream");
+    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    String currentDateTime = dateFormatter.format(new Date());
 
-		String headerKey = "Content-Disposition";
-		String headerValue = "attachment; filename=students_" + currentDateTime + ".xlsx";
-		response.setHeader(headerKey, headerValue);
+    String headerKey = "Content-Disposition";
+    String headerValue = "attachment; filename=students_" + currentDateTime + ".xlsx";
+    response.setHeader(headerKey, headerValue);
 
-		List<User> studentList = (List<User>) studentServiceImp.getAllStudent();
+    List<User> studentList = (List<User>) studentServiceImp.getAllStudent();
 
-		StudentExcelExporter excelExporter = new StudentExcelExporter(studentList);
+    StudentExcelExporter excelExporter = new StudentExcelExporter(studentList);
 
-		excelExporter.export(response);
-	}
+    excelExporter.export(response);
+  }
 
-	@PostMapping("/import/student")
-	public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
-		if (multipartFile != null) {
-			StudentExcelImporter excelImporter = new StudentExcelImporter();
-			Role role = entityManager.find(Role.class, 4);
-			Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp,
-					role);
-			studentServiceImp.saveAlLStudent(studentList);
-		}
+  @PostMapping("/import/student")
+  public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile)
+      throws IOException {
+    if (multipartFile != null) {
+      StudentExcelImporter excelImporter = new StudentExcelImporter();
+      Role role = entityManager.find(Role.class, 4);
+      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp, role);
+      studentServiceImp.saveAlLStudent(studentList);
+    }
 
-		return "redirect:/show/teacher";
-	}
+    return "redirect:/show/teacher";
+  }
 
-	@PreAuthorize("hasAuthority('TEACHER')")
-	@GetMapping("/insert/student/mark")
-	public String insertStudentMark() {
-		return "/admin/index";
-	}
+  @PreAuthorize("hasAuthority('TEACHER')")
+  @GetMapping("/insert/student/mark")
+  public String insertStudentMark() {
+    return "/admin/index";
+  }
 
+  @GetMapping("/show/student-class-detail/{id}")
+  public String showStudentClassDetail(Model model, @PathVariable("id") Integer id) {
+    User student = studentServiceImp.getStudentById(id);
+    Iterable<StudentEvaluate> studentEvaluates = repositories.findAllByStudent(student);
+
+    model.addAttribute("student", student);
+    model.addAttribute("studentEvaluates", studentEvaluates);
+
+    return "/admin/student/student_class_detail";
+  }
 }

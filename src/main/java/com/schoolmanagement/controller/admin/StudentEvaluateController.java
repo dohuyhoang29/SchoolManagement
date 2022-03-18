@@ -28,21 +28,22 @@ public class StudentEvaluateController {
   private StudentEvaluateServiceImp studentEvaluateServiceImp;
 
   @PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
-  @GetMapping("/insert/evaluate/{id}")
-  public String insertStudentEvaluate(@PathVariable("id") Integer id, Model model) {
-    StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(id);
+  @GetMapping("/insert/evaluate/{student-id}/{semester}")
+  public String insertStudentEvaluate(@PathVariable("student-id") Integer studentId, Model model,
+      @PathVariable("semester") Integer semester) {
+    StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(studentId, semester);
     if (evaluate == null) {
-      User student = studentServiceImp.getStudentById(id);
+      User student = studentServiceImp.getStudentById(studentId);
       StudentEvaluate studentEvaluate= new StudentEvaluate();
 
       studentEvaluate.setStudent(student);
+      studentEvaluate.setSemester(semester);
 
       model.addAttribute("student", student);
       model.addAttribute("studentEvaluate", studentEvaluate);
     } else {
       model.addAttribute("student", evaluate.getStudent());
-      model.addAttribute("studentEvaluate", evaluate);
-    }
+      model.addAttribute("studentEvaluate", evaluate);}
 
     return "/admin/student/student_evaluate";
   }
@@ -53,8 +54,6 @@ public class StudentEvaluateController {
       @AuthenticationPrincipal AccountDetails accountDetails, @PathVariable("id") Integer id, Model model) {
     User student = studentServiceImp.getStudentById(id);
     User user = accountDetails.getUser();
-    studentEvaluate.setCreatedBy(user);
-    studentEvaluate.setUpdatedBy(user);
     studentEvaluate.setCreatedDate(LocalDate.now());
     studentEvaluate.setUpdatedDate(LocalDate.now());
     studentEvaluate.setStudent(student);
@@ -66,6 +65,13 @@ public class StudentEvaluateController {
       model.addAttribute("studentEvaluate", studentEvaluate);
 
       return "/admin/student/student_evaluate";
+    }
+
+    if (studentEvaluate.getId() == null) {
+      studentEvaluate.setCreatedBy(user);
+      studentEvaluate.setUpdatedBy(user);
+    } else {
+      studentEvaluate.setUpdatedBy(user);
     }
 
     studentEvaluateServiceImp.saveStudentEvaluate(studentEvaluate);

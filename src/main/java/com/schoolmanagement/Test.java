@@ -25,7 +25,7 @@ public class Test {
     System.out.println(localDateTime);
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    System.out.println(encoder.encode("1"));
+    System.out.println(encoder.encode("123456"));
   }
 
   public static int randomString(String text) {

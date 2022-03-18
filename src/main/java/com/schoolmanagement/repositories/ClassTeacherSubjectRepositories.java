@@ -2,6 +2,7 @@ package com.schoolmanagement.repositories;
 
 
 
+import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,5 @@ public interface ClassTeacherSubjectRepositories extends PagingAndSortingReposit
 	Iterable<ClassTeacherSubject> findByClassId(@Param("idc") int id);
 
 	@Query(value = "SELECT cts FROM ClassTeacherSubject cts WHERE cts.users.id = :id")
-	Iterable<ClassTeacherSubject> findByTeacherId(@Param("id") Integer id);
+	Set<ClassTeacherSubject> findByTeacherId(@Param("id") Integer id);
 }

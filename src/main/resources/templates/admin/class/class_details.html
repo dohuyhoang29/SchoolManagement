@@ -70,15 +70,16 @@
                   	<form>
                   		<div class="form-group">
                   			<div class="form-group row">
-                  				<label>Class Name       : <span th:text="${class.className}"></span>  </label>
+                  				<label>Class Name : <span th:text="${class.className}"></span>
+													</label>
                   				&emsp;&emsp;|&emsp;
-			                  	<label>       Grade     : <span th:text="${class.grade}"></span></label>
+			                  	<label> Grade : <span th:text="${class.grade}"></span></label>
                   			</div>
                   		</div>
                   		<hr>
                   		<div class="form-group">
                   			<div class="form-group row">
-                  				<label> School Year     : <span th:text="${class.schoolYear}"></span></label>
+                  				<label> School Year : <span th:text="${class.schoolYear}"></span></label>
                   				&emsp;&emsp;|&emsp;
 			                  	<label>Homeroom Teacher : <span th:text="${class.user.fullName}"></span></label>
                   			</div>
@@ -245,7 +246,7 @@
 			                  	</div>
                   	<hr>
                   	<div align="center">
-                  		<a class="btn btn-warning text-white col-lg-1">Edit</a>
+                  		<a th:href="@{/edit/class/{id}(id=${class.id})}" class="btn btn-warning text-white col-lg-1">Edit</a>
                   		<a th:href="@{/show/class}" class="btn btn-secondary text-white col-lg-1">Cancel</a>
                   		<a class="btn btn-success text-white col-lg-1">Export</a>
                   	</div>

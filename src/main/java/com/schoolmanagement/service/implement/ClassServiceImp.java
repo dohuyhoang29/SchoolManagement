@@ -1,6 +1,7 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.request.SchoolYearClassRequest;
 import com.schoolmanagement.repositories.ClassRepositories;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,9 +46,15 @@ public class ClassServiceImp implements ClassService {
 			
 			return classRepositories.findAll(pages);
 		}else {
-			return classRepositories.listClass("%"+b+"%",pages);
+			return classRepositories.listClass(b, pages);
 		}
-		
+	}
+
+	@Override
+	public Page<Class> getAllByTeacherId(Integer id, int page) {
+		Pageable pages = PageRequest.of(page -1, 10);
+
+		return classRepositories.getAllByTeacherId(id, pages);
 	}
 
 	@Override
