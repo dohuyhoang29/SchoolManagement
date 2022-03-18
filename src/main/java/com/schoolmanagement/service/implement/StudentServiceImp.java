@@ -124,4 +124,9 @@ public class StudentServiceImp implements StudentService {
 		return list;
 	}
 
+	@Override
+	public List<User> findAllByAdmissionYear(Integer admissionYear) {
+		return repositories.findAllByAdmissionYear(admissionYear);
+	}
+
 }

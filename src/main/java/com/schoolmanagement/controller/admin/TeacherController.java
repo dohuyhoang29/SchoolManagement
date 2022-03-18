@@ -148,11 +148,13 @@ public class TeacherController {
       user.setCreatedDate(LocalDateTime.now());
       user.setUpdatedDate(LocalDateTime.now());
     } else {
-      user.setPassword(user.getPassword());
+      //validator duplicate email
       if (userService.getUserByEmail(user.getEmail()) != null &&
           !Objects.equals(user.getId(), userService.getUserByEmail(user.getEmail()).getId())) {
-        result.rejectValue("email", "error.user", "An account already exists for this email.");
+        result.rejectValue("email", "error.user",
+            "An account already exists for this email.");
       }
+      //validator duplicate username
       if (userService.getUserByUsername(user.getUsername()) != null &&
           !Objects.equals(user.getId(),
               userService.getUserByUsername(user.getUsername()).getId())) {
@@ -160,6 +162,7 @@ public class TeacherController {
             "An account already exists for this username.");
       }
 
+      user.setPassword(user.getPassword());
       user.setCreatedDate(user.getCreatedDate());
       user.setUpdatedDate(LocalDateTime.now());
     }

@@ -1,6 +1,7 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.StudentEvaluate;
+import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.StudentEvaluateRepositories;
 import com.schoolmanagement.service.StudentEvaluateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,10 @@ public class StudentEvaluateServiceImp implements StudentEvaluateService {
   @Override
   public StudentEvaluate findStudentEvaluateByStudentId(Integer id, Integer semester) {
     return studentEvaluateRepositories.findStudentEvaluateByStudentId(id, semester);
+  }
+
+  @Override
+  public Iterable<StudentEvaluate> getAllByStudent(User student) {
+    return studentEvaluateRepositories.findAllByStudent(student);
   }
 }

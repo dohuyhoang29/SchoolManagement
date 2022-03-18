@@ -26,4 +26,6 @@ public interface StudentService {
 			String sortDir, String fullName, String grade, String className);
 
 	List<User> findAllStudentStudying();
+
+	List<User> findAllByAdmissionYear(Integer admissionYear);
 }

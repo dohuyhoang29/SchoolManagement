@@ -7,11 +7,10 @@ import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.repositories.StudentEvaluateRepositories;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
+import com.schoolmanagement.service.ClassService;
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.StudentEvaluateService;
+import com.schoolmanagement.service.StudentService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -47,29 +46,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.schoolmanagement.helper.StudentExcelExporter;
-import com.schoolmanagement.helper.StudentExcelImporter;
-import com.schoolmanagement.model.AccountDetails;
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
-
 @Controller
 public class StudentController {
   @Autowired
-  private StudentServiceImp studentServiceImp;
+  private StudentService studentService;
   @Autowired
-  private StudentRepositories studentRepositories;
+  private ClassService classService;
   @Autowired
-  private ClassServiceImp classServiceImp;
+  private ClassTeacherSubjectService classTeacherSubjectService;
   @Autowired
-  private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
-  @Autowired
-  private StudentEvaluateRepositories repositories;
+  private StudentEvaluateService studentEvaluateService;
   @Autowired
   private EntityManager entityManager;
 
@@ -81,24 +67,20 @@ public class StudentController {
 
   @GetMapping("/show/student/{page}")
   public String listStudentByPage(Model model,
-      @PathVariable("page") int currentPage,
-      @Param("sortField") String sortField,
-      @Param("sortDir") String sortDir,
-      @Param("search") String search,
-      @Param("status") String status,
-      @Param("grade") String grade,
-      @Param("class-name") String className,
-      @Param("school-year") String schoolYear,
+      @PathVariable("page") int currentPage, @Param("sortField") String sortField,
+      @Param("sortDir") String sortDir, @Param("search") String search,
+      @Param("status") String status, @Param("grade") String grade,
+      @Param("class-name") String className, @Param("school-year") String schoolYear,
       @AuthenticationPrincipal AccountDetails accountDetails) {
     Page<User> page;
 
     if (accountDetails.hasRole("ADMIN")) {
-      page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
+      page = studentService.searchStudent(search, status, currentPage, sortField,
           sortDir, grade, className, schoolYear);
     } else {
-      Set<Class> classList = classTeacherSubjectServiceImp.findAllByTeacher(accountDetails.getId());
+      Set<Class> classList = classTeacherSubjectService.findAllByTeacher(accountDetails.getId());
 
-      page = studentServiceImp.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
+      page = studentService.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
     }
 
     assert page != null;
@@ -119,8 +101,8 @@ public class StudentController {
     model.addAttribute("className", className);
     model.addAttribute("grade", grade);
     model.addAttribute("schoolYear", schoolYear);
-    model.addAttribute("classList", classServiceImp.getAllClass());
-    model.addAttribute("schoolYearList", classServiceImp.getSchoolYear());
+    model.addAttribute("classList", classService.getAllClass());
+    model.addAttribute("schoolYearList", classService.getSchoolYear());
 
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
@@ -131,7 +113,7 @@ public class StudentController {
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
     model.addAttribute("user", new User());
-    model.addAttribute("classList", classServiceImp.getAllClass());
+    model.addAttribute("classList", classService.getAllClass());
 
     return "/admin/student/form_student";
   }
@@ -157,7 +139,7 @@ public class StudentController {
       user.setImage(str_filename);
     }
     if (user.getId() == null) {
-      int size = studentRepositories.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
+      int size = studentService.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
       user.setUsername("std_" + user.getUserInfo().getAdmissionYear() + "_" + (size+ 1));
       if (user.getUserInfo().getAdmissionYear()== null) {
         result.rejectValue("userInfo.admissionYear", "error.user.userInfo", "Enter Admission Year");
@@ -205,11 +187,11 @@ public class StudentController {
     user.addRole(role);
 
     if (result.hasErrors()) {
-      model.addAttribute("classList", classServiceImp.getAllClass());
+      model.addAttribute("classList", classService.getAllClass());
 
       return "/admin/student/form_student";
     }
-    studentServiceImp.saveStudent(user);
+    studentService.saveStudent(user);
 
     if (user.getId() == null) {
       rdrAttr.addFlashAttribute("message", "Add student successfully");
@@ -222,7 +204,7 @@ public class StudentController {
 
   @GetMapping("/show/student/details/{id}")
   public String studentDetails(Model model, @PathVariable("id") Integer id) {
-    model.addAttribute("student", studentServiceImp.getStudentById(id));
+    model.addAttribute("student", studentService.getStudentById(id));
 
     return "/admin/student/student_details";
   }
@@ -245,8 +227,8 @@ public class StudentController {
 
   @GetMapping("/edit/student/{id}")
   public String editStudent(@PathVariable("id") Integer id, Model model){
-    model.addAttribute("user", studentServiceImp.getStudentById(id));
-    model.addAttribute("classList", classServiceImp.getAllClass());
+    model.addAttribute("user", studentService.getStudentById(id));
+    model.addAttribute("classList", classService.getAllClass());
 
     return "/admin/student/form_student";
   }
@@ -262,7 +244,7 @@ public class StudentController {
     String headerValue = "attachment; filename=students_" + currentDateTime + ".xlsx";
     response.setHeader(headerKey, headerValue);
 
-    List<User> studentList = (List<User>) studentServiceImp.getAllStudent();
+    List<User> studentList = (List<User>) studentService.getAllStudent();
 
     StudentExcelExporter excelExporter = new StudentExcelExporter(studentList);
 
@@ -275,8 +257,8 @@ public class StudentController {
     if (multipartFile != null) {
       StudentExcelImporter excelImporter = new StudentExcelImporter();
       Role role = entityManager.find(Role.class, 4);
-      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentRepositories, classServiceImp, role);
-      studentServiceImp.saveAlLStudent(studentList);
+      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentService, classService, role);
+      studentService.saveAlLStudent(studentList);
     }
 
     return "redirect:/show/teacher";
@@ -290,8 +272,8 @@ public class StudentController {
 
   @GetMapping("/show/student-class-detail/{id}")
   public String showStudentClassDetail(Model model, @PathVariable("id") Integer id) {
-    User student = studentServiceImp.getStudentById(id);
-    Iterable<StudentEvaluate> studentEvaluates = repositories.findAllByStudent(student);
+    User student = studentService.getStudentById(id);
+    Iterable<StudentEvaluate> studentEvaluates = studentEvaluateService.getAllByStudent(student);
 
     model.addAttribute("student", student);
     model.addAttribute("studentEvaluates", studentEvaluates);

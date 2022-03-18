@@ -100,7 +100,7 @@ public class User {
 	@OneToOne(mappedBy = "user")
 	private Class aClass;
 
-	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "users", orphanRemoval = true)
 	private List<ClassTeacherSubject> users = new ArrayList<>();
 
   @OneToMany(mappedBy = "students")

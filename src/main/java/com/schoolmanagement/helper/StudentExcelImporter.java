@@ -1,5 +1,7 @@
 package com.schoolmanagement.helper;
 
+import com.schoolmanagement.service.ClassService;
+import com.schoolmanagement.service.StudentService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +16,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,18 +23,11 @@ import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.UserInfo;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.implement.ClassServiceImp;
+
 
 public class StudentExcelImporter {
-	@Autowired
-	private StudentRepositories studentRepositories;
-
-	@Autowired
-	private ClassServiceImp classService;
-
-	public List<User> excelImport(MultipartFile multipartFile, StudentRepositories studentRepositories,
-			ClassServiceImp classService, Role role) throws IOException {
+	public List<User> excelImport(MultipartFile multipartFile, StudentService studentService,
+			ClassService classService, Role role) throws IOException {
 		List<User> studentList = new ArrayList<>();
 
 		String fullName = "";
@@ -98,7 +92,7 @@ public class StudentExcelImporter {
 				}
 			}
 
-			int size = studentRepositories.findAllByAdmissionYear((int) admissionYear).size();
+			int size = studentService.findAllByAdmissionYear((int) admissionYear).size();
 			String username = "std_" + (int) admissionYear + "_" + (size + 1);
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode("123456");
