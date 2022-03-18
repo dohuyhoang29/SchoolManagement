@@ -45,15 +45,11 @@ public class MarkServiceImp implements MarkService {
 	}
 	
 	@Override
-	public List<Mark> findAllMarkByMedium(int type) {
+	public List<Mark> findAllMarkByMedium(int studentid ,int type , int semseter) {
 		
-		return markReponsitories.findAllMarkByMedium(type);
+		return markReponsitories.findAllMarkByMedium(studentid, type, semseter);
 	}
 
-	@Override
-	public List<Mark> find(int sbid, int sid, int type) {
-		
-		return markReponsitories.find(sbid, sid, type);
-	}
+	
 
 }

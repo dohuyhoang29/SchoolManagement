@@ -9,8 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.schoolmanagement.model.Subjects;
+import com.schoolmanagement.model.request.SubjectRequest;
 
 @Repository
 public interface SubjectRepositories extends PagingAndSortingRepository<Subjects, Integer> {
@@ -27,4 +29,14 @@ public interface SubjectRepositories extends PagingAndSortingRepository<Subjects
 	
 	@Query(value="SELECT s FROM Subjects s ORDER BY s.id ASC")
 	List<Subjects> findAllMarkByASC();
+
+	@Transactional
+	@Query(value = "SELECT new com.schoolmanagement.model.request.SubjectRequest(s.subjectName, s.id, m.studentId, m.type, m.semester, "
+			+ " GROUP_CONCAT(m.coefficient  ) ) "
+			+ " FROM Subjects s "
+			+ " JOIN Mark m ON s.id = m.subjectId "
+			+ " WHERE m.subjectId = :studentId AND m.type = :type AND m.semester = :semester"
+			+ " GROUP BY s.subjectName, " 
+			+ " s.id, m.subjectId, m.type , m.semester" )
+	List<SubjectRequest> findByStudent(@Param("studentId") int id , @Param("type") int type , @Param("semester") int semester);
 }

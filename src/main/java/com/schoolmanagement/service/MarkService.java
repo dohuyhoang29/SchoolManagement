@@ -18,8 +18,7 @@ public interface MarkService {
 	
 	Iterable<Mark> findAllMark();
 	
-	List<Mark> findAllMarkByMedium(int type);
+	List<Mark> findAllMarkByMedium(int studentid ,int type , int semester);
 	
-	List<Mark> find(int sbid , int sid  , int type ); 
 	
 }

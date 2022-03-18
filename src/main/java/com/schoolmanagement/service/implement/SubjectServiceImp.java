@@ -1,17 +1,19 @@
 package com.schoolmanagement.service.implement;
 
-import com.schoolmanagement.model.Subjects;
-import com.schoolmanagement.repositories.SubjectRepositories;
-import com.schoolmanagement.service.SubjectService;
-
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import com.schoolmanagement.model.Subjects;
+import com.schoolmanagement.model.request.SubjectRequest;
+import com.schoolmanagement.repositories.SubjectRepositories;
+import com.schoolmanagement.service.SubjectService;
 
 @Service
 public class SubjectServiceImp implements SubjectService {
@@ -66,5 +68,11 @@ public class SubjectServiceImp implements SubjectService {
 	public List<Subjects> findAllSubjectAscId() {
 		
 		return subjectRepositories.findAllMarkByASC();
+	}
+
+	@Override
+	public List<SubjectRequest> findByStudent(int studentId , int type , int semester) {
+		
+		return subjectRepositories.findByStudent(studentId , type , semester);
 	}
 }

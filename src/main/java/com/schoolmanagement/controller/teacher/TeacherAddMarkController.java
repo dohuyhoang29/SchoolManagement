@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,13 +52,13 @@ public class TeacherAddMarkController {
 
 	@PreAuthorize("hasAuthority('TEACHER')")
 	@GetMapping("/insert/mark/{classid}")
-	public String IndexAddMark(Model model, @PathVariable("classid") int id,@AuthenticationPrincipal AccountDetails accountDetails) {
+	public String IndexAddMark(Model model, @PathVariable("classid") int id,
+			@AuthenticationPrincipal AccountDetails accountDetails) {
 		com.schoolmanagement.model.Class c = classServiceImpl.getClassById(id);
 		User u = teacherServiceImp.getUserByUsername(accountDetails.getUsername());
 		List<User> s = studentServiceImp.findAllStudentByClassId(id);
 		ClassTeacherSubject cts = classTeacherSubjectServiceImp.findByIdOther(u.getId(), c.getId());
-		
-		
+
 		model.addAttribute("cst", cts);
 		model.addAttribute("Studentlist", s);
 
@@ -77,7 +76,7 @@ public class TeacherAddMarkController {
 			User user = teacherServiceImp.findByUserId(m.getCreatedBy());
 			User student = studentServiceImp.getStudentById(m.getStudents());
 			Subjects subjects = subjectServiceImp.findBySubjectID(m.getSubjects());
-			
+
 			for (int i = 0; i < m.getCoefficient().size(); i++) {
 				Mark mark = new Mark();
 				if (list.size() > 0 && list.get(i).getId() != 0) {
@@ -97,55 +96,59 @@ public class TeacherAddMarkController {
 
 			}
 
-			if (m.getType() == 4) {
+			if (markServiceImp.findByStudentSubject(m.getSubjects(), m.getStudents(), m.getSemester()) != null) {
 				Mark marks = new Mark();
 				List<Mark> listMarkSubject = new ArrayList<>();
-				if (markServiceImp.findByStudentSubject(m.getSubjects(), m.getStudents(), m.getSemester()) != null) {
-					listMarkSubject.addAll(
-							markServiceImp.findByStudentSubject(m.getSubjects(), m.getStudents(), m.getSemester()));
-				}
-				Mark mediumscore = markServiceImp.findMediumScore(m.getSubjects(), m.getStudents(),5, m.getSemester());
-				if(mediumscore != null && mediumscore.getId() !=0 ) {
-					marks.setId(mediumscore.getId());
-				}
-				marks.setCreatedDate(LocalDate.now());
-				marks.setCreatedBy(user);
-				marks.setSemester(m.getSemester());
-				marks.setSubjects(subjects);
-				marks.setStudents(student);
-				marks.setUpdatedBy(user);
-				marks.setUpdatedDate(LocalDate.now());
-				marks.setType(5);
-				
-				
-				if (listMarkSubject.size() > 0 ) {
-					float areaMarksubject = 0;
-					for (int j = 0; j < listMarkSubject.size(); j++) {
-
-						if (listMarkSubject.get(j).getType() == 1) {
-							areaMarksubject += listMarkSubject.get(j).getCoefficient();
-						}
-
-						if (listMarkSubject.get(j).getType() == 2) {
-							areaMarksubject += listMarkSubject.get(j).getCoefficient();
-						}
-
-						if (listMarkSubject.get(j).getType() == 3) {
-							areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 2);
-						}
-
-						if (listMarkSubject.get(j).getType() == 4) {
-							areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 3);
-						}
-						if (j == 7) {
-							areaMarksubject = areaMarksubject / 12;
-						}
+				listMarkSubject.addAll(markServiceImp.findByStudentSubject(m.getSubjects(), m.getStudents(), m.getSemester()));
+				if (listMarkSubject.size() > 7) {
+					Mark mediumscore = markServiceImp.findMediumScore(m.getSubjects(), m.getStudents(), 5,
+							m.getSemester());
+					if (mediumscore != null && mediumscore.getId() != 0) {
+						marks.setId(mediumscore.getId());
 					}
-					
-					marks.setCoefficient(Float.valueOf(String.format(Locale.getDefault(), "%.1f" , areaMarksubject)));
-					markServiceImp.SaveMarkStudent(marks);
 
+					marks.setCreatedDate(LocalDate.now());
+					marks.setCreatedBy(user);
+					marks.setSemester(m.getSemester());
+					marks.setSubjects(subjects);
+					marks.setStudents(student);
+					marks.setUpdatedBy(user);
+					marks.setUpdatedDate(LocalDate.now());
+					marks.setType(5);
+
+					if (listMarkSubject.size() > 0) {
+						float areaMarksubject = 0;
+						for (int j = 0; j < listMarkSubject.size(); j++) {
+
+							if (listMarkSubject.get(j).getType() == 1) {
+								areaMarksubject += listMarkSubject.get(j).getCoefficient();
+							}
+
+							if (listMarkSubject.get(j).getType() == 2) {
+								areaMarksubject += listMarkSubject.get(j).getCoefficient();
+							}
+
+							if (listMarkSubject.get(j).getType() == 3) {
+								areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 2);
+							}
+
+							if (listMarkSubject.get(j).getType() == 4) {
+								areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 3);
+							}
+
+							if (j == 7) {
+								areaMarksubject = areaMarksubject / 12;
+							}
+						}
+
+						marks.setCoefficient(
+								Float.valueOf(String.format(Locale.getDefault(), "%.1f", areaMarksubject)));
+
+						markServiceImp.SaveMarkStudent(marks);
+
+					}
 				}
+
 			}
 		}
 

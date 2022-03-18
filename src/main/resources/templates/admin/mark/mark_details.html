@@ -45,14 +45,15 @@
             <h1 class="page-title">Student</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Student Mark</li>
+              <li class="breadcrumb-item active" aria-current="page">Student List</li>
             </ol>
           </div>
           <ul class="nav nav-tabs page-header-tab">
             <li class="nav-item"><a class="nav-link active"
                                     th:href="@{/show/student}">List
               View</a></li>
-            
+            <li class="nav-item"><a class="nav-link" th:href="@{/insert/student}">Add</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -66,33 +67,41 @@
               </div>
             </div>
             <div class="table-responsive card">
-              <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
-                <thead>
-	                <tr>
-	                  <th>ID </th>
-	                  <th>Student Name</th>
-	                  <th >Class Name</th>
-	                  <th>School Year</th>
-	                  <th>Grader</th> 
-	                  <th>Average Marks</th>
-	                  <th>Actions</th>
-	                </tr>
-                </thead>
-                <tbody>
-                	<tr th:each="mark : ${markList}">
-                		<td th:text="${mark.students.id}"></td>
-                		<td th:text="${mark.students.fullName}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.className}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.schoolYear}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.grade}"></td>
-                		<td th:text="${mark.coefficient}">
-                		<td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}" class="btn btn-secondary text-white">Details</a></td>
-                	</tr>
-                </tbody>
-              </table>
               <div class="card-body">
                 <div class="bd-example">
-                 
+		              <label>Student Name  : <span th:text="${student.fullName}"></span></label> <br>
+		              <label>Class Name : <span th:text="${student.userInfo.aClass.className}"></span> <a class="btn btn-secondary text-white">Details</a></label><br>
+		              <label>Grade : <span th:text="${student.userInfo.aClass.grade}"></span></label><br>
+		              <label>School Year : <span th:text="${student.userInfo.aClass.schoolYear}"></span></label><br>
+		              <label>Homeroom Teacher : <span th:text="${student.userInfo.aClass.user.fullName}"></span> <a class="btn btn-secondary text-white">Details</a></label>
+		              <hr>
+		              <label>Marks</label>
+		              <hr>
+		              <div class="row">
+			              	<div class="col-lg-6" align="center">Semester 1</div>
+	              			<div class="col-lg-6" align="center">Semester 2</div>
+		            
+		              </div>
+		               <table class="table">
+              				<thead>
+              					<tr>
+              						<th>Subject</th>
+              						<th>Oral</th>
+              						<th>15 minutes</th>
+              						<th>1 houser</th>
+              						<th>Semester</th>
+              						<th>Average subject</th>
+              						<th>Oral</th>
+              						<th>15 minutes</th>
+              						<th>1 houser</th>
+              						<th>Semester</th>
+              						<th>Average subject</th>
+              					</tr>
+              				</thead>
+              				<tbody>
+              				</tbody>
+              			</table>
+		              <a class="btn btn-secondary text-white">Cancel</a>
                 </div>
               </div>
             </div>

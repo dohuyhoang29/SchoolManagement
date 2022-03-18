@@ -30,8 +30,15 @@ public class Mark {
 	@JoinColumn(name = "student_id")
 	private User students;
 	
+	@Column(name ="student_id" , insertable = false , updatable = false)
+	private int studentId;
+	
 	@ManyToOne( fetch = FetchType.LAZY)
+	@JoinColumn(name ="subjects_id")
 	private Subjects subjects;
+	
+	@Column(name ="subjects_id" , insertable = false , updatable = false)
+	private int subjectId;
 	
 	@Column(name = "type")
 	private Integer type;
