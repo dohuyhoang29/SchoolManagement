@@ -18,7 +18,7 @@ public class StudentEvaluateServiceImp implements StudentEvaluateService {
   }
 
   @Override
-  public StudentEvaluate findStudentEvaluateByStudentId(Integer id) {
-    return studentEvaluateRepositories.findStudentEvaluateByStudentId(id);
+  public StudentEvaluate findStudentEvaluateByStudentId(Integer id, Integer semester) {
+    return studentEvaluateRepositories.findStudentEvaluateByStudentId(id, semester);
   }
 }

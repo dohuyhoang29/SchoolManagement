@@ -1,7 +1,9 @@
 package com.schoolmanagement.service;
 
+import com.schoolmanagement.model.ClassTeacherSubject;
 import java.util.List;
 
+import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Class;
@@ -15,6 +17,8 @@ public interface ClassService {
   Iterable<Class> getAllClass();
 
   Page<Class> getAllClassPage(String b , int page);
+
+  Page<Class> getAllByTeacherId(Integer id, int page);
 
   List<SchoolYearClassRequest> getSchoolYear();
 

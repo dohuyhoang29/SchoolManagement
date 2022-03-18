@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -150,10 +151,29 @@ public class User {
     return false;
   }
 
-  public float getAverageMarks () {
-    for (Iterator<Mark> iterator = marks.iterator(); iterator.hasNext(); ) {
-      Mark next = iterator.next();
-      if (next.getType() == 4) {
+  public float getAverageMarks (Integer semester) {
+    for (Mark next : marks) {
+      if (next.getType() == 5 && Objects.equals(next.getSemester(), semester)) {
+        return next.getCoefficient();
+      }
+    }
+
+    return 0.0f;
+  }
+
+  public float getAverageMarksSemester1 () {
+    for (Mark next : marks) {
+      if (next.getType() == 5 && next.getSemester() == 1) {
+        return next.getCoefficient();
+      }
+    }
+
+    return 0.0f;
+  }
+
+  public float getAverageMarksSemester2 () {
+    for (Mark next : marks) {
+      if (next.getType() == 5 && next.getSemester() == 2) {
         return next.getCoefficient();
       }
     }

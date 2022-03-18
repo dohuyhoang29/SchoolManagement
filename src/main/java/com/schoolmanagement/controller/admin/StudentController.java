@@ -7,6 +7,7 @@ import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.repositories.StudentEvaluateRepositories;
 import com.schoolmanagement.repositories.StudentRepositories;
 import com.schoolmanagement.service.implement.ClassServiceImp;
 import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
@@ -57,6 +58,8 @@ public class StudentController {
   @Autowired
   private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
   @Autowired
+  private StudentEvaluateRepositories repositories;
+  @Autowired
   private EntityManager entityManager;
 
   @GetMapping("/show/student")
@@ -76,7 +79,7 @@ public class StudentController {
       @Param("class-name") String className,
       @Param("school-year") String schoolYear,
       @AuthenticationPrincipal AccountDetails accountDetails) {
-    Page<User> page = null;
+    Page<User> page;
 
     if (accountDetails.hasRole("ADMIN")) {
       page = studentServiceImp.searchStudent(search, status, currentPage, sortField,
@@ -91,10 +94,8 @@ public class StudentController {
     int totalPages = page.getTotalPages();
     List<User> studentList = new ArrayList<>();
     for (User user : page.getContent()) {
-      for (Role role : user.getRoles()) {
-        if (role.getRoleName().equalsIgnoreCase("STUDENT")) {
-          studentList.add(user);
-        }
+      if (user.hasRole("STUDENT")) {
+        studentList.add(user);
       }
     }
 
@@ -276,4 +277,14 @@ public class StudentController {
     return "/admin/index";
   }
 
+  @GetMapping("/show/student-class-detail/{id}")
+  public String showStudentClassDetail(Model model, @PathVariable("id") Integer id) {
+    User student = studentServiceImp.getStudentById(id);
+    Iterable<StudentEvaluate> studentEvaluates = repositories.findAllByStudent(student);
+
+    model.addAttribute("student", student);
+    model.addAttribute("studentEvaluates", studentEvaluates);
+
+    return "/admin/student/student_class_detail";
+  }
 }

@@ -48,7 +48,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 	@Query(value ="SELECT s FROM User s WHERE s.userInfo.aClass.id = (:classId) AND s.fullName LIKE %:fullName%")
 	Page<User> findByClassId(@Param("classId") int id, @Param("fullName") String search , Pageable page);
 	
-	@Query(value ="SELECT s FROM User s WHERE s.aClass.id = (:classId)")
+	@Query(value ="SELECT s FROM User s WHERE s.userInfo.aClass.id = (:classId)")
 	List<User> findByIdClass(@Param("classId") int id);
 
 	@Query(value = "SELECT u FROM User u WHERE u.userInfo.aClass IN :classList AND u.fullName LIKE %:fullName% AND u.userInfo.aClass.className LIKE %:className%")

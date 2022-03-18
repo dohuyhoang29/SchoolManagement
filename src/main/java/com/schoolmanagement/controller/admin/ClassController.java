@@ -1,14 +1,17 @@
 package com.schoolmanagement.controller.admin;
 
+import com.schoolmanagement.model.AccountDetails;
 import java.util.List;
 
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.EntityManager;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,33 +36,35 @@ public class ClassController {
 
 	@Autowired
 	private ClassServiceImp classServiceImp;
-
 	@Autowired
 	private StudentServiceImp studentServiceImp;
-
 	@Autowired
 	private SubjectServiceImp subjectServiceImp;
-
 	@Autowired
 	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
-
 	@Autowired
 	private TeacherServiceImp teacherServiceImp;
-	
 	@Autowired
 	private EntityManager entityManager;
 
 //index
 	@GetMapping("/show/class")
-	public String classList(Model model) {
+	public String classList(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
 		
-		return listClassByPage(model , 1,"");
+		return listClassByPage(model , 1,"", accountDetails);
 	}
 
 	@GetMapping("/show/class/page/{page}")
-	public String listClassByPage(Model model, @PathVariable("page") int currentPage, @Param("search") String search) {
+	public String listClassByPage(Model model, @PathVariable("page") int currentPage, @Param("search") String search,
+			@AuthenticationPrincipal AccountDetails accountDetails) {
+		Page<Class> page = null;
 
-		Page<Class> page = classServiceImp.getAllClassPage(search, currentPage);
+		if (accountDetails.hasRole("ADMIN")) {
+			page = classServiceImp.getAllClassPage(search, currentPage);
+		} else {
+			page = classServiceImp.getAllByTeacherId(accountDetails.getId(), currentPage);
+		}
+
 		int totalPages = page.getTotalPages();
 		Iterable<Class> classList = page.getContent();
 		model.addAttribute("currentPage", currentPage);
@@ -154,9 +159,9 @@ public class ClassController {
 	
 // search manager
 	@GetMapping("/show/class/search")
-	public String SearchClass(Model model , @RequestParam("search") String nameclass) {
+	public String SearchClass(Model model , @RequestParam("search") String nameclass, @AuthenticationPrincipal AccountDetails accountDetails) {
 		
-		return listClassByPage(model, 1, nameclass);
+		return listClassByPage(model, 1, nameclass, accountDetails);
 	}
 	//seacher student by class Details
 	@GetMapping("/detail/class/student/search/{id}")

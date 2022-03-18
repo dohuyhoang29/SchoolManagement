@@ -33,12 +33,6 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 	}
 
 	@Override
-	public Iterable<ClassTeacherSubject> findAllTeacherSubject(){
-		
-		return classTeacherSubjectRepositories.findAll();
-	}
-
-	@Override
 	public Set<Class> findAllByTeacher(Integer id) {
 		Set<Class> classList = new HashSet<>();
 		for (ClassTeacherSubject cts : classTeacherSubjectRepositories.findByTeacherId(id)) {

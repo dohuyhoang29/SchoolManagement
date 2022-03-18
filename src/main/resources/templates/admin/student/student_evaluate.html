@@ -109,7 +109,9 @@
                     <h3 class="card-title">Evaluate</h3>
                   </div>
                   <form th:action="@{/evaluate/save/{id}(id=${student.id})}" method="post" th:object="${studentEvaluate}">
-                    <input type="hidden" th:field="*{id}">
+                    <input id="evaluate-id" type="hidden" th:field="*{id}">
+                    <input id="student-id" type="hidden" th:value="${student.id}">
+                    <input type="hidden" th:field="*{createdBy}">
                     <div class="card-body">
                       <div class="row clearfix">
                         <div class="col-md-6 col-sm-12">
@@ -155,17 +157,17 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label for="average_marks">Average Marks</label>
-                            <input id="average_marks" th:value="${student.getAverageMarks()}" type="text" class="form-control" disabled>
+                            <input id="average_marks" th:value="${student.getAverageMarks(studentEvaluate.semester)}" type="text" class="form-control" disabled>
                           </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label>Academic Ability</label>
                             <input type="hidden" th:field="*{academicAbility}">
-                            <input th:if="${studentEvaluate.getAcademicAbility() == 1}" type="text" value="Below Average" class="form-control" disabled>
-                            <input th:if="${studentEvaluate.getAcademicAbility() == 2}" type="text" value="Average" class="form-control" disabled>
-                            <input th:if="${studentEvaluate.getAcademicAbility() == 3}" type="text" value="Good" class="form-control" disabled>
-                            <input th:if="${studentEvaluate.getAcademicAbility() == 4}" type="text" value="Excellent" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.setAcademicAbility() == 1}" type="text" value="Below Average" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.setAcademicAbility() == 2}" type="text" value="Average" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.setAcademicAbility() == 3}" type="text" value="Good" class="form-control" disabled>
+                            <input th:if="${studentEvaluate.setAcademicAbility() == 4}" type="text" value="Excellent" class="form-control" disabled>
                           </div>
                         </div>
                         <div class="col-sm-12">
@@ -184,6 +186,7 @@
     </div>
   </div>
 </div>
+
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
 
@@ -196,5 +199,12 @@
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#semester').change(function () {
+      location.href = "/insert/evaluate/" + $("#student-id").val() + "/" + $("#semester").val();
+    });
+  });
+</script>
 </body>
 </html>

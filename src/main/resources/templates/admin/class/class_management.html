@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
   <meta charset="UTF-8">
@@ -92,12 +93,12 @@
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
                 <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Class Name</th>
-                  <th>Total Student</th>
-                  <th>School Year</th>
-                  <th>Grade</th>
-                  <th>Actions</th>
+                  <th><b>ID</b></th>
+                  <th><b>Class Name</b></th>
+                  <th><b>Total Student</b></th>
+                  <th><b>School Year</b></th>
+                  <th><b>Grade</b></th>
+                  <th class="align-center"><b>Actions</b></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,7 +109,7 @@
                     <td>[[${class.students.size()}]]</td>
                     <td>[[${class.schoolYear}]]</td>
                     <td>[[${class.grade}]]</td>
-                    <td>
+                    <td class="align-center">
                       <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/details/class/{id}(id=${class.id})}">
                         <button type="button" class="btn btn-icon btn-sm" title="View">
                           <i class="fa fa-eye text-success"></i>
@@ -121,7 +122,13 @@
                       </a>
                       <a sec:authorize="hasAnyAuthority('ADMIN')" class="btn btn-icon btn-sm js-sweetalert"
                               title="Update Class Teacher " data-type="confirm" th:href="@{/updateClassTeacher/class/{id}(id=${class.id})}"><i
-                          class="fe fe-file-plus text-danger" ></i></a>
+                          class="fe fe-file-plus text-danger" ></i>
+                      </a>
+                      <a sec:authorize="hasAnyAuthority('TEACHER')"
+                         class="btn btn-icon btn-sm js-sweetalert" title="Add Marks" data-type="confirm"
+                         th:href="@{/insert/mark/{classid}(classid = ${class.id})}">
+                        <button type="button" class="btn btn-success btn-sm">Update Marks</button>
+                      </a>
                     </td>
                   </tr>
                 </th:block>

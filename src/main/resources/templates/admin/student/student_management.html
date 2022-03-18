@@ -260,22 +260,22 @@
                       </a>
                     </th>
                     <th>
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.status' + ${pageUrlPostfix}}">
                         Status
                       </a>
                     </th>
                     <th>
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.grade' + ${pageUrlPostfix}}">
                         Grade
                       </a>
                     </th>
                     <th class="text-center">
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.className' + ${pageUrlPostfix}}">
                         Class
                       </a>
                     </th>
                     <th class="text-center">
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.schoolYear' + ${pageUrlPostfix}}">
                         School Year
                       </a>
                     </th>
@@ -307,22 +307,22 @@
                       </a>
                     </th>
                     <th>
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=status' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.status' + ${pageUrlPostfix}}">
                         Status
                       </a>
                     </th>
                     <th>
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.grade' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.grade' + ${pageUrlPostfix}}">
                         Grade
                       </a>
                     </th>
                     <th class="text-center">
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.className' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.className' + ${pageUrlPostfix}}">
                         Class
                       </a>
                     </th>
                     <th class="text-center">
-                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=aClass.schoolYear' + ${pageUrlPostfix}}">
+                      <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=userInfo.aClass.schoolYear' + ${pageUrlPostfix}}">
                         School Year
                       </a>
                     </th>
@@ -360,17 +360,12 @@
                         <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
                           <button type="button" class="btn btn-success btn-sm">Edit</button>
                         </a>
-                        <a sec:authorize="hasAnyAuthority('TEACHER')"
-                           class="btn btn-icon btn-sm js-sweetalert" title="Add Marks" data-type="confirm"
-                           th:href="@{/insert/mark/{classid}(classid = ${user.userInfo.aClass.id})}">
-                          <button type="button" class="btn btn-success btn-sm">Add Marks</button>
-                        </a>
                         <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                                title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}">
+                                title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{student-id}/{semester}(student-id = ${user.id}, semester = 1)}">
                           <button type="button" class="btn btn-success btn-sm">Student Evaluate</button>
                         </a>
                         <a sec:authorize="hasAnyAuthority('TEACHER', 'HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                           title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{id}(id = ${user.id})}">
+                           title="Student Evaluate" data-type="confirm" th:href="@{/show/student-class-detail/{id}(id = ${user.id})}">
                           <button type="button" class="btn btn-success btn-sm">Details Marks</button>
                         </a>
                       </td>
