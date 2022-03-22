@@ -1,14 +1,17 @@
 package com.schoolmanagement.model;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,12 +27,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "user")
@@ -47,7 +49,7 @@ public class User {
   @Column(name = "full_name", nullable = false)
   private String fullName;
 
-//  @NotEmpty(message = "Enter username")
+  @NotEmpty(message = "Enter username")
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
@@ -91,26 +93,28 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+  @JoinTable(name = "teacher_subjects",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "subject_id"))
   private Set<Subjects> subjects = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Blog> blogs = new HashSet<>();
 
-	@OneToOne(mappedBy = "user")
-	private Class aClass;
+  @OneToOne(mappedBy = "user")
+  private Class aClass;
 
-	@OneToMany(mappedBy = "users", orphanRemoval = true)
-	private List<ClassTeacherSubject> users = new ArrayList<>();
+  @OneToMany(mappedBy = "users", orphanRemoval = true)
+  private List<ClassTeacherSubject> users = new ArrayList<>();
 
   @OneToMany(mappedBy = "students")
   private Set<Mark> marks = new HashSet<>();
 
-	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> createMark = new HashSet<>();
+  @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Mark> createMark = new HashSet<>();
 
-	@OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Mark> updateMark = new HashSet<>();
+  @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Mark> updateMark = new HashSet<>();
 
   @OneToOne(mappedBy = "student")
   private StudentEvaluate studentEvaluate;
@@ -141,17 +145,33 @@ public class User {
     return "/upload/image/student_image/" + image;
   }
 
-  public boolean hasRole (String roleName) {
-    for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext(); ) {
-      Role next = iterator.next();
-      if (next.getRoleName().equalsIgnoreCase(roleName)){
+  public void setImage(MultipartFile multipartFile, String folderSrc) throws IOException {
+    String root = "src/main/";
+    String imageTeacher = multipartFile.getOriginalFilename();
+    String str_filename = "";
+    if (imageTeacher != null && !imageTeacher.isEmpty()) {
+      str_filename = UUID.randomUUID() + imageTeacher.substring(imageTeacher.lastIndexOf('.'));
+
+      if (!Files.exists(Paths.get(root + folderSrc))) {
+        Files.createDirectories(Paths.get(root + folderSrc));
+      }
+      Files.copy(multipartFile.getInputStream(), Paths.get(root + folderSrc + str_filename),
+          StandardCopyOption.REPLACE_EXISTING);
+
+      this.image = str_filename;
+    }
+  }
+
+  public boolean hasRole(String roleName) {
+    for (Role next : roles) {
+      if (next.getRoleName().equalsIgnoreCase(roleName)) {
         return true;
       }
     }
     return false;
   }
 
-  public float getAverageMarks (Integer semester) {
+  public float getAverageMarks(Integer semester) {
     for (Mark next : marks) {
       if (next.getType() == 5 && Objects.equals(next.getSemester(), semester)) {
         return next.getCoefficient();
@@ -161,7 +181,7 @@ public class User {
     return 0.0f;
   }
 
-  public float getAverageMarksSemester1 () {
+  public float getAverageMarksSemester1() {
     for (Mark next : marks) {
       if (next.getType() == 5 && next.getSemester() == 1) {
         return next.getCoefficient();
@@ -171,7 +191,7 @@ public class User {
     return 0.0f;
   }
 
-  public float getAverageMarksSemester2 () {
+  public float getAverageMarksSemester2() {
     for (Mark next : marks) {
       if (next.getType() == 5 && next.getSemester() == 2) {
         return next.getCoefficient();
@@ -182,7 +202,8 @@ public class User {
   }
 
   public User(String fullName, String username, String password, String email, String phone,
-      LocalDate dob, String address, LocalDateTime createdDate, LocalDateTime updatedDate, UserInfo userInfo) {
+      LocalDate dob, String address, LocalDateTime createdDate, LocalDateTime updatedDate,
+      UserInfo userInfo) {
     this.fullName = fullName;
     this.username = username;
     this.password = password;

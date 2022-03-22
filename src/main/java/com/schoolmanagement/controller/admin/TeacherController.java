@@ -4,30 +4,27 @@ import com.schoolmanagement.helper.TeacherExcelExporter;
 import com.schoolmanagement.helper.TeacherExcelImporter;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.implement.TeacherServiceImp;
+import com.schoolmanagement.model.request.EditTeacherRequest;
+import com.schoolmanagement.model.request.InsertTeacherRequest;
+import com.schoolmanagement.service.TeacherService;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TeacherController {
 
   @Autowired
-  private TeacherServiceImp userService;
+  private TeacherService teacherService;
 
   @Autowired
   private EntityManager entityManager;
@@ -53,12 +50,12 @@ public class TeacherController {
     Page<User> page;
 
     if (status.equalsIgnoreCase("all")) {
-      page = userService.searchUserByFullName(search, currentPage, sortField, sortDir);
+      page = teacherService.searchUserByFullName(search, currentPage, sortField, sortDir);
     } else if (status.equalsIgnoreCase("true")) {
-      page = userService.searchUserByFullNameAndDeleted(search, true, currentPage, sortField,
+      page = teacherService.searchUserByFullNameAndDeleted(search, true, currentPage, sortField,
           sortDir);
     } else {
-      page = userService.searchUserByFullNameAndDeleted(search, false, currentPage, sortField,
+      page = teacherService.searchUserByFullNameAndDeleted(search, false, currentPage, sortField,
           sortDir);
     }
     long totalItems = page.getTotalElements();
@@ -92,101 +89,53 @@ public class TeacherController {
 
   @GetMapping("/show/teacher/details/{id}")
   public String teacherDetails(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("user", userService.getUserById(id));
+    model.addAttribute("user", teacherService.getUserById(id));
 
     return "/admin/teacher/teacher_details";
   }
 
   @GetMapping("/insert/teacher")
   public String insertTeacher(Model model) {
-    model.addAttribute("user", new User());
+    model.addAttribute("user", new InsertTeacherRequest());
 
     return "/admin/teacher/form_teacher";
   }
 
   @PostMapping("/teacher/save")
-  public String saveTeacher(@Valid User user, BindingResult result,
-      @RequestParam("fileImage") MultipartFile multipartFile,
+  public String saveTeacher(@Valid @ModelAttribute("user") InsertTeacherRequest user,
+      BindingResult result, @RequestParam("fileImage") MultipartFile multipartFile,
       RedirectAttributes rdrAttr) throws IOException {
 
     Role role = entityManager.find(Role.class, 2);
     user.addRole(role);
 
-    String root = "src/main/";
-    String folder = "upload/image/user_image/";
-    String org_filename = multipartFile.getOriginalFilename();
-    String str_filename = "";
-    if (org_filename != null && !org_filename.isEmpty()) {
-      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
+    user.setImage(multipartFile, "upload/image/user_image/");
 
-      if (!Files.exists(Paths.get(root + folder))) {
-        Files.createDirectories(Paths.get(root + folder));
-      }
-      Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
-          StandardCopyOption.REPLACE_EXISTING);
-
-      user.setImage(str_filename);
-    }
-
-    if (user.getId() == null) {
-      if (user.getPassword().isEmpty()) {
-        result.rejectValue("password", "error.user", "Enter password");
-      } else {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = user.getPassword();
-        String encoderPassword = encoder.encode(rawPassword);
-        user.setPassword(encoderPassword);
-      }
-      if (userService.getUserByEmail(user.getEmail()) != null) {
-        result.rejectValue("email", "error.user", "An account already exists for this email.");
-      }
-      if (userService.getUserByUsername(user.getUsername()) != null) {
-        result.rejectValue("username", "error.user",
-            "An account already exists for this username.");
-      }
-
-      user.setCreatedDate(LocalDateTime.now());
-      user.setUpdatedDate(LocalDateTime.now());
-    } else {
-      //validator duplicate email
-      if (userService.getUserByEmail(user.getEmail()) != null &&
-          !Objects.equals(user.getId(), userService.getUserByEmail(user.getEmail()).getId())) {
-        result.rejectValue("email", "error.user",
-            "An account already exists for this email.");
-      }
-      //validator duplicate username
-      if (userService.getUserByUsername(user.getUsername()) != null &&
-          !Objects.equals(user.getId(),
-              userService.getUserByUsername(user.getUsername()).getId())) {
-        result.rejectValue("username", "error.user",
-            "An account already exists for this username.");
-      }
-
-      user.setPassword(user.getPassword());
-      user.setCreatedDate(user.getCreatedDate());
-      user.setUpdatedDate(LocalDateTime.now());
-    }
+    user.setCreatedDate(LocalDateTime.now());
+    user.setUpdatedDate(LocalDateTime.now());
 
     if (result.hasErrors()) {
       return "/admin/teacher/form_teacher";
     }
 
-    if (user.getId() == null) {
-      rdrAttr.addFlashAttribute("message", "Add teacher successfully");
-    } else {
-      rdrAttr.addFlashAttribute("message", "Edit teacher successfully");
-    }
+    rdrAttr.addFlashAttribute("message", "Add teacher successfully");
+    teacherService.saveUser(user);
 
-    userService.saveUser(user);
+    return "redirect:/show/teacher";
+  }
+
+  @PostMapping("/teacher/update")
+  public String updateTeacher(EditTeacherRequest editTeacherRequest) {
+
 
     return "redirect:/show/teacher";
   }
 
   @GetMapping("/edit/teacher/{id}")
   public String editTeacher(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("user", userService.getUserById(id));
+    model.addAttribute("user", teacherService.getUserById(id));
 
-    return "/admin/teacher/form_teacher";
+    return "/admin/teacher/edit_teacher";
   }
 
   @GetMapping("/show/teacher/search")
@@ -207,7 +156,7 @@ public class TeacherController {
     String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
     response.setHeader(headerKey, headerValue);
 
-    List<User> listUsers = userService.getAllUser();
+    List<User> listUsers = teacherService.getAllUser();
 
     TeacherExcelExporter excelExporter = new TeacherExcelExporter(listUsers);
 
@@ -221,7 +170,7 @@ public class TeacherController {
       TeacherExcelImporter excelImporter = new TeacherExcelImporter();
       Role role = entityManager.find(Role.class, 2);
       Iterable<User> listUser = excelImporter.excelImport(multipartFile, role);
-      userService.saveAllUser(listUser);
+      teacherService.saveAllUser(listUser);
     }
 
     return "redirect:/show/teacher";
@@ -229,14 +178,14 @@ public class TeacherController {
 
   @GetMapping("/update/teacher/retired/{id}")
   public String makeTeacherRetired(@PathVariable("id") Integer id) {
-    userService.makeRetired(id);
+    teacherService.makeRetired(id);
 
     return "redirect:/show/teacher";
   }
 
   @GetMapping("/update/teacher/working/{id}")
   public String makeTeacherWorking(@PathVariable("id") Integer id) {
-    userService.makeWorking(id);
+    teacherService.makeWorking(id);
 
     return "redirect:/show/teacher";
   }

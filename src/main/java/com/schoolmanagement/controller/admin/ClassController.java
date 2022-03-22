@@ -114,7 +114,7 @@ public class ClassController {
 			return "/admin/class/form_class";
 		}
 
-		teacherServiceImp.saveUser(u);
+//		teacherServiceImp.saveUser(u);
 		classServiceImp.saveClass(aClass);
 
 		if (aClass.getId() == null) {

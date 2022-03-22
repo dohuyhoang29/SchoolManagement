@@ -71,18 +71,10 @@
                     <h3 class="card-title">Basic Information</h3>
                   </div>
                   <div class="card-body">
-                    <form th:action="@{/teacher/save}" method="post" th:object="${user}"
+                    <form th:action="@{/teacher/update}" method="post" th:object="${user}"
                           enctype="multipart/form-data" id="form-teacher">
+                      <input type="hidden" th:field="*{username}" disabled>
                       <div class="row clearfix">
-                        <div class="col-md-6 col-sm-12">
-                          <div class="form-group">
-                            <label>User Name</label>
-                            <input th:field="*{username}" type="text"
-                                   th:classappend="${#fields.hasErrors('username') ? 'form-control error-input' : 'form-control'}">
-                            <p class="error-message" th:if="${#fields.hasErrors('username')}"
-                               th:errors="*{username}"></p>
-                          </div>
-                        </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label>Full Name</label>
@@ -90,33 +82,6 @@
                                    th:classappend="${#fields.hasErrors('fullName') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('fullName')}"
                                th:errors="*{fullName}"></p>
-                          </div>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                          <div class="form-group">
-                            <label>Password</label>
-                            <input th:field="*{password}" type="password"
-                                   th:classappend="${#fields.hasErrors('password') ? 'form-control error-input' : 'form-control'}">
-                            <p class="error-message" th:if="${#fields.hasErrors('password')}"
-                               th:errors="*{password}"></p>
-                          </div>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                          <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input th:field="*{confirmPassword}" type="password"
-                                   th:classappend="${#fields.hasErrors('confirmPassword') ? 'form-control error-input' : 'form-control'}">
-                            <p class="error-message" th:if="${#fields.hasErrors('confirmPassword')}"
-                               th:errors="*{confirmPassword}"></p>
-                          </div>
-                        </div>
-                        <div class="col-md-12 col-sm-12">
-                          <div class="form-group">
-                            <label>Email</label>
-                            <input th:field="*{email}" type="text"
-                                   th:classappend="${#fields.hasErrors('email') ? 'form-control error-input' : 'form-control'}">
-                            <p class="error-message" th:if="${#fields.hasErrors('email')}"
-                               th:errors="*{email}"></p>
                           </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
@@ -131,7 +96,7 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <label>Phone</label>
-                          <input th:field="*{phone}" type="text" id="phone"
+                          <input th:field="*{phone}" type="number"
                                  th:classappend="${#fields.hasErrors('phone') ? 'form-control error-input' : 'form-control'}">
                           <p class="error-message" th:if="${#fields.hasErrors('phone')}"
                              th:errors="*{phone}"></p>
@@ -148,7 +113,7 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label>Start Date</label>
-                            <input th:field="*{userInfo.startDate}" name="startDate"
+                            <input th:field="*{userInfo.startDate}" name="start-date"
                                    data-provide="datepicker" data-date-autoclose="true"
                                    th:classappend="${#fields.hasErrors('userInfo.startDate') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('userInfo.startDate')}"
@@ -158,7 +123,7 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
                             <label for="endDate">End Date</label>
-                            <input th:field="*{userInfo.endDate}" name="endDate" data-provide="datepicker"
+                            <input th:field="*{userInfo.endDate}" name="end-date" data-provide="datepicker"
                                    data-date-autoclose="true" id="endDate"
                                    th:classappend="${#fields.hasErrors('userInfo.endDate') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('userInfo.endDate')}"
@@ -187,7 +152,7 @@
                           <div class="form-group mt-2 mb-3">
                             <label>Image</label>
                             <input name="fileImage" id="fileImage" type="file" class="dropify"
-                                   accept="image/png, image/jpeg">
+                                   accept="image/png, image/jpeg" th:data-default-file="${user.getUserImagePath}">
                           </div>
                           <input type="hidden" th:field="*{image}">
                           <p class="error-message" th:if="${#fields.hasErrors('image')}"
@@ -213,29 +178,7 @@
 </div>
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
-<script>
-  (function($) {
-    $.fn.inputFilter = function(inputFilter) {
-      return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-        if (inputFilter(this.value)) {
-          this.oldValue = this.value;
-          this.oldSelectionStart = this.selectionStart;
-          this.oldSelectionEnd = this.selectionEnd;
-        } else if (this.hasOwnProperty("oldValue")) {
-          this.value = this.oldValue;
-          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-        } else {
-          this.value = "";
-        }
-      });
-    };
-  }(jQuery));
 
-  // Install input filters.
-  $("#phone").inputFilter(function(value) {
-    return /^\d*$/.test(value);
-  });
-</script>
 <!-- Start Plugin Js -->
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/dropify/js/dropify.min.js"></script>

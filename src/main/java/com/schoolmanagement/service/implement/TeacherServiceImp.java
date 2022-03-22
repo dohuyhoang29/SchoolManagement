@@ -1,8 +1,12 @@
 package com.schoolmanagement.service.implement;
 
+import com.schoolmanagement.model.request.EditTeacherRequest;
+import com.schoolmanagement.model.request.InsertTeacherRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Optional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,18 +17,21 @@ import org.springframework.stereotype.Service;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.repositories.UserRepositories;
-import com.schoolmanagement.service.UserService;
+import com.schoolmanagement.service.TeacherService;
 
 @Service
-public class TeacherServiceImp implements UserService {
+public class TeacherServiceImp implements TeacherService {
 
 	@Autowired
 	private UserRepositories repo;
-
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@Override
-	public User saveUser(User user) {
-		return repo.save(user);
+	public void saveUser(InsertTeacherRequest insertTeacherRequest) {
+		User user = modelMapper.map(insertTeacherRequest, User.class);
+
+		repo.save(user);
 	}
 
 	@Override
@@ -85,8 +92,13 @@ public class TeacherServiceImp implements UserService {
 	}
 
 	@Override
-	public User getUserById(Integer id) {
-		return repo.findById(id).get();
+	public EditTeacherRequest getUserById(Integer id) {
+		Optional<User> user = repo.findById(id);
+		EditTeacherRequest editTeacherRequest = new EditTeacherRequest();
+		if (user.isPresent()) {
+			editTeacherRequest = modelMapper.map(user.get(), EditTeacherRequest.class);
+		}
+		return editTeacherRequest;
 	}
 
 	@Override

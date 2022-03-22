@@ -1157,7 +1157,9 @@ UPDATE user
 SET `password` = '$2a$10$52K1dg0D500/QOQbckMjq.cwyCrGakolPXtq4d3JeEiE45uC0JhwG'
 WHERE id BETWEEN 1 AND 50;
 
-
+UPDATE user 
+SET `image` = '2101e897-61c2-489f-86dc-8c03ab91360a.png'
+WHERE id BETWEEN 1 AND 50;
 
 
 

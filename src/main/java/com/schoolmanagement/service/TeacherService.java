@@ -1,13 +1,15 @@
 package com.schoolmanagement.service;
 
+import com.schoolmanagement.model.request.EditTeacherRequest;
+import com.schoolmanagement.model.request.InsertTeacherRequest;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.User;
 
-public interface UserService {
-	User saveUser(User user);
+public interface TeacherService {
+	void saveUser(InsertTeacherRequest user);
 
 	Iterable<User> saveAllUser(Iterable<User> list);
 
@@ -26,7 +28,7 @@ public interface UserService {
 
 	User findByUserId(int id);
 
-	User getUserById(Integer id);
+	EditTeacherRequest getUserById(Integer id);
 
 	void makeRetired(Integer id);
 

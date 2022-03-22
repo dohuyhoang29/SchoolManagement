@@ -19,13 +19,7 @@ public class Test {
   private static StudentRepositories repositories;
 
   public static void main(String[] args) {
-    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().append(DateTimeFormatter.ofPattern("MM-dd-yyyy")).toFormatter();
-    String date = "02-12-2002";
-    LocalDate localDateTime = LocalDate.parse(date, dateTimeFormatter);
-    System.out.println(localDateTime);
-
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    System.out.println(encoder.encode("123456"));
+    System.out.println("'");
   }
 
   public static int randomString(String text) {

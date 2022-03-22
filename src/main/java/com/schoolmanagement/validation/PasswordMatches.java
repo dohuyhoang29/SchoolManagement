@@ -8,15 +8,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Documented
-@Constraint(validatedBy = UniqueSubjectNameValidator.class)
-@Target({ElementType.FIELD})
+@Target( {ElementType.TYPE, ElementType.ANNOTATION_TYPE} )
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueSubjectName {
-
-  String message();
-
+@Constraint(validatedBy = PasswordMatchesValidator.class)
+@Documented
+public @interface PasswordMatches {
+  String message() default "Passwords do not match";
   Class<?>[] groups() default {};
-
   Class<? extends Payload>[] payload() default {};
 }
