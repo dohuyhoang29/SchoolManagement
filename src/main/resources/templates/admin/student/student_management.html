@@ -334,9 +334,8 @@
                 <tbody>
                   <th:block th:each="user : ${studentList}">
                     <tr>
-                      <td>[[${user.id}]]</td>
+                      <td><img class="avatar" th:src="${user.getStudentImagePath}" alt=""></td>
                       <td class="">
-                        <img class="avatar" th:src="${user.getStudentImagePath}" alt="">
                         <span class="font-16">[[${user.fullName}]]</span>
                       </td>
                       <td class="pr-20">[[${user.address}]]</td>
@@ -354,7 +353,7 @@
                       <td class="text-center">[[${user.userInfo.aClass.className}]]</td>
                       <td class="text-center">[[${user.userInfo.aClass.schoolYear}]]</td>
                       <td class="text-center">
-                        <a th:href="@{/show/student/details/{id}(id=${user.id})}"  sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a th:href="@{/show/student/details/{id}(id=${user.id})}" sec:authorize="hasAnyAuthority('ADMIN')">
                           <button type="button" class="btn btn-success btn-sm">Detail</button>
                         </a>
                         <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">

@@ -55,7 +55,11 @@ public class AccountDetails implements UserDetails {
 	}
 
 	public String getImage() {
-		return this.user.getUserImagePath();
+		if (!this.user.hasRole("STUDENT")) {
+			return this.user.getTeacherImagePath();
+		} else {
+			return this.user.getStudentImagePath();
+		}
 	}
 
 	public Integer getId () {

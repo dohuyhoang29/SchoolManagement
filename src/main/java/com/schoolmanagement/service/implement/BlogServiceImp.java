@@ -58,4 +58,9 @@ public class BlogServiceImp implements BlogService {
 
 		return null;
 	}
+
+	@Override
+	public int countAllBlog() {
+		return blogRepositories.countAll();
+	}
 }

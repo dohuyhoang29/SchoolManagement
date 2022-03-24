@@ -84,15 +84,11 @@
                     <form th:action="@{/save/student}" method="post" th:object="${user}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
-                      <input type="hidden" th:field="*{userInfo.id}">
-                      <input type="hidden" th:field="*{username}">
-                      <input type="hidden" th:field="*{password}">
-                      <input type="hidden" th:field="*{createdDate}">
                       <div class="row clearfix">
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Full Name</label>
-                            <input th:field="*{fullName}" type="text"
+                            <label for="full-name">Full Name</label>
+                            <input id="full-name" th:field="*{fullName}" type="text"
                                    th:classappend="${#fields.hasErrors('fullName') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('fullName')}"
                                th:errors="*{fullName}"></p>
@@ -100,8 +96,8 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Date of Birth</label>
-                            <input th:field="*{dob}" name="dob" data-provide="datepicker"
+                            <label for="dob">Date of Birth</label>
+                            <input id="dob" th:field="*{dob}" name="dob" data-provide="datepicker"
                                    data-date-autoclose="true"
                                    th:classappend="${#fields.hasErrors('dob') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('dob')}"
@@ -110,8 +106,8 @@
                         </div>
                         <div class="col-md-12 col-sm-12">
                           <div class="form-group">
-                            <label>Address</label>
-                            <input th:field="*{address}" type="text"
+                            <label for="address">Address</label>
+                            <input id="address" th:field="*{address}" type="text"
                                    th:classappend="${#fields.hasErrors('address') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('address')}"
                                th:errors="*{address}"></p>
@@ -119,8 +115,8 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Email</label>
-                            <input th:field="*{email}" type="text"
+                            <label for="email">Email</label>
+                            <input id="email" th:field="*{email}" type="text"
                                    th:classappend="${#fields.hasErrors('email') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('email')}"
                                th:errors="*{email}"></p>
@@ -128,8 +124,8 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Phone Number</label>
-                            <input th:field="*{phone}" type="text"
+                            <label for="phone">Phone Number</label>
+                            <input id="phone" th:field="*{phone}" type="text"
                                    th:classappend="${#fields.hasErrors('phone') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('phone')}"
                                th:errors="*{phone}"></p>
@@ -137,9 +133,9 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Admission Year</label>
-                            <input th:field="*{userInfo.admissionYear}" name="start-date"
-                                   class="yearpicker" data-date-autoclose="true"
+                            <label for="admission-year">Admission Year</label>
+                            <input id="admission-year" th:field="*{userInfo.admissionYear}" name="start-date"
+                                   class="year-picker" data-date-autoclose="true"
                                    th:classappend="${#fields.hasErrors('userInfo.admissionYear') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('userInfo.admissionYear')}"
                                th:errors="*{userInfo.admissionYear}"></p>
@@ -147,9 +143,9 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="form-group">
-                            <label>Graduate Year</label>
-                            <input th:field="*{userInfo.graduateYear}"
-                                   class="yearpicker"
+                            <label for="graduate-year">Graduate Year</label>
+                            <input id="graduate-year" th:field="*{userInfo.graduateYear}"
+                                   class="year-picker"
                                    data-date-autoclose="true"
                                    th:classappend="${#fields.hasErrors('userInfo.graduateYear') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('userInfo.graduateYear')}"
@@ -180,20 +176,6 @@
                           </div>
                           <p class="error-message" th:if="${#fields.hasErrors('userInfo.status')}"
                              th:errors="*{userInfo.status}"></p>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                          <div class="form-group">
-                            <label>Class</label>
-                            <select class="form-control input-height" name="class"
-                                    th:field="*{userInfo.aClass}">
-                              <option th:each="class : ${classList}"
-                                      th:field="*{userInfo.aClass}"
-                                       th:value="${class.id}"
-                                      th:utext="${class.className}"></option>
-                            </select>
-                            <p class="error-message" th:if="${#fields.hasErrors('userInfo.aClass')}"
-                               th:errors="*{userInfo.aClass}"></p>
-                          </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group mt-2 mb-3">
@@ -228,7 +210,29 @@
 </script>
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
+<script>
+  (function($) {
+    $.fn.inputFilter = function(inputFilter) {
+      return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+          this.value = "";
+        }
+      });
+    };
+  }(jQuery));
 
+  // Install input filters.
+  $("#phone").inputFilter(function(value) {
+    return /^\d*$/.test(value);
+  });
+</script>
 <!-- Start Plugin Js -->
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/bootstrap-yearpicker/bootstrap-datepicker.min.js"></script>
@@ -242,7 +246,7 @@
 
 <script>
   $(document).ready(function () {
-    $('.yearpicker').datepicker({
+    $('.year-picker').datepicker({
       format: "yyyy",
       viewMode: "years",
       minViewMode: "years",

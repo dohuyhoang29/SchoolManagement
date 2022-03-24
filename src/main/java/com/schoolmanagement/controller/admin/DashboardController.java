@@ -24,10 +24,10 @@ public class DashboardController {
 
   @GetMapping("/")
   public String dashboard (@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-    model.addAttribute("teacherList", teacherServiceImp.getAllUser());
-    model.addAttribute("studentsStudying", studentServiceImp.findAllStudentStudying());
-    model.addAttribute("classList", classServiceImp.getAllClassInCurrentYear());
-    model.addAttribute("blogList", blogServiceImp.FindAllBlog());
+    model.addAttribute("totalTeacher", teacherServiceImp.countTeacher());
+    model.addAttribute("totalStudent", studentServiceImp.countAllStudent());
+    model.addAttribute("totalClass", classServiceImp.countAllClass());
+    model.addAttribute("totalBlog", blogServiceImp.countAllBlog());
 
     return "/admin/index";
   }

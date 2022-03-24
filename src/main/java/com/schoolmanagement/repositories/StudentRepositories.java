@@ -11,11 +11,22 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface StudentRepositories extends PagingAndSortingRepository<User, Integer> {
-	@Query(value = "SELECT u FROM User u WHERE u.userInfo.admissionYear = :admissionYear")
+	@Query(value = "SELECT u.* "
+			+ "FROM user AS u "
+			+ "INNER JOIN user_role AS ur ON u.id = ur.user_id "
+			+ "INNER JOIN role AS r ON r.id = ur.role_id "
+			+ "INNER JOIN user_info AS ui ON u.user_info_id = ui.id "
+			+ "WHERE ur.role_id = 4 AND ui.admission_year = :admissionYear", nativeQuery = true)
 	List<User> findAllByAdmissionYear(@Param("admissionYear") Integer admissionYear);
 
-	@Query(value = "SELECT u FROM User u WHERE u.fullName LIKE %:fullName% AND u.userInfo.aClass.className LIKE %:class%")
-	Page<User> findStudentByFullNameAndClass(@Param("fullName") String fullName, @Param("class") String className, Pageable pageable);
+	@Query(value = "SELECT u.* "
+			+ "FROM user AS u "
+			+ "INNER JOIN user_role AS ur ON u.id = ur.user_id "
+			+ "INNER JOIN role AS r ON r.id = ur.role_id "
+			+ "INNER JOIN user_info AS ui ON u.user_info_id = ui.id "
+			+ "INNER JOIN class AS c ON c.id = ui.class_id "
+			+ "WHERE ur.role_id = 4 AND u.full_name LIKE %:fullName% AND c.class_name LIKE %:className%", nativeQuery = true)
+	Page<User> findStudentByFullNameAndClass(@Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
 
 	@Query(value = "SELECT s FROM User s WHERE s.fullName LIKE %:fullName% AND s.userInfo.status = :status AND s.aClass.className LIKE %:class%")
 	Page<User> findStudentByFullNameAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,
@@ -59,6 +70,12 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 	Page<User> findStudentByListClassAndGrade(@Param("classList") Collection<Class> classList,
 			@Param("fullName") String fullName, @Param("className") String className, @Param("grade") Integer grade, Pageable pageable);
 
-
+	@Query(value = "SELECT COUNT(u.id) "
+			+ "FROM user AS u "
+			+ "INNER JOIN user_role AS ur ON u.id = ur.user_id "
+			+ "INNER JOIN role AS r ON r.id = ur.role_id "
+			+ "INNER JOIN user_info AS ui ON ui.id = u.user_info_id "
+			+ "WHERE ur.role_id = 4 AND ui.status = 1", nativeQuery = true)
+	int countAllStudent();
 	
 }

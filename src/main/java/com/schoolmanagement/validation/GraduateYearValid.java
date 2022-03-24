@@ -10,10 +10,10 @@ import javax.validation.Payload;
 
 @Target( {ElementType.TYPE, ElementType.ANNOTATION_TYPE} )
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DuplicateUsernameValidator.class)
+@Constraint(validatedBy = GraduateYearValidator.class)
 @Documented
-public @interface DuplicateUsername {
-  String message() default "An account already exists for this username.";
+public @interface GraduateYearValid {
+  String message() default "Graduate year must be greater than admission year";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

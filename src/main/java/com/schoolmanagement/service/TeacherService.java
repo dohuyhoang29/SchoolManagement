@@ -2,31 +2,28 @@ package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
+import com.schoolmanagement.model.request.TeacherDetailRequest;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface TeacherService {
-	void saveUser(InsertTeacherRequest user);
+	void saveUser(InsertTeacherRequest user, MultipartFile multipartFile);
 
 	Iterable<User> saveAllUser(Iterable<User> list);
 
+	void updateTeacher(EditTeacherRequest editTeacherRequest, MultipartFile multipartFile);
+
 	List<User> getAllUser();
 
-	Page<User> getAllUserByPage(int pageNumber, String sortField, String sortDir);
-
-	Page<User> searchUserByFullName(String fullName, int pageNumber, String sortField, String sortDir);
-
-	Page<User> searchUserByFullNameAndDeleted(String fullName, Boolean deleted, int pageNumber, String sortField,
-			String sortDir);
-
-	User getUserByUsername(String username);
-
-	User getUserByEmail(String email);
+	Page<User> searchTeacher(int pageNumber, String fullName, String status, String sortField, String sortDir);
 
 	User findByUserId(int id);
+
+	TeacherDetailRequest findTeacherDetail(Integer id);
 
 	EditTeacherRequest getUserById(Integer id);
 
@@ -34,7 +31,7 @@ public interface TeacherService {
 
 	void makeWorking(Integer id);
 	
-	List<User> findByFullName(String name);
+	int countTeacher();
 	
 	void deleterole(int roleid , int userid);
 }

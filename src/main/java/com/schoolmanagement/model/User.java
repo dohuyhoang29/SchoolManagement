@@ -86,6 +86,12 @@ public class User {
   @JoinColumn(name = "user_info_id", referencedColumnName = "id")
   private UserInfo userInfo;
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "user_role",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private List<Role> userRole;
+
   @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
   @JoinTable(name = "user_role",
       joinColumns = @JoinColumn(name = "user_id"),
@@ -129,12 +135,12 @@ public class User {
     this.roles.add(role);
   }
 
-  public String getUserImagePath() {
+  public String getTeacherImagePath() {
     if (image == null && id == null) {
       return null;
     }
 
-    return "/upload/image/user_image/" + image;
+    return "/upload/image/teacher_image/" + image;
   }
 
   public String getStudentImagePath() {

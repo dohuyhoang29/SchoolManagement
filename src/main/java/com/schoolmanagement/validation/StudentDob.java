@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target( {ElementType.TYPE, ElementType.ANNOTATION_TYPE} )
+@Target( {ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.TYPE} )
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DuplicateUsernameValidator.class)
+@Constraint(validatedBy = StudentDobValidator.class)
 @Documented
-public @interface DuplicateUsername {
-  String message() default "An account already exists for this username.";
+public @interface StudentDob {
+  String message() default "Student must be 16 year old";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

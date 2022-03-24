@@ -25,4 +25,6 @@ public interface ClassService {
   Class getClassByClassName (String className);
 
   List<Class> getAllClassInCurrentYear();
+
+  int countAllClass();
 }

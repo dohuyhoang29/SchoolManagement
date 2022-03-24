@@ -2,12 +2,15 @@ package com.schoolmanagement.service;
 
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.StudentRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface StudentService {
-	void saveStudent(User user);
+	void saveStudent(StudentRequest studentRequest, MultipartFile multipartFile) throws IOException;
 
 	Iterable<User> getAllStudent();
 
@@ -28,4 +31,6 @@ public interface StudentService {
 	List<User> findAllStudentStudying();
 
 	List<User> findAllByAdmissionYear(Integer admissionYear);
+
+	int countAllStudent();
 }

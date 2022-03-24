@@ -83,4 +83,9 @@ public class ClassServiceImp implements ClassService {
 		return classList;
 	}
 
+	@Override
+	public int countAllClass() {
+		return classRepositories.countAll();
+	}
+
 }

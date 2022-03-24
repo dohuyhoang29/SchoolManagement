@@ -1,12 +1,10 @@
 package com.schoolmanagement.model.request;
 
 import com.schoolmanagement.model.Role;
+import com.schoolmanagement.validation.AdmissionYearValid;
 import com.schoolmanagement.validation.DuplicateEmail;
-import com.schoolmanagement.validation.DuplicateUsername;
-import com.schoolmanagement.validation.EndDateValid;
-import com.schoolmanagement.validation.PasswordMatches;
-import com.schoolmanagement.validation.StartDateValid;
-import com.schoolmanagement.validation.TeacherDob;
+import com.schoolmanagement.validation.GraduateYearValid;
+import com.schoolmanagement.validation.StudentDob;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,55 +27,42 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @NoArgsConstructor
-@PasswordMatches
-@StartDateValid
-@EndDateValid
-@DuplicateUsername
 @DuplicateEmail
-public class InsertTeacherRequest {
+@AdmissionYearValid
+@GraduateYearValid
+public class StudentRequest {
 
   private Integer id;
 
   @NotEmpty(message = "Enter full name")
   private String fullName;
 
-  @NotEmpty(message = "Enter username")
-  private String username;
-
-  @NotEmpty(message = "Enter password")
-  private String password;
-
-  @NotEmpty(message = "Enter confirm password")
-  private String confirmPassword;
-
   @NotEmpty(message = "Enter email")
   private String email;
 
-  @Pattern(regexp = "(^$|[0-9]{10})", message = "Is valid phone number")
+  @Pattern(regexp = "(^$|[0-9]{10})", message = "Invalid phone number")
   @NotEmpty(message = "Enter phone number")
   private String phone;
 
   @NotNull(message = "Enter date of birth")
-  @TeacherDob
+  @StudentDob
   @DateTimeFormat(pattern = "MM/dd/yyyy")
   private LocalDate dob;
 
   @NotEmpty(message = "Enter address")
   private String address;
 
-  private LocalDateTime createdDate;
-
-  private LocalDateTime updatedDate;
-
   private String image;
 
   @Valid
-  public TeacherInfoRequest userInfo;
+  public StudentInfoRequest userInfo;
 
-  private Set<Role> roles = new HashSet<>();
+  public String getStudentImagePath() {
+    if (image == null && id == null) {
+      return null;
+    }
 
-  public void addRole(Role role) {
-    this.roles.add(role);
+    return "/upload/image/student_image/" + image;
   }
 
   public void setImage(MultipartFile multipartFile, String folderSrc) throws IOException {

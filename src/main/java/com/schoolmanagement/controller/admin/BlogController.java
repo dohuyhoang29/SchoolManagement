@@ -1,5 +1,6 @@
 package com.schoolmanagement.controller.admin;
 
+import com.schoolmanagement.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +29,7 @@ public class BlogController {
 	private BlogServiceImp blogServiceImp;
 
 	@Autowired
-	private TeacherServiceImp teacherServiceImp;
+	private UserService userService;
 	
 	@GetMapping("/show/blog")
 	public String IndexBlog(Model model, Authentication authentication) {
@@ -69,7 +70,7 @@ public class BlogController {
 	@PostMapping("/save/blog")
 	public String save(Model model, @Valid Blog blogs , Authentication authentication) {
 		
-		User user = teacherServiceImp.getUserByUsername(authentication.getName());
+		User user = userService.getUserByUsername(authentication.getName());
 		blogs.setUser(user);
 		blogs.setCreatedDate(LocalDate.now());
 		blogs.setUpdatedDate(LocalDateTime.now());
@@ -81,9 +82,9 @@ public class BlogController {
 	@GetMapping("/edit/blog/{id}")
 	public String Edit(Model model , @PathVariable("id") int id) {
 		Blog blogs = blogServiceImp.findByIdBlog(id);
-		User user = teacherServiceImp.findByUserId(blogs.getUser().getId());
+//		User user = userService.findByUserId(blogs.getUser().getId());
 		model.addAttribute("blogs", blogs);
-		model.addAttribute("users", user);
+//		model.addAttribute("users", user);
 
 		return "/admin/blog/form_blog";
 	}

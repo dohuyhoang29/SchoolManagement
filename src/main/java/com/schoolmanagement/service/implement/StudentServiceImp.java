@@ -1,30 +1,76 @@
 package com.schoolmanagement.service.implement;
 
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.StudentRequest;
+import com.schoolmanagement.repositories.StudentRepositories;
+import com.schoolmanagement.service.StudentService;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-
+import javax.persistence.EntityManager;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.repositories.StudentRepositories;
-import com.schoolmanagement.service.StudentService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class StudentServiceImp implements StudentService {
 
 	@Autowired
 	private StudentRepositories repositories;
+	@Autowired
+	private ModelMapper modelMapper;
+	@Autowired
+	private EntityManager entityManager;
 
 	@Override
-	public void saveStudent(User student) {
-		repositories.save(student);
+	public void saveStudent(StudentRequest studentRequest, MultipartFile multipartFile) {
+		try {
+			studentRequest.setImage(multipartFile, "upload/image/student_image/");
+		} catch (IOException e) {
+			System.out.println("Can not found file");
+		}
+
+
+		if (studentRequest.getId() == null) {
+			User student = modelMapper.map(studentRequest, User.class);
+			int size = repositories.findAllByAdmissionYear(student.getUserInfo().getAdmissionYear()).size();
+			student.setUsername("std_" + studentRequest.getUserInfo().getAdmissionYear() + "_" + (size+ 1));
+
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			student.setPassword(encoder.encode("123456"));
+
+			student.setCreatedDate(LocalDateTime.now());
+			student.setUpdatedDate(LocalDateTime.now());
+
+			Role role = entityManager.find(Role.class, 4);
+			student.addRole(role);
+
+			repositories.save(student);
+		} else {
+			Optional<User> check = repositories.findById(studentRequest.getId());
+
+			if (check.isPresent()) {
+				User student = check.get();
+				modelMapper.map(studentRequest, student);
+				student.setUpdatedDate(LocalDateTime.now());
+				repositories.save(student);
+			} else {
+				System.out.println("Can not found student");
+			}
+		}
+
+
 	}
 
 	@Override
@@ -82,7 +128,7 @@ public class StudentServiceImp implements StudentService {
 	public Page<User> findStudentByClassId(int id , String search , int page) {
 		Sort sort = Sort.by("fullName");
 		Pageable pageable = PageRequest.of(page -1 , 8 ,sort );
-		
+
 		return repositories.findByClassId(id, search,pageable);
 	}
 
@@ -127,6 +173,11 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public List<User> findAllByAdmissionYear(Integer admissionYear) {
 		return repositories.findAllByAdmissionYear(admissionYear);
+	}
+
+	@Override
+	public int countAllStudent() {
+		return repositories.countAllStudent();
 	}
 
 }

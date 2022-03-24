@@ -27,7 +27,7 @@ public class StudentEvaluateController {
   @Autowired
   private StudentEvaluateServiceImp studentEvaluateServiceImp;
 
-  @PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
+  @PreAuthorize("hasAnyAuthority('TEACHER')")
   @GetMapping("/insert/evaluate/{student-id}/{semester}")
   public String insertStudentEvaluate(@PathVariable("student-id") Integer studentId, Model model,
       @PathVariable("semester") Integer semester) {

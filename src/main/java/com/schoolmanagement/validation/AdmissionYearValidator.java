@@ -1,0 +1,41 @@
+package com.schoolmanagement.validation;
+
+import com.schoolmanagement.model.User;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class AdmissionYearValidator implements ConstraintValidator<AdmissionYearValid, Object> {
+  @Autowired
+  private ModelMapper modelMapper;
+
+  private String message;
+
+  @Override
+  public void initialize(AdmissionYearValid constraintAnnotation) {
+    this.message = constraintAnnotation.message();
+  }
+
+  @Override
+  public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
+    User user = modelMapper.map(o, User.class);
+    boolean isValid;
+
+    if (user.getUserInfo().getAdmissionYear() == null || user.getDob() == null) {
+      return true;
+    }
+    Integer admission = user.getUserInfo().getAdmissionYear();
+    Integer dob = user.getDob().getYear();
+
+    isValid = admission - dob >= 16;
+
+    if (!isValid) {
+      constraintValidatorContext.disableDefaultConstraintViolation();
+      constraintValidatorContext.buildConstraintViolationWithTemplate(message)
+          .addPropertyNode("userInfo.admissionYear").addConstraintViolation();
+    }
+
+    return isValid;
+  }
+}

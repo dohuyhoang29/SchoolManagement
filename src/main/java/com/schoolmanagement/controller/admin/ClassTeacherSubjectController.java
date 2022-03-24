@@ -1,5 +1,6 @@
 package com.schoolmanagement.controller.admin;
 
+import com.schoolmanagement.service.ClassService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import com.schoolmanagement.service.implement.TeacherServiceImp;
 @Controller
 public class ClassTeacherSubjectController {
 	@Autowired
-	private ClassServiceImp classServiceImp;
+	private ClassService classService;
 
 	
 	@Autowired
@@ -40,7 +41,7 @@ public class ClassTeacherSubjectController {
 	@GetMapping("/updateClassTeacher/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
 		model.addAttribute("userList", teacherServiceImp.getAllUser());
-		model.addAttribute("class", classServiceImp.getClassById(id));
+		model.addAttribute("class", classService.getClassById(id));
 		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
 
 		return "/admin/class/update_classTeacher";
@@ -54,7 +55,7 @@ public class ClassTeacherSubjectController {
 			ClassTeacherSubject cts = new ClassTeacherSubject();
 			User users = teacherServiceImp.findByUserId(dr.get(i).getUserid());
 			Subjects subjects = subjectServiceImp.findBySubjectID(dr.get(i).getSubjectId());
-			com.schoolmanagement.model.Class class_u = classServiceImp.getClassById(dr.get(i).getClassid());
+			com.schoolmanagement.model.Class class_u = classService.getClassById(dr.get(i).getClassid());
 			ClassTeacherSubject e = classTeacherSubjectServiceImp.findByIdOther(subjects.getId(), class_u.getId());
 			
 			if(e != null && e.getId() != 0) {

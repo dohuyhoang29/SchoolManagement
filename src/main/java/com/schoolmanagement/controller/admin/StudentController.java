@@ -7,37 +7,32 @@ import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.StudentRequest;
 import com.schoolmanagement.service.ClassService;
 import com.schoolmanagement.service.ClassTeacherSubjectService;
 import com.schoolmanagement.service.StudentEvaluateService;
 import com.schoolmanagement.service.StudentService;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class StudentController {
+
   @Autowired
   private StudentService studentService;
   @Autowired
@@ -58,6 +54,8 @@ public class StudentController {
   private StudentEvaluateService studentEvaluateService;
   @Autowired
   private EntityManager entityManager;
+  @Autowired
+  private ModelMapper modelMapper;
 
   @GetMapping("/show/student")
   public String listStudent(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
@@ -80,19 +78,15 @@ public class StudentController {
     } else {
       Set<Class> classList = classTeacherSubjectService.findAllByTeacher(accountDetails.getId());
 
-      page = studentService.findAllStudentByListClass(classList, currentPage, sortField, sortDir, search, grade, className);
+      page = studentService.findAllStudentByListClass(classList, currentPage, sortField, sortDir,
+          search, grade, className);
     }
 
     assert page != null;
     int totalPages = page.getTotalPages();
-    List<User> studentList = new ArrayList<>();
-    for (User user : page.getContent()) {
-      if (user.hasRole("STUDENT")) {
-        studentList.add(user);
-      }
-    }
 
-    model.addAttribute("studentList", studentList);
+
+    model.addAttribute("studentList", page.getContent());
     model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPages", totalPages);
     model.addAttribute("sortField", sortField);
@@ -112,88 +106,25 @@ public class StudentController {
 
   @GetMapping("/insert/student")
   public String insertStudent(Model model) {
-    model.addAttribute("user", new User());
+    model.addAttribute("user", new StudentRequest());
     model.addAttribute("classList", classService.getAllClass());
 
     return "/admin/student/form_student";
   }
 
   @PostMapping("/save/student")
-  public String saveStudent(@Valid User user, BindingResult result,
+  public String saveStudent(@Valid @ModelAttribute("user") StudentRequest studentRequest, BindingResult result,
       @RequestParam("fileImage") MultipartFile multipartFile, Model model,
       RedirectAttributes rdrAttr) throws IOException {
-
-    String root = "src/main/";
-    String folder = "upload/image/student_image/";
-    String org_filename = multipartFile.getOriginalFilename();
-    String str_filename = "";
-    if (org_filename != null && !org_filename.isEmpty()) {
-      str_filename = UUID.randomUUID() + org_filename.substring(org_filename.lastIndexOf('.'));
-
-      if (!Files.exists(Paths.get(root + folder))) {
-        Files.createDirectories(Paths.get(root + folder));
-      }
-      Files.copy(multipartFile.getInputStream(), Paths.get(root + folder + str_filename),
-          StandardCopyOption.REPLACE_EXISTING);
-
-      user.setImage(str_filename);
-    }
-    if (user.getId() == null) {
-      int size = studentService.findAllByAdmissionYear(user.getUserInfo().getAdmissionYear()).size();
-      user.setUsername("std_" + user.getUserInfo().getAdmissionYear() + "_" + (size+ 1));
-      if (user.getUserInfo().getAdmissionYear()== null) {
-        result.rejectValue("userInfo.admissionYear", "error.user.userInfo", "Enter Admission Year");
-      }
-      if (user.getUserInfo().getGraduateYear()== null) {
-        result.rejectValue("userInfo.graduateYear", "error.user.userInfo", "Enter Graduate Year");
-      }
-      if (user.getUserInfo().getStatus()== null) {
-        result.rejectValue("userInfo.status", "error.user.userInfo", "Choose a status");
-      }
-      if (user.getUserInfo().getAClass()== null) {
-        result.rejectValue("userInfo.aClass", "error.user.userInfo", "Choose a class");
-      }
-      if (user.getUsername().equalsIgnoreCase("")) {
-        result.rejectValue("username", "error.user", "Enter username");
-      }
-
-      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-      String rawPassword = "123456";
-      String encoderPassword = encoder.encode(rawPassword);
-      user.setPassword(encoderPassword);
-
-      user.setCreatedDate(LocalDateTime.now());
-      user.setUpdatedDate(LocalDateTime.now());
-    } else {
-      user.setUsername(user.getUsername());
-      user.setPassword(user.getPassword());
-
-      user.setCreatedDate(user.getCreatedDate());
-      user.setUpdatedDate(LocalDateTime.now());
-    }
-
-    if (user.getUserInfo().getGraduateYear() != null && user.getUserInfo().getAdmissionYear() != null) {
-      if (user.getUserInfo().getAdmissionYear() > user.getUserInfo().getGraduateYear()) {
-        result.rejectValue("graduateYear", "error.student", "Graduate Year must be greater than Admission Year");
-      }
-    }
-
-    if (user.getDob() != null) {
-      if (LocalDateTime.now().getYear() - user.getDob().getYear() < 16) {
-        result.rejectValue("dob", "error.student", "Students must be 16 years old");
-      }
-    }
-    Role role = entityManager.find(Role.class, 4);
-    user.addRole(role);
 
     if (result.hasErrors()) {
       model.addAttribute("classList", classService.getAllClass());
 
       return "/admin/student/form_student";
     }
-    studentService.saveStudent(user);
+    studentService.saveStudent(studentRequest, multipartFile);
 
-    if (user.getId() == null) {
+    if (studentRequest.getId() == null) {
       rdrAttr.addFlashAttribute("message", "Add student successfully");
     } else {
       rdrAttr.addFlashAttribute("message", "Edit student successfully");
@@ -212,25 +143,39 @@ public class StudentController {
   @GetMapping("/show/student/search")
   public String searchStudent(@RequestParam("search") String search,
       @RequestParam("status") String status, @RequestParam("grade") String grade,
-      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestParam("class-name") String className,
+      @AuthenticationPrincipal AccountDetails accountDetails,
       @RequestParam("school-year") String schoolYear, Model model) {
 
-    return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear, accountDetails);
+    return listStudentByPage(model, 1, "id", "asc", search, status, grade, className, schoolYear,
+        accountDetails);
   }
 
   @GetMapping("/show/student/teacher/search")
-  public String searchStudentForTeacher(@RequestParam("search") String search, @RequestParam("grade") String grade,
-      @RequestParam("class-name") String className, @AuthenticationPrincipal AccountDetails accountDetails, Model model) {
+  public String searchStudentForTeacher(@RequestParam("search") String search,
+      @RequestParam("grade") String grade,
+      @RequestParam("class-name") String className,
+      @AuthenticationPrincipal AccountDetails accountDetails, Model model) {
 
-    return listStudentByPage(model, 1, "id", "asc", search, "all", grade, className, "", accountDetails);
+    return listStudentByPage(model, 1, "id", "asc", search, "all", grade, className, "",
+        accountDetails);
   }
 
   @GetMapping("/edit/student/{id}")
-  public String editStudent(@PathVariable("id") Integer id, Model model){
-    model.addAttribute("user", studentService.getStudentById(id));
+  public String editStudent(@PathVariable("id") Integer id, Model model) {
+    StudentRequest studentRequest = modelMapper.map(studentService.getStudentById(id), StudentRequest.class);
+
+    model.addAttribute("user", studentRequest);
     model.addAttribute("classList", classService.getAllClass());
 
     return "/admin/student/form_student";
+  }
+
+  @PostMapping("/student/update")
+  public String updateStudent() {
+
+
+    return "redirect:/show/student";
   }
 
   @RequestMapping("/export/student")
@@ -257,7 +202,8 @@ public class StudentController {
     if (multipartFile != null) {
       StudentExcelImporter excelImporter = new StudentExcelImporter();
       Role role = entityManager.find(Role.class, 4);
-      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentService, classService, role);
+      Iterable<User> studentList = excelImporter.excelImport(multipartFile, studentService,
+          classService, role);
       studentService.saveAlLStudent(studentList);
     }
 

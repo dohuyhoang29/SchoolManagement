@@ -12,4 +12,6 @@ public interface BlogService {
   Blog findByIdBlog(int id);
 
   Page<Blog> searchBlog(String search, String fromDate, String toDate, int currentPage, String sortField, String sortDir);
+
+  int countAllBlog();
 }

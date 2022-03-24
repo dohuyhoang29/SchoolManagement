@@ -28,4 +28,7 @@ public interface ClassRepositories extends PagingAndSortingRepository<Class, Int
 
 	@Query(value = "SELECT c FROM Class c JOIN ClassTeacherSubject cts ON c.id = cts.theClass.id WHERE cts.users.id = :teacherID")
 	Page<Class> getAllByTeacherId(@Param("teacherID") Integer id, Pageable pageable);
+
+	@Query(value = "SELECT COUNT(c.id) from Class c")
+	int countAll();
 }

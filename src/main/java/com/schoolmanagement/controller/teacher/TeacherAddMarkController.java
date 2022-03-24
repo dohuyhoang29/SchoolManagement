@@ -1,5 +1,6 @@
 package com.schoolmanagement.controller.teacher;
 
+import com.schoolmanagement.service.UserService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class TeacherAddMarkController {
 	private StudentServiceImp studentServiceImp;
 
 	@Autowired
-	private TeacherServiceImp teacherServiceImp;
+	private UserService userService;
 
 	@Autowired
 	private SubjectServiceImp subjectServiceImp;
@@ -55,7 +56,7 @@ public class TeacherAddMarkController {
 	public String IndexAddMark(Model model, @PathVariable("classid") int id,
 			@AuthenticationPrincipal AccountDetails accountDetails) {
 		com.schoolmanagement.model.Class c = classServiceImpl.getClassById(id);
-		User u = teacherServiceImp.getUserByUsername(accountDetails.getUsername());
+		User u = userService.getUserByUsername(accountDetails.getUsername());
 		List<User> s = studentServiceImp.findAllStudentByClassId(id);
 		ClassTeacherSubject cts = classTeacherSubjectServiceImp.findByIdOther(u.getId(), c.getId());
 
@@ -73,7 +74,7 @@ public class TeacherAddMarkController {
 				list.addAll(
 						markServiceImp.findByOtherId(m.getSubjects(), m.getStudents(), m.getType(), m.getSemester()));
 			}
-			User user = teacherServiceImp.findByUserId(m.getCreatedBy());
+			User user = userService.findByUserId(m.getCreatedBy());
 			User student = studentServiceImp.getStudentById(m.getStudents());
 			Subjects subjects = subjectServiceImp.findBySubjectID(m.getSubjects());
 

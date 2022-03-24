@@ -6,7 +6,9 @@ import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
+import com.schoolmanagement.model.request.TeacherManagementRequest;
 import com.schoolmanagement.service.TeacherService;
+import com.schoolmanagement.service.UserService;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,9 +16,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -35,42 +39,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TeacherController {
-
   @Autowired
   private TeacherService teacherService;
-
+  @Autowired
+  private UserService userService;
   @Autowired
   private EntityManager entityManager;
+  @Autowired
+  private ModelMapper modelMapper;
 
   @GetMapping("/show/teacher/{page}")
   public String listTeacherByPage(Model model, @PathVariable("page") int currentPage,
       @Param("sortField") String sortField, @Param("sortDir") String sortDir,
-      @Param("search") String search,
-      @Param("status") String status) {
-    Page<User> page;
+      @Param("search") String search, @Param("status") String status) {
+    Page<User> page = teacherService.searchTeacher(currentPage, search, status, sortField, sortDir);
 
-    if (status.equalsIgnoreCase("all")) {
-      page = teacherService.searchUserByFullName(search, currentPage, sortField, sortDir);
-    } else if (status.equalsIgnoreCase("true")) {
-      page = teacherService.searchUserByFullNameAndDeleted(search, true, currentPage, sortField,
-          sortDir);
-    } else {
-      page = teacherService.searchUserByFullNameAndDeleted(search, false, currentPage, sortField,
-          sortDir);
-    }
-    long totalItems = page.getTotalElements();
+    List<TeacherManagementRequest> list = page.getContent().stream().map(user -> modelMapper.map(user, TeacherManagementRequest.class)).collect(
+        Collectors.toList());
     int totalPages = page.getTotalPages();
-    List<User> listUser = new ArrayList<>();
 
-    for (User user : page.getContent()) {
-      if (user.hasRole("TEACHER")) {
-        listUser.add(user);
-      }
-    }
-
-    model.addAttribute("listUser", listUser);
+    model.addAttribute("listUser", list);
     model.addAttribute("currentPage", currentPage);
-    model.addAttribute("totalItems", totalItems);
     model.addAttribute("totalPages", totalPages);
     model.addAttribute("sortField", sortField);
     model.addAttribute("sortDir", sortDir);
@@ -79,6 +68,7 @@ public class TeacherController {
 
     String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
     model.addAttribute("reverseSortDir", reverseSortDir);
+
     return "/admin/teacher/teacher_management";
   }
 
@@ -89,7 +79,7 @@ public class TeacherController {
 
   @GetMapping("/show/teacher/details/{id}")
   public String teacherDetails(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("user", teacherService.getUserById(id));
+    model.addAttribute("user", teacherService.findTeacherDetail(id));
 
     return "/admin/teacher/teacher_details";
   }
@@ -106,27 +96,27 @@ public class TeacherController {
       BindingResult result, @RequestParam("fileImage") MultipartFile multipartFile,
       RedirectAttributes rdrAttr) throws IOException {
 
-    Role role = entityManager.find(Role.class, 2);
-    user.addRole(role);
-
-    user.setImage(multipartFile, "upload/image/user_image/");
-
-    user.setCreatedDate(LocalDateTime.now());
-    user.setUpdatedDate(LocalDateTime.now());
-
     if (result.hasErrors()) {
       return "/admin/teacher/form_teacher";
     }
 
     rdrAttr.addFlashAttribute("message", "Add teacher successfully");
-    teacherService.saveUser(user);
+    teacherService.saveUser(user, multipartFile);
 
     return "redirect:/show/teacher";
   }
 
   @PostMapping("/teacher/update")
-  public String updateTeacher(EditTeacherRequest editTeacherRequest) {
+  public String updateTeacher(@Valid @ModelAttribute("user") EditTeacherRequest user,
+      BindingResult result,
+      @RequestParam("fileImage") MultipartFile multipartFile, RedirectAttributes attributes) {
+    if (result.hasErrors()) {
+      return "/admin/teacher/edit_teacher";
+    }
 
+    teacherService.updateTeacher(user, multipartFile);
+
+    attributes.addFlashAttribute("message", "Edit teacher successfully");
 
     return "redirect:/show/teacher";
   }
