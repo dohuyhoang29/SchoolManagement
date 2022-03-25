@@ -34,8 +34,6 @@ public class SubjectRequest {
 		this.subjectId = subjectId;
 	}
 
-	
-
 	public int getType() {
 		return type;
 	}

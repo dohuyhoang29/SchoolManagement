@@ -3,6 +3,7 @@ package com.schoolmanagement.service;
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
 import com.schoolmanagement.model.request.TeacherDetailRequest;
+import com.schoolmanagement.model.request.TeacherManagementRequest;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

@@ -7,7 +7,10 @@ import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.ResetPasswordRequest;
+import com.schoolmanagement.model.request.StudentManagementRequest;
 import com.schoolmanagement.model.request.StudentRequest;
+import com.schoolmanagement.model.request.TeacherManagementRequest;
 import com.schoolmanagement.service.ClassService;
 import com.schoolmanagement.service.ClassTeacherSubjectService;
 import com.schoolmanagement.service.StudentEvaluateService;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -82,13 +86,12 @@ public class StudentController {
           search, grade, className);
     }
 
-    assert page != null;
-    int totalPages = page.getTotalPages();
+    List<StudentManagementRequest> list = page.getContent().stream().map(
+        user -> modelMapper.map(user, StudentManagementRequest.class)).collect(Collectors.toList());
 
-
-    model.addAttribute("studentList", page.getContent());
+    model.addAttribute("studentList", list);
     model.addAttribute("currentPage", currentPage);
-    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalPages", page.getTotalPages());
     model.addAttribute("sortField", sortField);
     model.addAttribute("search", search);
     model.addAttribute("status", status);

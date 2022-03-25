@@ -3,6 +3,7 @@ package com.schoolmanagement.service.implement;
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
 import com.schoolmanagement.model.request.TeacherDetailRequest;
+import com.schoolmanagement.model.request.TeacherManagementRequest;
 import com.schoolmanagement.repositories.TeacherRepositories;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +88,7 @@ public class TeacherServiceImp implements TeacherService {
 
 		for (User user : repo.findAll()) {
 			for (Role role : user.getRoles()) {
-				if (role.getRoleID() == 2) {
+				if (role.getId() == 2) {
 					list.add(user);
 				}
 			}
@@ -101,27 +103,14 @@ public class TeacherServiceImp implements TeacherService {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
 		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
-		List<User> listCheck;
-		List<User> list = new ArrayList<>();
 
 		if (status.equalsIgnoreCase("all")) {
-			listCheck = teacherRepositories.searchUsersByFullName(fullName);
+			return teacherRepositories.searchUsersByFullName(fullName, page);
 		} else if (status.equalsIgnoreCase("true")) {
-			listCheck = teacherRepositories.searchUsersByFullNameAndDeleted(fullName, true);
+			return teacherRepositories.searchUsersByFullNameAndDeleted(fullName, true, page);
 		} else {
-			listCheck = teacherRepositories.searchUsersByFullNameAndDeleted(fullName, false);
+			return teacherRepositories.searchUsersByFullNameAndDeleted(fullName, false, page);
 		}
-
-		for (User user: listCheck) {
-			if (user.hasRole("TEACHER")) {
-				list.add(user);
-			}
-		}
-
-		int start = (int) page.getOffset();
-		int end = (int) ((start + page.getPageSize()) > list.size() ? list.size() : (start + page.getPageSize()));
-
-		return new PageImpl<>(list.subList(start, end), page, list.size());
 	}
 
 	@Override

@@ -19,4 +19,6 @@ public class StudentInfoRequest {
 
   @NotNull(message = "Choose a status")
   private Integer status;
+
+  private Class aClass;
 }

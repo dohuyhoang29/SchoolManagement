@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal: modalAbandonedCart-->
+    <!-- Modal: Import Teacher-->
     <div class="modal fade right" id="modalAbandonedCart" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel"
          aria-hidden="true" data-backdrop="false">
@@ -98,7 +98,58 @@
         <!--/.Content-->
       </div>
     </div>
-    <!-- Modal: modalAbandonedCart-->
+    <!-- Modal: Import Teacher-->
+    <!-- Modal: Reset Password-->
+    <div class="modal fade right" th:each="reset : ${listResetPass}"
+         th:attr="id=${'modalResetPassword' + reset.id}" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+      <div class="modal-dialog modal-side modal-bottom-right modal-notify modal-info"
+           role="document">
+        <!--Content-->
+        <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+            <span class="heading font-weight-bold font-18">Reset Password of [[${reset.fullName}]]</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" class="white-text">&times;</span>
+            </button>
+          </div>
+          <!--Body-->
+          <form th:action="@{/reset-password/teacher/{id}(id=${reset.id})}" method="POST" th:object="${reset}">
+            <div class="modal-body">
+              <div class="row clearfix">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label>Password</label>
+<!--                    <input th:field="*{newPassword}" type="password">-->
+<!--                           th:classappend="${#fields.hasErrors('newPassword') ? 'form-control error-input' : 'form-control'}">-->
+<!--                    <p class="error-message" th:if="${#fields.hasErrors('newPassword')}"-->
+<!--                       th:errors="*{newPassword}"></p>-->
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label>Confirm Password</label>
+<!--                    <input th:field="*{confirmPassword}" type="password"-->
+<!--                           th:classappend="${#fields.hasErrors('confirmPassword') ? 'form-control error-input' : 'form-control'}">-->
+<!--                    <p class="error-message" th:if="${#fields.hasErrors('confirmPassword')}"-->
+<!--                       th:errors="*{confirmPassword}"></p>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+              <input type="submit" class="btn btn-info" value="Reset">
+              <a type="button" class="btn btn-outline-info waves-effect"
+                 data-dismiss="modal">Cancel</a>
+            </div>
+          </form>
+        </div>
+        <!--/.Content-->
+      </div>
+    </div>
+    <!-- Modal: Reset Password-->
     <div class="section-body mt-4">
       <div class="container-fluid">
         <div class="tab-content">
@@ -245,6 +296,8 @@
                                 title="Delete" data-type="confirm">Make Retired
                         </button>
                       </a>
+                      <button class="btn btn-sm js-sweetalert btn-secondary" data-toggle="modal"
+                         th:attr="data-target=${'#modalResetPassword'+users.id}" th:data="${users}">Reset Password</button>
                     </td>
                   </tr>
                 </th:block>

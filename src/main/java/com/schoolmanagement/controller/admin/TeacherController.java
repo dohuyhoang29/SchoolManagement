@@ -6,14 +6,13 @@ import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
+import com.schoolmanagement.model.request.ResetPasswordRequest;
 import com.schoolmanagement.model.request.TeacherManagementRequest;
 import com.schoolmanagement.service.TeacherService;
 import com.schoolmanagement.service.UserService;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TeacherController {
+
   @Autowired
   private TeacherService teacherService;
   @Autowired
@@ -54,13 +54,16 @@ public class TeacherController {
       @Param("search") String search, @Param("status") String status) {
     Page<User> page = teacherService.searchTeacher(currentPage, search, status, sortField, sortDir);
 
-    List<TeacherManagementRequest> list = page.getContent().stream().map(user -> modelMapper.map(user, TeacherManagementRequest.class)).collect(
-        Collectors.toList());
-    int totalPages = page.getTotalPages();
+    List<TeacherManagementRequest> list = page.getContent().stream().map(
+        user -> modelMapper.map(user, TeacherManagementRequest.class)).collect(Collectors.toList());
 
+    List<ResetPasswordRequest> listResetPass = page.getContent().stream().map(
+        user -> modelMapper.map(user, ResetPasswordRequest.class)).collect(Collectors.toList());
+
+    model.addAttribute("listResetPass", listResetPass);
     model.addAttribute("listUser", list);
     model.addAttribute("currentPage", currentPage);
-    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalPages", page.getTotalPages());
     model.addAttribute("sortField", sortField);
     model.addAttribute("sortDir", sortDir);
     model.addAttribute("search", search);
@@ -103,6 +106,11 @@ public class TeacherController {
     rdrAttr.addFlashAttribute("message", "Add teacher successfully");
     teacherService.saveUser(user, multipartFile);
 
+    return "redirect:/show/teacher";
+  }
+
+  @PostMapping("/reset-password/teacher")
+  public String resetPassword(@Valid ResetPasswordRequest resetPasswordRequest, BindingResult result) {
     return "redirect:/show/teacher";
   }
 

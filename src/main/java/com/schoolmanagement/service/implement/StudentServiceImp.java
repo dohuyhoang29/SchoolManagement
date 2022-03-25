@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -76,7 +77,7 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public Iterable<User> getAllStudent() {
 		List<User> list = new ArrayList<>();
-		for (User user : repositories.findAll()) {
+		for (User user : repositories.findAllStudent()) {
 			if (user.hasRole("STUDENT")) {
 				list.add(user);
 			}
@@ -121,6 +122,7 @@ public class StudentServiceImp implements StudentService {
 		if (!status.equalsIgnoreCase("all") && !grade.equalsIgnoreCase("") && !schoolYear.equalsIgnoreCase("")) {
 			return repositories.findStudent(fullName, Integer.parseInt(status), Integer.parseInt(grade), className, Integer.parseInt(schoolYear), page);
 		}
+
 		return null;
 	}
 
@@ -129,7 +131,7 @@ public class StudentServiceImp implements StudentService {
 		Sort sort = Sort.by("fullName");
 		Pageable pageable = PageRequest.of(page -1 , 8 ,sort );
 
-		return repositories.findByClassId(id, search,pageable);
+		return repositories.findByClassId(id, search, pageable);
 	}
 
 	@Override
@@ -149,6 +151,7 @@ public class StudentServiceImp implements StudentService {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
+
 		if (grade.equalsIgnoreCase("")) {
 			return repositories.findStudentByListClass(classList, fullName, className, pageable);
 		} else {
