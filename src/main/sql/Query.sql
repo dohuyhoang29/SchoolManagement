@@ -1,4 +1,3 @@
-ALTER user "root"@"localhost" IDENTIFIED BY ""
 
 USE school_management;
 
@@ -1162,6 +1161,27 @@ SET `image` = '2101e897-61c2-489f-86dc-8c03ab91360a.png'
 WHERE id BETWEEN 1 AND 50;
 
 
+SELECT COUNT(u.id)
+FROM user AS u
+INNER JOIN user_role AS ur ON u.id = ur.user_id
+INNER JOIN role AS r ON r.id = ur.role_id
+WHERE ur.role_id = 2 
+
+SELECT u.image, u.full_name, u.address, u.dob, ui.status, c.grade, c.class_name, c.school_year
+      FROM user AS u
+      INNER JOIN user_role AS ur ON u.id = ur.user_id 
+      INNER JOIN role AS r ON r.id = ur.role_id 
+      INNER JOIN user_info AS ui ON u.user_info_id = ui.id
+      INNER JOIN class AS c ON c.id = ui.class_id
+      WHERE ur.role_id = 4 AND c.grade = 10;
+
+FROM User AS u 
+INNER JOIN UserRole AS ur ON u.id = ur.pk.userId 
+INNER JOIN Role AS r ON r.id = ur.pk.roleId 
+INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id 
+INNER JOIN Class AS c ON c.id = ui.aClass.id 
+WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% 
+AND u.userInfo.aClass.grade = :grade AND u.aClass.className LIKE %:class%
 
 
 
@@ -1186,7 +1206,3 @@ WHERE id BETWEEN 1 AND 50;
 
 
 
-
-
-
-school_management
