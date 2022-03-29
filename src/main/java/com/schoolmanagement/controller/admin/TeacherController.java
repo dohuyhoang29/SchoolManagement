@@ -6,7 +6,6 @@ import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.EditTeacherRequest;
 import com.schoolmanagement.model.request.InsertTeacherRequest;
-import com.schoolmanagement.model.request.ResetPasswordRequest;
 import com.schoolmanagement.model.request.TeacherManagementRequest;
 import com.schoolmanagement.service.TeacherService;
 import com.schoolmanagement.service.UserService;
@@ -57,10 +56,6 @@ public class TeacherController {
     List<TeacherManagementRequest> list = page.getContent().stream().map(
         user -> modelMapper.map(user, TeacherManagementRequest.class)).collect(Collectors.toList());
 
-    List<ResetPasswordRequest> listResetPass = page.getContent().stream().map(
-        user -> modelMapper.map(user, ResetPasswordRequest.class)).collect(Collectors.toList());
-
-    model.addAttribute("listResetPass", listResetPass);
     model.addAttribute("listUser", list);
     model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPages", page.getTotalPages());
@@ -106,11 +101,6 @@ public class TeacherController {
     rdrAttr.addFlashAttribute("message", "Add teacher successfully");
     teacherService.saveUser(user, multipartFile);
 
-    return "redirect:/show/teacher";
-  }
-
-  @PostMapping("/reset-password/teacher")
-  public String resetPassword(@Valid ResetPasswordRequest resetPasswordRequest, BindingResult result) {
     return "redirect:/show/teacher";
   }
 

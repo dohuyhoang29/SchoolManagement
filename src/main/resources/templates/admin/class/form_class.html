@@ -9,14 +9,12 @@
 
   <!-- Bootstrap Core and vandor -->
   <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+
   <!--selectPickercss-->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+        rel="stylesheet"/>
   <!-- Core css -->
   <link rel="stylesheet" href="/css/style.min.css"/>
   <style>
@@ -84,17 +82,18 @@
                   <div class="card-header">
                     <h3 class="card-title">Basic Information</h3>
                   </div>
-                  	<div align="center" id="message"></div>             
+                  <div id="message"></div>
                   <div class="card-body">
-                    <form id="classInsertForm" class="formsubmit" th:action="@{/save/class}" method="post"
+                    <form id="classInsertForm" class="formsubmit" th:action="@{/save/class}"
+                          method="post"
                           th:object="${class}"
                           enctype="multipart/form-data">
                       <input type="hidden" th:field="*{id}">
                       <div class="row clearfix">
                         <div class="col-md-12 col-sm-12">
                           <div class="form-group">
-                            <label>Class Name</label>
-                            <input th:field="*{className}" type="text" id="className"
+                            <label for="class-name">Class Name</label>
+                            <input th:field="*{className}" type="text" id="class-name"
                                    th:classappend="${#fields.hasErrors('className') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('className')}"
                                th:errors="*{className}"></p>
@@ -102,8 +101,8 @@
                         </div>
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
-                            <label>Grade</label>
-                            <select class="form-control input-height" id="grade"  name="department"
+                            <label for="grade">Grade</label>
+                            <select class="form-control input-height changeStudent" id="grade" name="department"
                                     th:field="*{grade}">
                               <option th:field="*{grade}" value="10">10</option>
                               <option th:field="*{grade}" value="11">11</option>
@@ -115,10 +114,16 @@
                         </div>
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
-                            <label>School Year</label>
-                            <input th:field="*{schoolYear}" name="start-date" id="schoolYear"
-                                   class="yearpicker" data-date-autoclose="true"
-                                   th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">
+                            <label for="school-year">School Year</label>
+<!--                            <input th:field="*{schoolYear}" name="start-date" id="school-year"-->
+<!--                                   class="yearpicker changeStudent" data-date-autoclose="true"-->
+<!--                                   th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">-->
+                            <select class="form-control input-height changeStudent" id="school-year" name="department"
+                                    th:field="*{schoolYear}">
+                              <option th:field="*{schoolYear}" value="2022">2022</option>
+                              <option th:field="*{schoolYear}" value="2021">2021</option>
+                              <option th:field="*{schoolYear}" value="2020">2020</option>
+                            </select>
                             <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
                                th:errors="*{schoolYear}"></p>
                           </div>
@@ -126,7 +131,8 @@
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
                             <label>Homeroom Teacher</label>
-                            <select class="form-control input-height" name="department" id="hometeacher"
+                            <select class="form-control input-height" name="department"
+                                    id="hometeacher"
                                     th:field="*{user}">
                               <option th:each="user : ${userList}"
                                       th:value="${user.id}" th:utext="${user.fullName}"></option>
@@ -135,14 +141,26 @@
                                th:errors="*{user}"></p>
                           </div>
                         </div>
+                        <div class="col-12">
+                          <div class="form-group multi_select_box mt-2 mb-3">
+                            <label class="col-sm-12">Teachers</label>
+                            <select id="students" class="form-select col-sm-12" multiple
+                                    th:field="*{students}">
+                              <option th:each="user : ${studentList}"
+                                      th:field="*{students}"
+                                      th:value="${user.id}"
+                                      th:utext="${user.fullName}"></option>
+                            </select>
+                          </div>
+                        </div>
                         <div class="col-sm-12">
-	                         <button type="submit"  class="btn btn-primary">Save</button>
+                          <button type="submit" class="btn btn-primary">Save</button>
                           <a class="btn btn-secondary" th:href="@{/show/class}">Cancel</a>
                         </div>
                       </div>
                     </form>
                   </div>
-                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -150,8 +168,8 @@
       </div>
     </div>
   </div>
- </div>
-  
+</div>
+
 
 <script>
 
@@ -163,18 +181,41 @@
 <script src="/plugins/dropify/js/dropify.min.js"></script>
 <script src="/bundles/summernote.bundle.js"></script>
 <!--selectPicker-->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript" src="/SelectPicker.js"></script>
 <!-- Start project main js  and page js -->
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
-
 <script src="/js/ClassSubjectTeacher/CrudClassTeacherSubject.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#students').select2({
+      ajax: {
+        url: "/insert/class/student",
+        dataType: 'json',
+        data: function (params) {
+          // Query parameters will be ?search=[term]&type=public
+          return {
+            search: params.term,
+            schoolYear: $('#school-year').val(),
+            grade: $('#grade').val(),
+          };
+        },
+        processResults: function (data) {
+          return {
+            results: data
+          };
+        }
+        // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+      }
+    });
 
+    $(".changeStudent").change(function () {
+      $('#students').trigger('change');
+    });
+  })
+</script>
 </body>
 
 </html>

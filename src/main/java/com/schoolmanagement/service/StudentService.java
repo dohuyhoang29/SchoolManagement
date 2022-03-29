@@ -3,6 +3,7 @@ package com.schoolmanagement.service;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.StudentRequest;
+import com.schoolmanagement.model.request.response.SelectStudentReponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -28,9 +29,13 @@ public interface StudentService {
 	Page<User> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
 			String sortDir, String fullName, String grade, String className);
 
-	List<User> findAllStudentStudying();
+	List<User> findAllStudentNotClass();
+
+	List<SelectStudentReponse> findAllStudentNotClassByAdmissionYear(int schoolYear, int grade);
 
 	List<User> findAllByAdmissionYear(Integer admissionYear);
 
 	int countAllStudent();
+
+	int countAllNewStudentLastYear();
 }
