@@ -48,12 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**", "/bundles/**", "/fonts/**", "/resources/**")
+        .antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**", "/bundles/**", "/fonts/**" , "/upload/**","/user_css_js/**")
         .permitAll()
         .antMatchers("/insert/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
         .antMatchers("/show/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
         .antMatchers("/edit/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
-        .antMatchers("/home", "/blog").permitAll()
+        .antMatchers("/","/blog/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin().loginPage("/admin/login")

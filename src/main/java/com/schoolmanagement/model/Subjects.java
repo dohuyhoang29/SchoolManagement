@@ -45,7 +45,7 @@ public class Subjects {
 	@OneToMany(mappedBy = "subjects", orphanRemoval = true)
 	public List<ClassTeacherSubject> subjects = new ArrayList<>();
 
-	@OneToMany(mappedBy = "subjects")
+	@OneToMany(mappedBy = "subjects" ,fetch = FetchType.LAZY)
 	private List<Mark> mark = new ArrayList<>();
 
 

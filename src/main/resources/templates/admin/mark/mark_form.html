@@ -1,146 +1,282 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>School Management</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>School Management</title>
 
-  <!-- Bootstrap Core and vandor -->
-  <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
-  <link rel="stylesheet" href="/plugins/summernote/dist/summernote.css"/>
+<!-- Bootstrap Core and vandor -->
+<link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/plugins/dropify/css/dropify.min.css">
+<link rel="stylesheet" href="/plugins/summernote/dist/summernote.css" />
 
-  <!-- Core css -->
-  <link rel="stylesheet" href="/css/style.min.css"/>
+<!-- Core css -->
+<link rel="stylesheet" href="/css/style.min.css" />
 </head>
 
 <body class="font-muli theme-cyan gradient">
-<!-- Page Loader -->
-<div class="page-loader-wrapper">
-  <div class="loader">
-  </div>
-</div>
-
-<div id="main_content">
-  <!-- Start Main top header -->
-  <div th:include="partials/header"></div>
-  <!-- Start Rightbar setting panel -->
-  <div th:include="partials/rightbar"></div>
-  <!-- Start Main leftbar navigation -->
-  <div th:include="partials/leftbar"></div>
-
-
-  <!-- Start project content area -->
-  <div class="page">
-    <!-- Start Page header -->
-    <div th:include="partials/navbar"></div>
-    <!-- Start Page title and tab -->
-    <div class="section-body">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center ">
-          <div class="header-action">
-            <h1 class="page-title">Student</h1>
-            <ol class="breadcrumb page-breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Add Mark</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div> 
-	<div class="section-body mt-4">
-		<div align="center" id="messges"> </div>
-		 <div class="container-fluid">
-        <div class="tab-content">
-        	<div class="tab-pane active" id="Staff-add">
-        		<div class="row clearfix">
-        			<div class="col-lg-12 col-md-12 col-sm-12">
-        				<div class="card">
-        					<div class="card-header">	
-        						<form>
-        							<div class="form-group">
-        								<input type="hidden" id="userId" th:value="${cst.users.id}">
-        								<label> Class Name  : <span >
-        								[[${cst.theClass.className}]]
-        								</span> </label>
-        								<input type="hidden" id="classid" th:value ="${cst.theClass.id}">
-        							</div>
-        							<div class="form-group" >
-        								<label> Subject Name  : <span >[[${cst.subjects.subjectName}]]</span> </label>
-        								<input type="hidden" id="subjectId" th:value="${cst.subjects.id}">
-        							</div>
-        							<div class="form-group">
-        								<label> Type  : </label>
-        								<select class="form-control w-100" aria-label="Default select example" id="test">
-        									<option th:selected="${type == 1}" value="1">Oral test</option>
-        									<option th:selected="${type == 2}" value="2">15 minutes test</option>
-        									<option th:selected="${type == 3}" value="3">1 hour test</option>
-        									<option th:selected="${type == 4}" value="4">Semester test</option>
-        								</select>
-        							</div>
-        							<div class="form-group">
-        								<label>Semester :  </label>
-        								<select class="form-control  w-100" aria-label="Default select example" id="semester">
-        									<option value="1">1</option>
-        									<option value="2">2</option>
-        								</select>
-        							</div>
-        						</form>
-        					</div>
-        					<div>
-        						<table class="table" id="tblB">
-        							<thead>
-        								<tr>
-        									<th class="w-25">Student Name</th>
-        									<th class="w-25">DOB</th>
-        									<th class="w-25">Address</th>
-        									<th>Marks</th>
-        								</tr>
-        							</thead>
-        							<tbody class="bodyTable">
-        								<tr th:each="listStudent : ${Studentlist}">
-        									<td th:text="${listStudent.fullName}"></td>
-        									<td th:text="${listStudent.dob}"></td>
-        									<td th:text="${listStudent.address}"></td>
-        									<td>
-	        									<input type ="number" class="a form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
- 	       									</td>
-        									<td>
-	        									<input type ="number" class="b form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
- 	       									</td>
-        									<td>
-	        									<input type ="number" class="c form-control" name="mark" min=0 max=10 placeholder="Enter" required="required">
- 	       									</td>
-        									<td><input type="hidden" th:value="${listStudent.id}" class="studentId"></td>
-        									
-        								</tr>
-        							</tbody>
-        						</table>
-        					</div>
-        				</div>
-        				<a class="btn btn-primary text-white" id="click">Save</a>
-        			</div>
-        		</div>
-        	</div>
-        	</div>
-        </div>
+	<!-- Page Loader -->
+	<div class="page-loader-wrapper">
+		<div class="loader"></div>
 	</div>
-</div>
-</div>
-<!-- Start Main project js, jQuery, Bootstrap -->
-<script src="/bundles/lib.vendor.bundle.js"></script>
 
-<!-- Start Plugin Js -->
-<script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="/plugins/dropify/js/dropify.min.js"></script>
-<script src="/bundles/summernote.bundle.js"></script>
-<script type="text/javascript" src="/js/MarkStudentAjax/markStudent.js"></script>
-<!-- Start project main js  and page js -->
-<script src="/js/core.js"></script>
-<script src="/assets/js/form/dropify.js"></script>
-<script src="/assets/js/page/summernote.js"></script>
+	<div id="main_content">
+		<!-- Start Main top header -->
+		<div th:include="partials/header"></div>
+		<!-- Start Rightbar setting panel -->
+		<div th:include="partials/rightbar"></div>
+		<!-- Start Main leftbar navigation -->
+		<div th:include="partials/leftbar"></div>
+
+
+		<!-- Start project content area -->
+		<div class="page">
+			<!-- Start Page header -->
+			<div th:include="partials/navbar"></div>
+			<!-- Start Page title and tab -->
+			<div class="section-body">
+				<div class="container-fluid">
+					<div class="d-flex justify-content-between align-items-center ">
+						<div class="header-action">
+							<h1 class="page-title">Student</h1>
+							<ol class="breadcrumb page-breadcrumb">
+								<li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Add
+									Mark</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="section-body mt-4">
+				<div align="center" id="messges"></div>
+				<div class="container-fluid">
+					<div class="tab-content">
+						<div class="tab-pane active" id="Staff-add">
+							<div class="row clearfix">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="card">
+										<div class="card-header">
+											<form>
+												<div class="form-group">
+													<input type="hidden" id="userId" th:value="${teacher.id}">
+													<label> Class Name : <span>
+															[[${class.className}]] </span>
+													</label> <input type="hidden" id="classid" th:value="${class.id}">
+												</div>
+												<div class="form-group">
+													<label> Subject Name </label> 
+													<select id="subjectId" >
+														<th:block th:each = "cts : ${cts}">
+						                              		<option th:selected = "${subjects.id} == ${cts.subjects.id}" th:value = "${cts.subjects.id}" th:utext="${cts.subjects.subjectName}"></option>
+						                              	</th:block>
+													</select>
+												</div>
+												<div class="form-group">
+													<label> Type : </label> <select class="form-control w-100"
+														aria-label="Default select example" id="type" name="type"
+														th:value="${type}">
+														<option th:selected="${type == 1}" value="1">Oral test</option>
+														<option th:selected="${type == 2}" value="2">15 minutes test</option>
+														<option th:selected="${type == 3}" value="3">1 hour test</option>
+														<option th:selected="${type == 4}" value="4">Semester test</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Semester : </label> <select
+														class="form-control  w-100"
+														aria-label="Default select example" id="semester" name ="semester"
+														th:value="${semester}">
+														<option   th:selected="${semester == 1}" value="1">1</option>
+														<option  th:if="${result == 1 }"  th:selected="${semester == 2}"value="2">2</option>
+													</select>
+												</div>
+											</form>
+										</div>
+										<div>
+											<table class="table" id="tblB">
+												<thead>
+													<tr>
+														<th class="w-25">Student Name</th>
+														<th class="w-25">DOB</th>
+														<th class="w-25">Address</th>
+														<th>Marks</th>
+													</tr>
+												</thead>
+												<tbody class="bodyTable">
+													<tr th:each="markRq : ${marklist}">
+														<td th:text="${markRq.getStudentName()}"></td>
+														<td th:text="${markRq.getDateOfBirth()}"></td>
+														<td th:text="${markRq.getAddress()}"></td>
+														<th:block th:if="${markRq.getCoefficients() != null }" th:each="coefficient : ${markRq.getCoefficients()}">
+															<td><input type="hidden" class="markId" th:value="${coefficient.id}">
+																<input type="number" class="w-100" th:value="${coefficient.coeffi}" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${markRq.getCoefficients().size() != 3  && type == 1}"><input type="hidden" class="markId" value="">
+																<input  type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${markRq.getCoefficients().size() != 3  && type == 1}"><input type="hidden" class="markId" value="">
+																<input  type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${markRq.getCoefficients().size() != 2  && type == 2 || markRq.getCoefficients().size() != 2  && type == 3 }"><input type="hidden" class="markId" value="">
+																<input  type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															
+														</th:block> 
+														 <th:block th:if="${markRq.getCoefficients() == null}"> 
+															<td th:if="${type ==1 || type == 4}"><input type="hidden" class="markId" value="">
+																<input  type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${type ==2 || type == 3 || type == 1}"><input type="hidden" class="markId" value="">
+																<input type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${type ==2 || type == 3 || type == 1}"><input type="hidden" class="markId" value="">
+																<input type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															
+
+														 </th:block>
+														<td><input type="hidden"
+																th:value="${markRq.getStudentId()}" class="studentId"></td>
+													</tr>
+												</tbody>
+											</table>
+											<input type="hidden" th:value = "${currentPage}" id ="currentPage">
+											<div th:fragment="pagination">
+												<div th:if="${totalPages > 1}"
+													th:with="pageUrlPostfix = '?classId=' +${class.id} + '&type=' + ${type} + '&semester=' + ${semester} ">
+													<nav>
+														<ul class="pagination justify-content-end"
+															th:with="pageUrlPrefix = '/page/insert/mark/'">
+
+															<li
+																th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+																<a class="page-link"
+																th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
+															</li>
+															<li
+																th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+																<a class="page-link"
+																th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
+															</li>
+
+															<th:block th:if="${totalPages <= 6}">
+																<li th:each="i : ${#numbers.sequence(1, totalPages)}"
+																	th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+																	<a th:if="${currentPage != i}" class="page-link"
+																	th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+																	<button th:if="${currentPage == i}"
+																		class="page-link active">[[${i}]]</button>
+																</li>
+															</th:block>
+
+															<th:block th:if="${totalPages > 6}">
+																<th:block th:if="${currentPage <= 4}">
+																	<li th:each="i : ${#numbers.sequence(1, 5)}"
+																		th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+																		<a th:if="${currentPage != i}" class="page-link"
+																		th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+																		<button th:if="${currentPage == i}"
+																			class="page-link active">[[${i}]]</button>
+																	</li>
+
+																	<button class="page-link">...</button>
+
+																	<li class="page-item"><a class="page-link"
+																		th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+																	</li>
+																</th:block>
+																<th:block
+																	th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+																	<li th:class="page-item"><a class="page-link"
+																		th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+																	</li>
+
+																	<button class="page-link">...</button>
+
+																	<li
+																		th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+																		th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+																		<a th:if="${currentPage != i}" class="page-link"
+																		th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+																		<button th:if="${currentPage == i}"
+																			class="page-link active">[[${i}]]</button>
+																	</li>
+
+																	<button th:class="page-link">...</button>
+
+																	<li class="page-item"><a class="page-link"
+																		th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
+																	</li>
+																</th:block>
+																<th:block th:if="${currentPage >= totalPages - 3}">
+																	<li class="page-item"><a class="page-link"
+																		th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
+																	</li>
+
+																	<button class="page-link">...</button>
+
+																	<li
+																		th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}"
+																		th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+																		<a th:if="${currentPage != i}" class="page-link"
+																		th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
+																		<button th:if="${currentPage == i}"
+																			class="page-link active">[[${i}]]</button>
+																	</li>
+																</th:block>
+															</th:block>
+
+															<li
+																th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+																<a class="page-link"
+																th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
+															</li>
+
+															<li
+																th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+																<a class="page-link"
+																th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
+															</li>
+
+														</ul>
+													</nav>
+												</div>
+											</div>
+										</div>
+									</div>
+									<a class="btn btn-primary text-white" id="click">Save</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Start Main project js, jQuery, Bootstrap -->
+	<script src="/bundles/lib.vendor.bundle.js"></script>
+
+	<!-- Start Plugin Js -->
+	<script
+		src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script src="/plugins/dropify/js/dropify.min.js"></script>
+	<script src="/bundles/summernote.bundle.js"></script>
+	<script type="text/javascript" src="/js/MarkStudentAjax/markStudent.js"></script>
+	<!-- Start project main js  and page js -->
+	<script src="/js/core.js"></script>
+	<script src="/assets/js/form/dropify.js"></script>
+	<script src="/assets/js/page/summernote.js"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@ public class BlogServiceImp implements BlogService {
 
 	@Override
 	public Iterable<Blog> FindAllBlog(){
-		return blogRepositories.findAll();
+		return blogRepositories.findAllBlog();
 	}
 
 	@Override
@@ -62,5 +62,19 @@ public class BlogServiceImp implements BlogService {
 	@Override
 	public int countAllBlog() {
 		return blogRepositories.countAll();
+	}
+
+	@Override
+	public void DeleteBlog(int id) {
+		Blog blog = blogRepositories.findById(id);
+		
+		blogRepositories.delete(blog);
+	}
+
+	@Override
+	public Page<Blog> PagingBlogUserScreen(int page) {
+		Pageable pageable = PageRequest.of(page -1, 9);
+		
+		return blogRepositories.findAll(pageable);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.schoolmanagement.model.Mark;
+import com.schoolmanagement.model.request.MarkRequest;
 
 @Repository
 public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integer> {
@@ -24,5 +25,20 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	@Query(value="SELECT m FROM Mark m WHERE m.students.id = :studentid AND m.type = :type AND m.semester = :semester ORDER By m.subjects.id ")
 	List<Mark> findAllMarkByMedium(@Param("studentid") int sid,@Param("type") int type  , @Param("semester") int semester);
 	
+	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(s.id, m.coefficient, m.semester,s.subjectName , u.fullName )"
+			+ "FROM Mark m "
+			+ "JOIN Subjects s ON m.subjectId = s.id "
+			+ "JOIN User u ON m.updatedBy = u.id "
+			+ "WHERE m.studentId = :studentId AND  m.type = 5")
+	List<MarkRequest> listAverageSubject(@Param("studentId") int studentId);
 	
+	@Query(value ="SELECT AVG(m.coefficient) FROM Mark m WHERE m.studentId = :studentId AND m.type = 5 AND m.semester = :semester")
+	float Average( @Param("studentId") int studentId , @Param("semester") int semester );
+	
+	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(s.id, m.coefficient, m.semester,s.subjectName , u.fullName )"
+			+ "FROM Mark m "
+			+ "JOIN Subjects s ON m.subjectId = s.id "
+			+ "JOIN User u ON m.updatedBy = u.id "
+			+ "WHERE m.studentId = :studentId AND  m.type = 5 AND m.semester = :semester")
+	List<MarkRequest> listAverageSubjectBySemester(@Param("studentId") int studentId , @Param("semester") int semester);
 }

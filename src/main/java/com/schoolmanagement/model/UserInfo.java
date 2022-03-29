@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,37 +28,39 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserInfo {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-  @Column(name = "admission_year")
-  private Integer admissionYear;
+	@Column(name = "admission_year")
+	private Integer admissionYear;
 
-  @Column(name = "graduate_year")
-  private Integer graduateYear;
+	@Column(name = "graduate_year")
+	private Integer graduateYear;
 
-  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "class_id")
-  private Class aClass;
+	@ManyToOne( fetch = FetchType.LAZY)
+	@JoinColumn(name = "class_id")
+	private Class aClass;
 
-  @Column(name = "status")
-  private Integer status;
 
-  @OneToMany(mappedBy = "students")
-  List<Mark> mark = new ArrayList<>();
+	
+	@Column(name = "status")
+	private Integer status;
 
-  @Column(name = "start_date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate startDate;
+	@OneToMany(mappedBy = "students" , fetch = FetchType.LAZY)
+	List<Mark> mark = new ArrayList<>();
 
-  @Column(name = "end_date")
-  @DateTimeFormat(pattern = "MM/dd/yyyy")
-  private LocalDate endDate;
+	@Column(name = "start_date")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private LocalDate startDate;
 
-  @Column(name = "deleted")
-  private Boolean deleted;
+	@Column(name = "end_date")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private LocalDate endDate;
 
-  @OneToOne(mappedBy = "userInfo")
-  private User user;
+	@Column(name = "deleted")
+	private Boolean deleted;
+
+	@OneToOne(mappedBy = "userInfo" , fetch = FetchType.LAZY)
+	private User user;
 }

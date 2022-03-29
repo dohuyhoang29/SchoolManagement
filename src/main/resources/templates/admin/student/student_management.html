@@ -359,11 +359,11 @@
                         <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
                           <button type="button" class="btn btn-success btn-sm">Edit</button>
                         </a>
-                        <a sec:authorize="hasAnyAuthority('TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
+                        <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
                                 title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{student-id}/{semester}(student-id = ${user.id}, semester = 1)}">
                           <button type="button" class="btn btn-success btn-sm">Student Evaluate</button>
                         </a>
-                        <a sec:authorize="hasAnyAuthority('TEACHER', 'HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
+                        <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
                            title="Student Evaluate" data-type="confirm" th:href="@{/show/student-class-detail/{id}(id = ${user.id})}">
                           <button type="button" class="btn btn-success btn-sm">Details Marks</button>
                         </a>

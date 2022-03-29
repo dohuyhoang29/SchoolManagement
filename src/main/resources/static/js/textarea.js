@@ -7,9 +7,9 @@ $(document).ready(function() {
 		callbacks: {
 			onImageUpload: function(files, editor, welEditable) {
 				for (var i = files.length - 1; i >= 0; i--) {
-					let maxSize = 1048576; // according to the database validator
+					let maxSize = 1048576 * 30; // according to the database validator
 					if (files[i].size > maxSize) {
-						alert('Image too large. Images must be less than 100 million bytes (999KB). Less than 1MB is recommended.');
+						alert('Image too large. Images must be less than 100 million bytes . Less than 30MB is recommended.');
 						return;
 					} else {
 						sendFile(files[i], this);
@@ -65,11 +65,40 @@ $(document).ready(function() {
 			enctype: 'multipart/form-data',
 			processData: false,
 			success: function(resp) {
-				console.log("Tạch");
+				console.log("May Chưa Tạch");
 			},
 			error: function(data) {
 				console.log("Tạch nốt");
 			}
 		});
 	}
+	
+	
+	$('#formId').submit(function(event){
+		var result = false; 
+		
+		if($('#header').val().length < 10){
+			
+			$('#errorsHeader').text("Header more than 10 charters").show().fadeOut(2000);	
+			result = true;
+		}
+		
+		if($('#showEvent').val().length < 50){
+			
+			$('#errorsContent').text("Content more than 50 charters").show().fadeOut(2000);	
+			result = true;
+		}
+		
+		
+		if(!result){
+			return ;
+		}else{
+			console.log(result)
+		}
+		
+		
+		
+		
+		event.preventDefault();
+	})
 });

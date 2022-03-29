@@ -2,6 +2,8 @@ package com.schoolmanagement.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,11 +31,11 @@ public class Blog {
 	@Column(name = "id")
 	private Integer id;
 
-	@NotEmpty(message = "enter header ")
+	
 	@Column(name = "header")
 	private String header;
 
-	@NotEmpty(message = "enter content Blog")
+	
 	@Column(name = "content")
 	private String content;
 
@@ -49,6 +50,29 @@ public class Blog {
 	@Column(name = "updated_date")
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDateTime updatedDate;
-	
-	
+
+	@Column(name = "images")
+	private String images;
+
+	public LocalTime getTime() {
+		LocalTime lt = updatedDate.toLocalTime();
+
+		return lt;
+
+	}
+
+	public LocalDate getDate() {
+		LocalDate ld = updatedDate.toLocalDate();
+
+		return ld;
+
+	}
+
+	public String getBlogBanner() {
+		if (images == null && id == null) {
+			return null;
+		}
+
+		return "/upload/image/blog_image/cover_image/" + images;
+	}
 }

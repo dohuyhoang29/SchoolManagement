@@ -26,7 +26,7 @@ public class DashboardController {
   @Autowired
   private BlogService blogService;
 
-  @GetMapping("/")
+  @GetMapping("/dashboard")
   public String dashboard (@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
     model.addAttribute("totalTeacher", teacherService.countTeacher());
     model.addAttribute("totalStudent", studentService.countAllStudent());

@@ -1,33 +1,96 @@
 $(document).ready(function() {
 
-	$('#test').change(function() {
+	$('#type').change(function() {
 
-		var val = $('#test').val();
-		let a = '<td><input type ="number" class="a form-control" name="mark" min=0 max=10 placeholder="Enter" required="required"></td>';
-		let b = '<td><input type ="number" class="b form-control" name="mark" min=0 max=10 placeholder="Enter" required="required"></td>';
-		let c = '<td><input type ="number" class="c form-control" name="mark" min=0 max=10 placeholder="Enter" required="required"></td>';
-
-		if (val == 1) {
-			$("table tbody").find('input[name="mark"]').each(function() {
-				$(this).parents("td").remove();
-			});
-			$('#tblB').find("tbody.bodyTable").find("tr").append($(a + b + c));
-		} else if (val == 2 || val == 3) {
-			$("table tbody").find('input[name="mark"]').each(function() {
-				$(this).parents("td").remove();
-			});
-			$('#tblB').find("tbody.bodyTable").find("tr").append($(b + c));
-		} else {
-			$("table tbody").find('input[name="mark"]').each(function() {
-				$(this).parents("td").remove();
-			});
-			$('#tblB').find("tbody.bodyTable").find("tr").append($(a));
-		}
+		var types = parseInt($(this).val());
+		var currentPage = parseInt($('#currentPage').val());
+		var classId = parseInt($('#classid').val());
+		var semester = parseInt($('#semester').val());
+		var subjectId = parseInt($('#subjectId').val());
+		
+		window.location.href = "/insert/mark/show/"+ currentPage +"/"+'z a'  + "/"+ types +"/"+'z b' +"/"+semester +"/"+'z c' +"/"+classId +"/"+'z d' +"/"+subjectId;
+		
 	});
 	
+	$('#semester').change(function() {
+
+		var types = parseInt($('#type').val());
+		var currentPage = parseInt($('#currentPage').val());
+		var classId = parseInt($('#classid').val());
+		var semester = parseInt($(this).val());
+		var subjectId = parseInt($('#subjectId').val());
+		
+		window.location.href = "/insert/mark/show/"+ currentPage +"/"+'z a'  + "/"+ types +"/"+'z b' +"/"+semester +"/"+'z c' +"/"+classId +"/"+'z d' +"/"+subjectId;
+		
+	});
 	
+	$('#subjectId').change(function() {
+
+		var types = parseInt($('#type').val());
+		var currentPage = parseInt($('#currentPage').val());
+		var classId = parseInt($('#classid').val());
+		var semester = parseInt($('#semester').val());
+		var subjectId = parseInt($(this).val());
+		
+		window.location.href = "/insert/mark/show/"+ currentPage +"/"+'z a'  + "/"+ types +"/"+'z b' +"/"+semester +"/"+'z c' +"/"+classId +"/"+'z d' +"/"+subjectId;
+		
+	});
+	
+	$("input").change(function() {
+		if ($(this).val() > 10) {
+			$(this).val(10);
+		}
+		if ($(this).val() < 0) {
+			$(this).val(0);
+		}
+		var types = parseInt($('#type').val());
+		var subjectId = parseInt($('#subjectId').val());
+		var createdBy = parseInt($('#userId').val());
+		var updateBy = parseInt($('#userId').val());
+		var semester = parseInt($('#semester').val());
+		var studentId = parseInt($(this).parents("tr").find("input.studentId").val());
+		
+		var markId = parseInt($(this).parent().find("input.markId").val()) || 0;
+		const listMark ={
+				'markId' : markId,
+				'students': studentId,
+				'subjects': subjectId,
+				'type': types,
+				'semester': semester,
+				'coefficient': parseFloat($(this).val()),
+				'createdBy': createdBy,
+				'updatedBy': updateBy
+ 			};
+		
+		
+		console.log(markId);
+		console.log(listMark);
+		var id = $(this).parent().find("input.markId");
+		var now = $(this);
+		$.ajax({
+
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: "http://localhost:8080/save/mark",
+			data: JSON.stringify(listMark),
+			cache: false,
+			success: function(data) {
+				console.log(data);
+				now.attr('id', data);
+				id.val(data);
+			},
+			error: function(err) {
+				$("#messges").html("<span style='color: red'>False</span>");
+			}
+		});
+
+
+
+		console.log($(this).val());
+	})
+
 	$('#click').click(function() {
-		const lista = [];
+		/*const lista = [];
 		const listb = [];
 		const listc = [];
 		const lists = [];
@@ -99,8 +162,8 @@ $(document).ready(function() {
 				})
 			}
 		}
-
-		$.ajax({
+*/
+		/*$.ajax({
 			type: "POST",
 			contentType: "application/json; charset=utf-8",
 			url: "http://localhost:8080/save/mark",
@@ -120,11 +183,11 @@ $(document).ready(function() {
 				$("#msg").html("<span style='color: red'>Name is required</span>");
 			}
 		});
-
-		console.log(lists);
+*/
+		/*console.log(lists);
 		console.log(lista);
 		console.log(listb);
 		console.log(listc);
-		console.log(listAll);
+		console.log(listAll);*/
 	});
 });

@@ -27,23 +27,7 @@
 
 <div id="main_content">
   <!-- Start Main top header -->
-  <div id="header_top" class="header_top">
-    <div class="container">
-      <div class="hleft">
-        <a class="header-brand" href="index.html"><i
-            class="fa fa-graduation-cap brand-logo"></i></a>
-        <div class="dropdown">
-          <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i
-              class="fe fe-align-center"></i></a>
-          <a href="javascript:void(0)" class="nav-link icon settingbar"><i
-              class="fe fe-settings"></i></a>
-        </div>
-      </div>
-      <div class="hright">
-        <a href="login.html" class="nav-link icon settingbar"><i class="fe fe-power"></i></a>
-      </div>
-    </div>
-  </div>
+ <div th:include="partials/header"></div>
   <!-- Start Rightbar setting panel -->
   <div th:include="partials/rightbar"></div>
   <!-- Start Main leftbar navigation -->
@@ -84,16 +68,16 @@
               <div class="col-xl-12 col-md-12">
                 <div class="card">
                   <div class="card-body">
-                    <span><b>Full Name : </b><span th:utext="${student.fullName}"></span></span>
+                    <span><b>Full Name : </b><span th:utext="${studentById.fullName}"></span></span>
                   </div>
                   <div class="card-body">
-                    <span><b>Class Name : </b><span th:utext="${student.userInfo.AClass.className}"></span></span>
+                    <span><b>Class Name : </b><span th:utext="${studentById.userInfo.AClass.className}"></span></span>
                   </div>
                   <div class="card-body">
-                    <span><b>School Year : </b><span th:utext="${student.userInfo.AClass.schoolYear}"></span></span>
+                    <span><b>School Year : </b><span th:utext="${studentById.userInfo.AClass.schoolYear}"></span></span>
                   </div>
                   <div class="card-body">
-                    <span><b>Homeroom Teacher : </b><span th:utext="${student.userInfo.AClass.user.fullName}"></span></span>
+                    <span><b>Homeroom Teacher : </b><span th:utext="${studentById.userInfo.AClass.user.fullName}"></span></span>
                   </div>
                   <div class="card-body row">
                     <div class="col-6">
@@ -109,32 +93,22 @@
                             </tr>
                             </thead>
                             <thead>
-                            <tr>
-                              <th>Subject Name</th>
-                              <th>Teacher</th>
-                              <th class="align-center">Semester 1</th>
-                              <th class="align-center">Semester 2</th>
-                            </tr>
-                            </thead>
+	                            <tr>
+	                              <th>Subject Name</th>
+	                              <th>Teacher</th>
+	                              <th class="align-center">Semester 1</th>
+	                              <th class="align-center">Semester 2</th>
+	                            </tr>
+	                            </thead>
                             <tbody>
-                            <tr>
-                              <td><div class="font-15">Ken Smith</div></td>
-                              <td><span>(417) 646-8377</span></td>
-                              <td class="align-center">10</td>
-                              <td class="align-center">10</td>
-                            </tr>
-                            <tr>
-                              <td><div class="font-15">Ken Smith</div></td>
-                              <td><span>(417) 646-8377</span></td>
-                              <td class="align-center">10</td>
-                              <td class="align-center">10</td>
-                            </tr>
-                            <tr>
-                              <td><div class="font-15">Ken Smith</div></td>
-                              <td><span>(417) 646-8377</span></td>
-                              <td class="align-center">10</td>
-                              <td class="align-center">10</td>
-                            </tr>
+	                            <tr th:each="markRq : ${markList}">
+	                             	<td th:text="${markRq.subjectName}"></td>
+	                             	<td th:text="${markRq.fullNameTeacher}"></td>
+	                             	<th:block th:each="mark : ${markRq.getCoefficients}">
+	                             		<td class="align-center" th:text="${mark.coeffi}"></td>	
+	                             	</th:block>
+	                             	
+	                            </tr>
                             </tbody>
                           </table>
                         </div>
@@ -144,29 +118,43 @@
                       <b>Evaluate</b>
                       <div class="card">
                         <div class="table-responsive">
-                          <table class="table table-hover table-vcenter table-striped text-nowrap mb-0">
-                            <th:block th:each="studentEvaluate : ${studentEvaluates}">
+                          <table class="table table-hover table-vcenter table-striped" th:each="studentEvaluate : ${studentEvaluateList}">
                               <thead>
-                              <tr>
-                                <th colspan="3">Semester [[${studentEvaluate.semester}]]</th>
-                              </tr>
+	                             <tr>
+	                                <th colspan="3">Semester : [[${studentEvaluate.semester}]]</th>
+	                             </tr>
                               </thead>
                               <tbody>
-                              <tr>
-                                <td></td>
-                                <td>Evaluate</td>
-                                <td th:utext="${studentEvaluate.evaluate}"></td>
-                              </tr>
-                              <tr>
-                                <td></td>
-                                <td>Conduct</td>
-                                <td th:utext="${studentEvaluate.getConductByString}"></td>
-                              </tr>
-                              <tr>
-                                <td></td>
-                                <td>Academic Ability</td>
-                                <td th:utext="${studentEvaluate.getAcademicAbilityByString}"></td>
-                              </tr>
+	                              <tr>
+	                                <td></td>
+	                                <td>Conduct</td>
+	                                <td>
+	                                	<span th:if="${studentEvaluate.conduct == 4}" >Excellent</span>
+                            			<span th:if="${studentEvaluate.conduct == 3}" >Good</span>
+			                            <span th:if="${studentEvaluate.conduct == 2}" >Average</span>
+			                            <span th:if="${studentEvaluate.conduct == 1}" >Below Average</span>
+	                                
+	                                </td>
+	                              </tr>
+	                              <tr>
+	                                <td></td>
+	                                <td>Academic Ability</td>
+	                                <td>
+	                                	<span th:if="${studentEvaluate.academicAbility == 1}" >Excellent</span>
+                            			<span th:if="${studentEvaluate.academicAbility == 2}" >Good</span>
+			                            <span th:if="${studentEvaluate.academicAbility == 3}" >Average</span>
+			                            <span th:if="${studentEvaluate.academicAbility == 4}" >Below Average</span>
+                          			</td>
+	                              </tr> 
+	                              <tr>
+	                                <td></td>
+	                                <td>Evaluate</td>
+	                                <td>
+		                                <div th:utext="${studentEvaluate.evaluate}">
+		                                
+		                                </div>
+		                            </td>
+	                              </tr>
                               </tbody>
                             </th:block>
                           </table>

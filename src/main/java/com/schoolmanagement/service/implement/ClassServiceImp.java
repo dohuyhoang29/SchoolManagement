@@ -1,21 +1,20 @@
 package com.schoolmanagement.service.implement;
 
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.ClassTeacherSubject;
-import com.schoolmanagement.model.request.SchoolYearClassRequest;
-import com.schoolmanagement.repositories.ClassRepositories;
-
-import com.schoolmanagement.service.ClassService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.request.SchoolYearClassRequest;
+import com.schoolmanagement.repositories.ClassRepositories;
+import com.schoolmanagement.service.ClassService;
 
 @Service
 public class ClassServiceImp implements ClassService {

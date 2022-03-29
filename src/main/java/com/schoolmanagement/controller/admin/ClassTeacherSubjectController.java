@@ -1,6 +1,5 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.service.ClassService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.schoolmanagement.model.Class;
 import com.schoolmanagement.model.ClassTeacherSubject;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.ClassTeacherSubjectRequest;
-import com.schoolmanagement.service.implement.ClassServiceImp;
-import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.implement.SubjectServiceImp;
-import com.schoolmanagement.service.implement.TeacherServiceImp;
+import com.schoolmanagement.service.ClassService;
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.SubjectService;
+import com.schoolmanagement.service.TeacherService;
 
 @Controller
 public class ClassTeacherSubjectController {
@@ -29,13 +29,13 @@ public class ClassTeacherSubjectController {
 
 	
 	@Autowired
-	private SubjectServiceImp subjectServiceImp;
+	private SubjectService subjectServiceImp;
 
 	@Autowired
-	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
+	private ClassTeacherSubjectService classTeacherSubjectServiceImp;
 
 	@Autowired
-	private TeacherServiceImp teacherServiceImp;
+	private TeacherService teacherServiceImp;
 	
 
 	@GetMapping("/updateClassTeacher/class/{id}")
@@ -55,8 +55,8 @@ public class ClassTeacherSubjectController {
 			ClassTeacherSubject cts = new ClassTeacherSubject();
 			User users = teacherServiceImp.findByUserId(dr.get(i).getUserid());
 			Subjects subjects = subjectServiceImp.findBySubjectID(dr.get(i).getSubjectId());
-			com.schoolmanagement.model.Class class_u = classService.getClassById(dr.get(i).getClassid());
-			ClassTeacherSubject e = classTeacherSubjectServiceImp.findByIdOther(subjects.getId(), class_u.getId());
+			Class class_u = classService.getClassById(dr.get(i).getClassid());
+			ClassTeacherSubject e = classTeacherSubjectServiceImp.findById(users.getId(), class_u.getId(), subjects.getId());
 			
 			if(e != null && e.getId() != 0) {
 				cts.setId(e.getId());

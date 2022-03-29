@@ -60,42 +60,5 @@ public class StudentEvaluate {
 	@JoinColumn(name = "updated_by", referencedColumnName = "id")
 	private User updatedBy;
 	
-	public Integer setAcademicAbility() {
-		if (student.getAverageMarks(semester) > 0) {
-			if (student.getAverageMarks(semester) < 3) {
-				this.academicAbility = 1;
-			} else if (3 <= student.getAverageMarks(semester) && student.getAverageMarks(semester) < 5) {
-				this.academicAbility = 2;
-			} else if (5 <= student.getAverageMarks(semester) && student.getAverageMarks(semester) < 8) {
-				this.academicAbility = 3;
-			} else {
-				this.academicAbility = 4;
-			}
-		}
-		return this.academicAbility;
-	}
-
-	public String getAcademicAbilityByString() {
-		if (this.academicAbility == 1) {
-			return "Below Average";
-		} else if (this.academicAbility == 2) {
-			return "Average";
-		} else if (this.academicAbility == 3) {
-			return "Good";
-		} else {
-			return "Excellent";
-		}
-	}
-
-	public String getConductByString() {
-		if (this.academicAbility == 1) {
-			return "Below Average";
-		} else if (this.academicAbility == 2) {
-			return "Average";
-		} else if (this.academicAbility == 3) {
-			return "Good";
-		} else {
-			return "Excellent";
-		}
-	}
+	
 }

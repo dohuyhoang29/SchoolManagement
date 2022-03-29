@@ -5,6 +5,8 @@ import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.StudentRequest;
 import com.schoolmanagement.model.request.response.SelectStudentReponse;
 import java.io.IOException;
+import com.schoolmanagement.model.request.MarkRequest;
+
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
@@ -24,7 +26,7 @@ public interface StudentService {
 
 	void saveAlLStudent (Iterable<User> studentList);
 
-	List<User> findAllStudentByClassId(int classid);
+	Page<User> findAllStudentByClassId(int classid , int page);
 
 	Page<User> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
 			String sortDir, String fullName, String grade, String className);
@@ -38,4 +40,8 @@ public interface StudentService {
 	int countAllStudent();
 
 	int countAllNewStudentLastYear();
+	
+	List<MarkRequest> findAllStudentHasMark(int type , int semester , int subjectId , int classId);
+
+	User findStudentByUserName(String username);
 }

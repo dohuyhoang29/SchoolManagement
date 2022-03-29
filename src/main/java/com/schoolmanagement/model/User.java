@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -98,11 +97,9 @@ public class User {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "teacher_subjects",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "subject_id"))
-  private Set<Subjects> subjects = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+	private Set<Subjects> subjects = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Blog> blogs = new HashSet<>();
@@ -177,49 +174,19 @@ public class User {
     return false;
   }
 
-  public float getAverageMarks(Integer semester) {
-    for (Mark next : marks) {
-      if (next.getType() == 5 && Objects.equals(next.getSemester(), semester)) {
-        return next.getCoefficient();
-      }
-    }
 
-    return 0.0f;
-  }
-
-  public float getAverageMarksSemester1() {
-    for (Mark next : marks) {
-      if (next.getType() == 5 && next.getSemester() == 1) {
-        return next.getCoefficient();
-      }
-    }
-
-    return 0.0f;
-  }
-
-  public float getAverageMarksSemester2() {
-    for (Mark next : marks) {
-      if (next.getType() == 5 && next.getSemester() == 2) {
-        return next.getCoefficient();
-      }
-    }
-
-    return 0.0f;
-  }
-
-  public User(String fullName, String username, String password, String email, String phone,
-      LocalDate dob, String address, LocalDateTime createdDate, LocalDateTime updatedDate,
-      UserInfo userInfo) {
-    this.fullName = fullName;
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.phone = phone;
-    this.dob = dob;
-    this.address = address;
-    this.createdDate = createdDate;
-    this.updatedDate = updatedDate;
-    this.userInfo = userInfo;
-  }
+	public User(String fullName, String username, String password, String email, String phone, LocalDate dob,
+			String address, LocalDateTime createdDate, LocalDateTime updatedDate, UserInfo userInfo) {
+		this.fullName = fullName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.phone = phone;
+		this.dob = dob;
+		this.address = address;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
+		this.userInfo = userInfo;
+	}
 
 }

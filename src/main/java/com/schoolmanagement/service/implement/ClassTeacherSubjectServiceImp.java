@@ -4,6 +4,7 @@ package com.schoolmanagement.service.implement;
 import com.schoolmanagement.model.Class;
 import com.schoolmanagement.service.ClassTeacherSubjectService;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 	}
 
 	@Override
-	public ClassTeacherSubject findByIdOther(int dataU , int dataC) {
+	public List<ClassTeacherSubject> findByIdOther(int dataU , int dataC) {
 		return classTeacherSubjectRepositories.findByIdTeacherClass(dataU, dataC);
 	}
 
@@ -40,5 +41,17 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 		}
 
 		return classList;
+	}
+
+	@Override
+	public ClassTeacherSubject findById(int teacherId, int classId , int subjectId) {
+		// TODO Auto-generated method stub
+		return classTeacherSubjectRepositories.findByIdTeacherClass(teacherId, classId, subjectId);
+	}
+
+	@Override
+	public Iterable<ClassTeacherSubject> findAll() {
+		
+		return classTeacherSubjectRepositories.findAll();
 	}
 }

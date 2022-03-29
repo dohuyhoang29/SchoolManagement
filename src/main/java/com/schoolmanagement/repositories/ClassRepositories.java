@@ -1,19 +1,16 @@
 package com.schoolmanagement.repositories;
 
-import com.schoolmanagement.model.Class;
-
-
-import com.schoolmanagement.model.ClassTeacherSubject;
-import com.schoolmanagement.model.request.SchoolYearClassRequest;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.request.SchoolYearClassRequest;
 
 public interface ClassRepositories extends PagingAndSortingRepository<Class, Integer> {
 
@@ -26,7 +23,7 @@ public interface ClassRepositories extends PagingAndSortingRepository<Class, Int
 
 	Optional<Class> getClassByClassName(String className);
 
-	@Query(value = "SELECT c FROM Class c JOIN ClassTeacherSubject cts ON c.id = cts.theClass.id WHERE cts.users.id = :teacherID")
+	@Query(value = "SELECT c FROM Class c JOIN ClassTeacherSubject cts ON c.id = cts.theClass.id WHERE cts.users.id = :teacherID GROUP BY c.id")
 	Page<Class> getAllByTeacherId(@Param("teacherID") Integer id, Pageable pageable);
 
 	@Query(value = "SELECT COUNT(c.id) from Class c")

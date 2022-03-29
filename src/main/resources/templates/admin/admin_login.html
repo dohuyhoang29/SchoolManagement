@@ -16,13 +16,13 @@
 
 </head>
 <body class="font-muli theme-cyan gradient">
-
+<div class="image_boder" >
 <div class="auth option2">
   <div class="auth_left">
-    <div class="card">
+    <div class="card ">
       <div class="card-body">
         <div class="text-center">
-          <a class="header-brand" href="index.html"><i class="fa fa-graduation-cap brand-logo"></i></a>
+          <a class="header-brand" th:href="@{/}"><i class="fa fa-graduation-cap brand-logo"></i></a>
           <div class="card-title mt-3">Login to your account</div>
         </div>
         <div th:if="${param.error}" class="alert alert-danger">
@@ -53,9 +53,7 @@
       </div>
     </div>
   </div>
-</div>
-</div>
-
+</div></div>
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script th:src="@{/bundles/lib.vendor.bundle.js}"></script>
 

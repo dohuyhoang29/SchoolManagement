@@ -7,7 +7,7 @@
     <div class="tab-pane fade show active" id="menu-admin" role="tabpanel">
       <nav class="sidebar-nav">
         <ul class="metismenu">
-          <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+          <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/dashboard}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
           <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/show/teacher}"><i class="fa fa-user-circle-o"></i><span>Teacher</span></a>
           <li><a th:href="@{/show/student}"><i class="fa fa-user"></i><span>Student</span></a></li>
           <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/show/subjects}"><i class="fa fa-book"></i><span>Subject</span></a></li>

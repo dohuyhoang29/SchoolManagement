@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
@@ -39,6 +40,7 @@ public class AttachmentController {
 			return "null";
 		}
 	}
+	
 	
 	
 	@PostMapping("/delete/image")

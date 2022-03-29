@@ -90,18 +90,26 @@
               						<th>15 minutes</th>
               						<th>1 houser</th>
               						<th>Semester</th>
-              						<th>Average subject</th>
+              						<th>Average</th>
+              						<th>|</th>
               						<th>Oral</th>
               						<th>15 minutes</th>
               						<th>1 houser</th>
               						<th>Semester</th>
-              						<th>Average subject</th>
+              						<th>Average</th>
               					</tr>
               				</thead>
               				<tbody>
+              					<tr  th:each="listMark : ${listRquest}">
+              						<td th:text="${listMark.subjectName}"></td>
+              						<th:block th:if="${listMark.coefficients != null}" th:each="coefficients, state : ${listMark.coefficients}">
+              							<td class="align-center" th:text="${coefficients.coefficient}"></td>
+              							<td class="align-center" th:if="${state.count == 5}">|</td>
+              						</th:block>
+              					</tr>
               				</tbody>
               			</table>
-		              <a class="btn btn-secondary text-white">Cancel</a>
+		              <a class="btn btn-secondary text-white" th:href="@{/show/mark}">Cancel</a>
                 </div>
               </div>
             </div>

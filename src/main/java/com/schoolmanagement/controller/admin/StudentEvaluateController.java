@@ -1,6 +1,8 @@
 package com.schoolmanagement.controller.admin;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
@@ -15,66 +17,114 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.schoolmanagement.model.AccountDetails;
+import com.schoolmanagement.model.Mark;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.MarkRequest;
+import com.schoolmanagement.service.implement.MarkServiceImp;
 import com.schoolmanagement.service.implement.StudentEvaluateServiceImp;
 import com.schoolmanagement.service.implement.StudentServiceImp;
 
 @Controller
 public class StudentEvaluateController {
-  @Autowired
-  private StudentServiceImp studentServiceImp;
-  @Autowired
-  private StudentEvaluateServiceImp studentEvaluateServiceImp;
+	@Autowired
+	private StudentServiceImp studentServiceImp;
 
-  @PreAuthorize("hasAnyAuthority('TEACHER')")
-  @GetMapping("/insert/evaluate/{student-id}/{semester}")
-  public String insertStudentEvaluate(@PathVariable("student-id") Integer studentId, Model model,
-      @PathVariable("semester") Integer semester) {
-    StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(studentId, semester);
-    if (evaluate == null) {
-      User student = studentServiceImp.getStudentById(studentId);
-      StudentEvaluate studentEvaluate= new StudentEvaluate();
+	@Autowired
+	private StudentEvaluateServiceImp studentEvaluateServiceImp;
 
-      studentEvaluate.setStudent(student);
-      studentEvaluate.setSemester(semester);
+	@Autowired
+	private MarkServiceImp markServiceImp;
 
-      model.addAttribute("student", student);
-      model.addAttribute("studentEvaluate", studentEvaluate);
-    } else {
-      model.addAttribute("student", evaluate.getStudent());
-      model.addAttribute("studentEvaluate", evaluate);}
+	@PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
+	@GetMapping("/insert/evaluate/{student-id}/{semester}")
+	public String insertStudentEvaluate(@PathVariable("student-id") Integer studentId, Model model,
+			@PathVariable("semester") Integer semester) {
 
-    return "/admin/student/student_evaluate";
-  }
+		List<Mark> marks = markServiceImp.findAllMarkByMedium(studentId, 5, semester);
+		StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(studentId, semester);
 
-  @PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
-  @PostMapping("/evaluate/save/{id}")
-  public String saveStudentEvaluate (@Valid StudentEvaluate studentEvaluate, BindingResult result,
-      @AuthenticationPrincipal AccountDetails accountDetails, @PathVariable("id") Integer id, Model model) {
-    User student = studentServiceImp.getStudentById(id);
-    User user = accountDetails.getUser();
-    studentEvaluate.setCreatedDate(LocalDate.now());
-    studentEvaluate.setUpdatedDate(LocalDate.now());
-    studentEvaluate.setStudent(student);
+		float average = 0;
+		for (int i = 0; i < marks.size(); i++) {
+			average += marks.get(i).getCoefficient();
+			if (i + 1 == marks.size()) {
+				average = average / marks.size();
+			}
 
-    if (result.hasErrors()) {
-      studentEvaluate.setStudent(student);
+		}
 
-      model.addAttribute("student", student);
-      model.addAttribute("studentEvaluate", studentEvaluate);
+		int status = 0;
+		if (average >= 8) {
+			status = 1;
+		} else if (average >= 6.5 && average < 8) {
+			status = 2;
+		} else if (average >= 5 && average < 6.5) {
+			status = 3;
+		} else {
+			status = 4;
+		}
 
-      return "/admin/student/student_evaluate";
-    }
+		if (evaluate == null) {
+			User student = studentServiceImp.getStudentById(studentId);
+			StudentEvaluate studentEvaluate = new StudentEvaluate();
 
-    if (studentEvaluate.getId() == null) {
-      studentEvaluate.setCreatedBy(user);
-      studentEvaluate.setUpdatedBy(user);
-    } else {
-      studentEvaluate.setUpdatedBy(user);
-    }
+			studentEvaluate.setStudent(student);
+			studentEvaluate.setSemester(semester);
 
-    studentEvaluateServiceImp.saveStudentEvaluate(studentEvaluate);
-    return "redirect:/show/student";
-  }
+			model.addAttribute("student", student);
+			model.addAttribute("studentEvaluate", studentEvaluate);
+		} else {
+			model.addAttribute("student", evaluate.getStudent());
+			model.addAttribute("studentEvaluate", evaluate);
+		}
+
+		model.addAttribute("status", status);
+		model.addAttribute("average", Float.valueOf(String.format(Locale.getDefault(), "%.1f", average)));
+
+		return "/admin/student/student_evaluate";
+	}
+
+	@PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
+	@PostMapping("/evaluate/save/{id}")
+	public String saveStudentEvaluate(@Valid StudentEvaluate studentEvaluate, BindingResult result,
+			@AuthenticationPrincipal AccountDetails accountDetails, @PathVariable("id") Integer id, Model model) {
+		User student = studentServiceImp.getStudentById(id);
+		User user = accountDetails.getUser();
+		studentEvaluate.setCreatedDate(LocalDate.now());
+		studentEvaluate.setUpdatedDate(LocalDate.now());
+		studentEvaluate.setStudent(student);
+
+		if (result.hasErrors()) {
+			studentEvaluate.setStudent(student);
+
+			model.addAttribute("student", student);
+			model.addAttribute("studentEvaluate", studentEvaluate);
+
+			return "/admin/student/student_evaluate";
+		}
+
+		if (studentEvaluate.getId() == null) {
+			studentEvaluate.setCreatedBy(user);
+			studentEvaluate.setUpdatedBy(user);
+		} else {
+			studentEvaluate.setUpdatedBy(user);
+		}
+
+		studentEvaluateServiceImp.saveStudentEvaluate(studentEvaluate);
+		return "redirect:/show/student";
+	}
+
+	@GetMapping("/show/student-class-detail/{id}")
+	public String showStudentClassDetail(Model model, @PathVariable("id") Integer id) {
+
+		User studentById = studentServiceImp.getStudentById(id);
+		List<StudentEvaluate> studentEvaluateList = studentEvaluateServiceImp.studentEvaluate(id);
+		List<MarkRequest> markList = markServiceImp.listAverageSubject(id);
+
+		model.addAttribute("markList", markList);
+		model.addAttribute("studentById", studentById);
+		model.addAttribute("studentEvaluateList", studentEvaluateList);
+
+		return "/admin/student/student_class_detail";
+	}
 }

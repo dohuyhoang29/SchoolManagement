@@ -20,11 +20,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     String redirectURl = request.getContextPath();
 
     if (accountDetails.hasRole("ADMIN")) {
-      redirectURl = "/";
+      redirectURl = "/dashboard";
     } else if (accountDetails.hasRole("TEACHER") || accountDetails.hasRole("HOMEROOM_TEACHER")) {
       redirectURl = "/show/student";
     } else if (accountDetails.hasRole("STUDENT")) {
-      redirectURl = "/home";
+      redirectURl = "/student/show/mark";
     }
 
     response.sendRedirect(redirectURl);

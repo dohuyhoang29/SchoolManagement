@@ -123,6 +123,7 @@
                     <td class="text-center">
                       <a th:href="@{/detail/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm"><i class="fa fa-eye"></i></a>
                       <a th:href="@{/edit/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm text-warning" ><i class="fa fa-edit"></i></a>
+                      <a th:href="@{/delete/blog/{id}(id = ${blog.id})}" class="btn btn-icon btn-sm text-danger"><i class="fa fa-trash"></i></a>
                     </td>
                   </tr>
                 </tbody>

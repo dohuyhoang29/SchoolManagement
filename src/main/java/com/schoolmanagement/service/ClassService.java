@@ -1,9 +1,7 @@
 package com.schoolmanagement.service;
 
-import com.schoolmanagement.model.ClassTeacherSubject;
 import java.util.List;
 
-import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Class;

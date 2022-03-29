@@ -1,6 +1,5 @@
 package com.schoolmanagement.config.factory;
 
-import java.sql.Types;
 
 import org.hibernate.dialect.MySQL8Dialect;
 import org.hibernate.dialect.function.StandardSQLFunction;
@@ -12,6 +11,7 @@ public class SessionFactorys extends MySQL8Dialect {
 		super();
 
 		registerFunction("GROUP_CONCAT", new StandardSQLFunction("GROUP_CONCAT", StandardBasicTypes.STRING));
+//		registerFunction("CAST", new CastFunction());
 	}
 
 }

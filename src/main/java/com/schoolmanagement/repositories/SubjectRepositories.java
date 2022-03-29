@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.schoolmanagement.model.Subjects;
-import com.schoolmanagement.model.request.SubjectRequest;
+import com.schoolmanagement.model.request.MarkRequest;
 
 @Repository
 public interface SubjectRepositories extends PagingAndSortingRepository<Subjects, Integer> {
@@ -31,12 +31,23 @@ public interface SubjectRepositories extends PagingAndSortingRepository<Subjects
 	List<Subjects> findAllMarkByASC();
 
 	@Transactional
-	@Query(value = "SELECT new com.schoolmanagement.model.request.SubjectRequest(s.subjectName, s.id, m.studentId, m.type, m.semester, "
-			+ " GROUP_CONCAT(m.coefficient  ) ) "
+	@Query(value = "SELECT new com.schoolmanagement.model.request.MarkRequest(s.subjectName, s.id, m.studentId, m.type, m.semester, "
+			+ " GROUP_CONCAT(m.coefficient ) ) "
 			+ " FROM Subjects s "
 			+ " JOIN Mark m ON s.id = m.subjectId "
-			+ " WHERE m.subjectId = :studentId AND m.type = :type AND m.semester = :semester"
+			+ " WHERE m.studentId = :studentId "
 			+ " GROUP BY s.subjectName, " 
-			+ " s.id, m.subjectId, m.type , m.semester" )
-	List<SubjectRequest> findByStudent(@Param("studentId") int id , @Param("type") int type , @Param("semester") int semester);
+			+ " s.id, m.subjectId, m.type , m.semester")
+	List<MarkRequest> findByStudent(@Param("studentId") int id );
+	
+	
+	@Query(value = "SELECT new com.schoolmanagement.model.request.MarkRequest(s.subjectName, s.id, m.studentId, m.type, m.semester, "
+			+ " GROUP_CONCAT(m.coefficient ) ) "
+			+ " FROM Subjects s "
+			+ " JOIN Mark m ON s.id = m.subjectId "
+			+ " WHERE m.studentId = :studentId AND m.semester = :semester "
+			+ " GROUP BY s.subjectName, " 
+			+ " s.id, m.subjectId, m.type , m.semester")
+	List<MarkRequest> findByStudentSemester(@Param("studentId") int id , @Param("semester") int semester );
+
 }

@@ -29,7 +29,7 @@ public class Mark {
 	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
 	private User students;
-	
+		
 	@Column(name ="student_id" , insertable = false , updatable = false)
 	private int studentId;
 	

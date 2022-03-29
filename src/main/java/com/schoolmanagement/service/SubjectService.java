@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Subjects;
-import com.schoolmanagement.model.request.SubjectRequest;
+import com.schoolmanagement.model.request.MarkRequest;
 
 public interface SubjectService {
 	Iterable<Subjects> getAllSubject();
@@ -22,5 +22,7 @@ public interface SubjectService {
 
 	Subjects findSubjectBySubjectName(String name);
 	
-	List<SubjectRequest> findByStudent(int studentId , int type , int semester);
+	List<MarkRequest> findByStudent(int studentId);
+	
+	List<MarkRequest> findByStudentSemester(int studentId , int semester);
 }

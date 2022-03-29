@@ -58,6 +58,11 @@
          		<label>Header: <span th:text="${blogs.header}"></span></label>
          	</div>
          	<div>
+         		<label>Banner :</label> <br> <div class="text-center">
+         			<img alt="not Found"  style="width: 600px ; height: 300px" th:src="${blogs.getBlogBanner()}">
+         		</div>
+         	</div>
+         	<div>
          		<label>Author: <span th:text="${blogs.user.fullName}"></span></label>
          	</div>
          	<div>
