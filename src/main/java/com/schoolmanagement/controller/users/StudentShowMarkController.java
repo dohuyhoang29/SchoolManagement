@@ -47,7 +47,7 @@ public class StudentShowMarkController {
 	
 	@GetMapping("/student/show/mark")
 	public String IndexStudent(Model model , @AuthenticationPrincipal AccountDetails accountDetails) {
-		User students = studentService.findStudentByUserName(accountDetails.getUsername());
+		User students = userService.getUserByUsername(accountDetails.getUsername());
 		StudentEvaluate studentEvaluate1 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 1);
 		StudentEvaluate studentEvaluate2 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 2);
 
@@ -56,10 +56,10 @@ public class StudentShowMarkController {
 		List<MarkRequest> markRequests1 = subjectService.findByStudentSemester(students.getId(), 1);
 		List<MarkRequest> markRequests2 = subjectService.findByStudentSemester(students.getId(), 2);
 		List<Subjects> listSubject = (List<Subjects>)subjectService.getAllSubject();
-		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectService.findAllByClassId(students.getUserInfo().getAClass().getId());
+		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectService.findAllByClassId(students.getAClass().getId());
 		
 
-		List<User> list = studentService.findByClassId(students.getUserInfo().getAClass().getId());
+		List<User> list = studentService.findByClassId(students.getAClass().getId());
 		
 		float average1 = 0;
 		float average2 = 0;

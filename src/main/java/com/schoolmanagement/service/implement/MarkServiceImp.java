@@ -145,20 +145,20 @@ public class MarkServiceImp implements MarkService {
 
 		markRepositories.save(mark);
 
-		if (markRepositories.finbyStudentSubect(markRequest.getSubjects(), markRequest.getStudents(),
+		if (markRepositories.finByStudentSubject(markRequest.getSubjects(), markRequest.getStudents(),
 				markRequest.getSemester()) != null) {
 			
 			Mark marks = new Mark();
 			
 			List<Mark> listMarkSubject = new ArrayList<>();
 			
-			listMarkSubject.addAll(markRepositories.finbyStudentSubect(markRequest.getSubjects(),
+			listMarkSubject.addAll(markRepositories.finByStudentSubject(markRequest.getSubjects(),
 					markRequest.getStudents(), markRequest.getSemester()));
 			
 			
 			if (listMarkSubject.size() > 7) {
 				
-				Mark mediumscore = markRepositories.findMediumscore(markRequest.getSubjects(), markRequest.getStudents(),
+				Mark mediumscore = markRepositories.findMediumScore(markRequest.getSubjects(), markRequest.getStudents(),
 						5, markRequest.getSemester());
 				
 				if (mediumscore != null && mediumscore.getId() != 0) {

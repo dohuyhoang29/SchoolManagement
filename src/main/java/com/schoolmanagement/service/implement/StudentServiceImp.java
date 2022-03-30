@@ -274,7 +274,7 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public List<User> findByClassId(int classId) {
 
-		return repositories.findByIdClass(classId);
+		return studentRepositories.findByIdClass(classId);
 	}
 
 
