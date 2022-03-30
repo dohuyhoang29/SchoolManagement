@@ -18,42 +18,45 @@ import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.MarkRequest;
-import com.schoolmanagement.service.implement.ClassTeacherSubjectServiceImp;
-import com.schoolmanagement.service.implement.MarkServiceImp;
-import com.schoolmanagement.service.implement.StudentEvaluateServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
-import com.schoolmanagement.service.implement.SubjectServiceImp;
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.MarkService;
+import com.schoolmanagement.service.StudentEvaluateService;
+import com.schoolmanagement.service.StudentService;
+import com.schoolmanagement.service.SubjectService;
+
 
 @Controller
 public class StudentShowMarkController {
 	@Autowired
-	private StudentEvaluateServiceImp evaluateServiceImp;
+	private StudentEvaluateService evaluateService;
 	
 	@Autowired
-	private StudentServiceImp studentServiceImp;
+	private StudentService studentService;
 	
 	@Autowired
-	private MarkServiceImp markServiceImp;
+	private MarkService markService;
 	
 	@Autowired
-	private SubjectServiceImp subjectServiceImp;
+	private SubjectService subjectService;
 	
 	@Autowired
-	private ClassTeacherSubjectServiceImp classTeacherSubjectServiceImp;
+	private ClassTeacherSubjectService classTeacherSubjectService;
 	
 	@GetMapping("/student/show/mark")
 	public String IndexStudent(Model model , @AuthenticationPrincipal AccountDetails accountDetails) {
-		User students = studentServiceImp.findStudentByUserName(accountDetails.getUsername());
-		StudentEvaluate studentEvaluate1 = evaluateServiceImp.findStudentEvaluateByStudentId(students.getId(), 1);
-		StudentEvaluate studentEvaluate2 = evaluateServiceImp.findStudentEvaluateByStudentId(students.getId(), 2);
+		User students = studentService.findStudentByUserName(accountDetails.getUsername());
+		StudentEvaluate studentEvaluate1 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 1);
+		StudentEvaluate studentEvaluate2 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 2);
 		
-		List<Mark> mark1 = markServiceImp.findAllMarkByMedium(students.getId(), 5, 1);
-		List<Mark> mark2 = markServiceImp.findAllMarkByMedium(students.getId(), 5, 2);
-		List<MarkRequest> markRequests1 = subjectServiceImp.findByStudentSemester(students.getId(), 1);
-		List<MarkRequest> markRequests2 = subjectServiceImp.findByStudentSemester(students.getId(), 2);	
-		List<Subjects> listSubject = (List<Subjects>)subjectServiceImp.getAllSubject();
-		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectServiceImp.findAllByClassId(students.getUserInfo().getAClass().getId());
-		Iterable<User> list = studentServiceImp.getAllStudent();
+		List<Mark> mark1 = markService.findAllMarkByMedium(students.getId(), 5, 1);
+		List<Mark> mark2 = markService.findAllMarkByMedium(students.getId(), 5, 2);
+		List<MarkRequest> markRequests1 = subjectService.findByStudentSemester(students.getId(), 1);
+		List<MarkRequest> markRequests2 = subjectService.findByStudentSemester(students.getId(), 2);	
+		List<Subjects> listSubject = (List<Subjects>)subjectService.getAllSubject();
+		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectService.findAllByClassId(students.getUserInfo().getAClass().getId());
+		
+		
+		List<User> list = studentService.findByClassId(students.getUserInfo().getAClass().getId());
 		
 		float average1 = 0;
 		float average2 = 0;
@@ -94,7 +97,7 @@ public class StudentShowMarkController {
 	public ResponseEntity<List<User>> handList(){
 		
 	
-		List<User> list = (List<User>)studentServiceImp.getAllStudent();
+		List<User> list = (List<User>)studentService.getAllStudent();
 		return new ResponseEntity<List<User>>(list , HttpStatus.OK);
 	}
 }

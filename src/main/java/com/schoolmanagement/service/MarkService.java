@@ -25,7 +25,7 @@ public interface MarkService {
 	
 	List<MarkRequest> listAverageSubject(int studentId);
 	
-	
+	Mark SaveMark(MarkRequest markRequest);
 	
 	Float Average(int studentid  , int semester);
 }

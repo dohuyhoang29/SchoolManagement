@@ -23,6 +23,7 @@ public class AttachmentController {
 	public String handlerFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request)
 			throws IOException {
 		try {
+			
 			String root = "src/main/";
 			String folder = "upload/image/blog_image/";
 			String org_filename = file.getOriginalFilename();
@@ -31,9 +32,12 @@ public class AttachmentController {
 			if (!Files.isDirectory(Paths.get(root + folder))) {
 				Files.createDirectories(Paths.get(root + folder));
 			}
+			
 			Files.copy(file.getInputStream(), Paths.get(root + folder + str_filename));
 
+			
 			return "/" + folder + str_filename;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -48,15 +52,18 @@ public class AttachmentController {
 	public void HandlerDeleteFIle(@RequestParam("src") String path) {
 		String paths = path.replaceAll("http://localhost:8080", "");
 		String root = "src/main";
+		
 		try {
 			
 			File fileToDelete = FileUtils.getFile(root + paths);
 			boolean succes = FileUtils.deleteQuietly(fileToDelete);
+			
 			if(succes) {
 				System.out.println("done!");
 			}else {
 				System.out.println("False!");
 			}
+			
 		} catch (Exception e) {
 			
 		}

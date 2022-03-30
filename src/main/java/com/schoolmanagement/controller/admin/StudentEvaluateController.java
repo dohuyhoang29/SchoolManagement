@@ -21,32 +21,35 @@ import com.schoolmanagement.model.Mark;
 import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.MarkRequest;
-import com.schoolmanagement.service.implement.MarkServiceImp;
-import com.schoolmanagement.service.implement.StudentEvaluateServiceImp;
-import com.schoolmanagement.service.implement.StudentServiceImp;
+import com.schoolmanagement.service.MarkService;
+import com.schoolmanagement.service.StudentEvaluateService;
+import com.schoolmanagement.service.StudentService;
 
 @Controller
 public class StudentEvaluateController {
 	@Autowired
-	private StudentServiceImp studentServiceImp;
+	private StudentService  studentService;
 
 	@Autowired
-	private StudentEvaluateServiceImp studentEvaluateServiceImp;
+	private StudentEvaluateService studentEvaluateService;
 
 	@Autowired
-	private MarkServiceImp markServiceImp;
+	private MarkService markService;
 
 	@PreAuthorize("hasAnyAuthority('HOMEROOM_TEACHER')")
 	@GetMapping("/insert/evaluate/{student-id}/{semester}")
 	public String insertStudentEvaluate(@PathVariable("student-id") Integer studentId, Model model,
 			@PathVariable("semester") Integer semester) {
 
-		List<Mark> marks = markServiceImp.findAllMarkByMedium(studentId, 5, semester);
-		StudentEvaluate evaluate = studentEvaluateServiceImp.findStudentEvaluateByStudentId(studentId, semester);
+		List<Mark> marks = markService.findAllMarkByMedium(studentId, 5, semester);
+		StudentEvaluate evaluate = studentEvaluateService.findStudentEvaluateByStudentId(studentId, semester);
 
 		float average = 0;
+		
 		for (int i = 0; i < marks.size(); i++) {
+			
 			average += marks.get(i).getCoefficient();
+			
 			if (i + 1 == marks.size()) {
 				average = average / marks.size();
 			}
@@ -54,18 +57,24 @@ public class StudentEvaluateController {
 		}
 
 		int status = 0;
+		
 		if (average >= 8) {
+			
 			status = 1;
 		} else if (average >= 6.5 && average < 8) {
+			
 			status = 2;
 		} else if (average >= 5 && average < 6.5) {
+			
 			status = 3;
 		} else {
+			
 			status = 4;
 		}
 
 		if (evaluate == null) {
-			User student = studentServiceImp.getStudentById(studentId);
+			
+			User student = studentService.getStudentById(studentId);
 			StudentEvaluate studentEvaluate = new StudentEvaluate();
 
 			studentEvaluate.setStudent(student);
@@ -74,6 +83,7 @@ public class StudentEvaluateController {
 			model.addAttribute("student", student);
 			model.addAttribute("studentEvaluate", studentEvaluate);
 		} else {
+			
 			model.addAttribute("student", evaluate.getStudent());
 			model.addAttribute("studentEvaluate", evaluate);
 		}
@@ -88,13 +98,16 @@ public class StudentEvaluateController {
 	@PostMapping("/evaluate/save/{id}")
 	public String saveStudentEvaluate(@Valid StudentEvaluate studentEvaluate, BindingResult result,
 			@AuthenticationPrincipal AccountDetails accountDetails, @PathVariable("id") Integer id, Model model) {
-		User student = studentServiceImp.getStudentById(id);
+		
+		User student = studentService.getStudentById(id);
 		User user = accountDetails.getUser();
+		
 		studentEvaluate.setCreatedDate(LocalDate.now());
 		studentEvaluate.setUpdatedDate(LocalDate.now());
 		studentEvaluate.setStudent(student);
 
 		if (result.hasErrors()) {
+			
 			studentEvaluate.setStudent(student);
 
 			model.addAttribute("student", student);
@@ -104,22 +117,25 @@ public class StudentEvaluateController {
 		}
 
 		if (studentEvaluate.getId() == null) {
+			
 			studentEvaluate.setCreatedBy(user);
 			studentEvaluate.setUpdatedBy(user);
 		} else {
+			
 			studentEvaluate.setUpdatedBy(user);
 		}
 
-		studentEvaluateServiceImp.saveStudentEvaluate(studentEvaluate);
+		studentEvaluateService.saveStudentEvaluate(studentEvaluate);
+		
 		return "redirect:/show/student";
 	}
 
 	@GetMapping("/show/student-class-detail/{id}")
 	public String showStudentClassDetail(Model model, @PathVariable("id") Integer id) {
 
-		User studentById = studentServiceImp.getStudentById(id);
-		List<StudentEvaluate> studentEvaluateList = studentEvaluateServiceImp.studentEvaluate(id);
-		List<MarkRequest> markList = markServiceImp.listAverageSubject(id);
+		User studentById = studentService.getStudentById(id);
+		List<StudentEvaluate> studentEvaluateList = studentEvaluateService.studentEvaluate(id);
+		List<MarkRequest> markList = markService.listAverageSubject(id);
 
 		model.addAttribute("markList", markList);
 		model.addAttribute("studentById", studentById);

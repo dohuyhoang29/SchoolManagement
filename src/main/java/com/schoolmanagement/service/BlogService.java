@@ -13,10 +13,10 @@ public interface BlogService {
 
 	Page<Blog> searchBlog(String search, String fromDate, String toDate, int currentPage, String sortField,
 			String sortDir);
-	
-	void DeleteBlog(int id);
-	
-	Page<Blog> PagingBlogUserScreen(int page);
 
-  int countAllBlog();
+	void DeleteBlog(int id);
+
+	Page<Blog> PagingBlogUserScreen(int page , int size);
+
+	int countAllBlog();
 }

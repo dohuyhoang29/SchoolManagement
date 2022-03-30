@@ -59,6 +59,10 @@ public class MarkRequest {
 		
 	}
 	//m.id, m.coefficient, m.semester,s.subject_name , u.full_name 
+	public MarkRequest(int markId) {
+		this.markId = markId;
+	}
+	
 	
 	public MarkRequest(int subjectId , float coefficient , int semester , String subjectName , String fullname) {
 		this.subjectId = subjectId;

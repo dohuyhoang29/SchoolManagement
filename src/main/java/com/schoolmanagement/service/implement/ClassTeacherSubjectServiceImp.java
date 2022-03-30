@@ -46,7 +46,7 @@ public class ClassTeacherSubjectServiceImp implements ClassTeacherSubjectService
 	@Override
 	public ClassTeacherSubject findById(int teacherId, int classId , int subjectId) {
 		// TODO Auto-generated method stub
-		return classTeacherSubjectRepositories.findByIdTeacherClass(teacherId, classId, subjectId);
+		return classTeacherSubjectRepositories.findByIdSubjectClass( classId, subjectId);
 	}
 
 	@Override

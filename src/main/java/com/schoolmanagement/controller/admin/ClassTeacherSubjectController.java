@@ -29,20 +29,25 @@ public class ClassTeacherSubjectController {
 
 	
 	@Autowired
-	private SubjectService subjectServiceImp;
+	private SubjectService subjectService;
 
 	@Autowired
-	private ClassTeacherSubjectService classTeacherSubjectServiceImp;
+	private ClassTeacherSubjectService classTeacherSubjectService;
 
 	@Autowired
-	private TeacherService teacherServiceImp;
+	private TeacherService teacherService;
 	
 
 	@GetMapping("/updateClassTeacher/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
-		model.addAttribute("userList", teacherServiceImp.getAllUser());
+		
+		
+		Iterable<ClassTeacherSubject> cts = classTeacherSubjectService.findAllByClassId(id);
+
+		model.addAttribute("cts", cts);
+		model.addAttribute("userList", teacherService.getAllUser());
 		model.addAttribute("class", classService.getClassById(id));
-		model.addAttribute("subjectList", subjectServiceImp.getAllSubject());
+		model.addAttribute("subjectList", subjectService.getAllSubject());
 
 		return "/admin/class/update_classTeacher";
 	}
@@ -51,14 +56,17 @@ public class ClassTeacherSubjectController {
 	
 	@PostMapping("/classTeacherSubject/change")
 	public ResponseEntity<Void> ChangeClassTeacherSubject(@RequestBody List<ClassTeacherSubjectRequest> dr) {
+		
 		for(int i = 0 ; i < dr.size() ; i++) {
+			
 			ClassTeacherSubject cts = new ClassTeacherSubject();
-			User users = teacherServiceImp.findByUserId(dr.get(i).getUserid());
-			Subjects subjects = subjectServiceImp.findBySubjectID(dr.get(i).getSubjectId());
+			User users = teacherService.findByUserId(dr.get(i).getUserid());
+			Subjects subjects = subjectService.findBySubjectID(dr.get(i).getSubjectId());
 			Class class_u = classService.getClassById(dr.get(i).getClassid());
-			ClassTeacherSubject e = classTeacherSubjectServiceImp.findById(users.getId(), class_u.getId(), subjects.getId());
+			ClassTeacherSubject e = classTeacherSubjectService.findById(users.getId(), class_u.getId(), subjects.getId());
 			
 			if(e != null && e.getId() != 0) {
+				
 				cts.setId(e.getId());
 			}
 			
@@ -66,8 +74,9 @@ public class ClassTeacherSubjectController {
 			cts.setTheClass(class_u);
 			cts.setUsers(users);
 			
-			classTeacherSubjectServiceImp.Save(cts);
+			classTeacherSubjectService.Save(cts);
 		}
+		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

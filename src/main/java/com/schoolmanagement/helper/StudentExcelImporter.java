@@ -56,37 +56,50 @@ public class StudentExcelImporter {
 				int columnIndex = nextCell.getColumnIndex();
 				switch (columnIndex) {
 				case 0:
+					
 					fullName = nextCell.getStringCellValue();
 					break;
 				case 1:
+					
 					email = nextCell.getStringCellValue();
 					break;
 				case 2:
+					
 					phone = nextCell.getStringCellValue();
 					break;
 				case 3:
+					
 					address = nextCell.getStringCellValue();
 					break;
 				case 4:
+					
 					String dateDob = dataFormatter.formatCellValue(nextCell);
 					dob = LocalDate.parse(dateDob, formatter);
 					break;
 				case 5:
+					
 					if (nextCell.getStringCellValue().equalsIgnoreCase("Studying")) {
+						
 						status = 1;
 					} else if (nextCell.getStringCellValue().equalsIgnoreCase("Absent")) {
+						
 						status = 2;
 					} else {
+						
 						status = 3;
 					}
+					
 					break;
 				case 6:
+					
 					admissionYear = nextCell.getNumericCellValue();
 					break;
 				case 7:
+					
 					graduateYear = nextCell.getNumericCellValue();
 					break;
 				case 8:
+					
 					className = nextCell.getStringCellValue();
 					break;
 				}
@@ -107,7 +120,9 @@ public class StudentExcelImporter {
 			user.addRole(role);
 			studentList.add(user);
 		}
+		
 		workbook.close();
+		
 		return studentList;
 	}
 }

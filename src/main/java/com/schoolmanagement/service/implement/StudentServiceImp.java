@@ -42,7 +42,7 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public void saveStudent(StudentRequest studentRequest, MultipartFile multipartFile) {
 		try {
-			studentRequest.setImage(multipartFile, "upload/image/student_image/");
+			studentRequest.setImage(multipartFile, "/upload/image/student_image/");
 		} catch (IOException e) {
 			System.out.println("Can not found file");
 		}
@@ -151,7 +151,8 @@ public class StudentServiceImp implements StudentService {
 
 	@Override
 	public Page<User> findAllStudentByClassId(int classid, int page) {
-		Pageable pageable = PageRequest.of(page - 1, 10);
+		
+		Pageable pageable = PageRequest.of(page - 1, 1);
 
 		return repositories.findByIdClass(classid, pageable);
 	}
@@ -159,13 +160,16 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public Page<User> findAllStudentByListClass(Set<Class> classList, Integer currentPage, String sortField,
 			String sortDir, String fullName, String grade, String className) {
+		
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
 
 		if (grade.equalsIgnoreCase("")) {
+			
 			return repositories.findStudentByListClass(classList, fullName, className, pageable);
 		} else {
+			
 			return repositories.findStudentByListClassAndGrade(classList, fullName, className, Integer.parseInt(grade),
 					pageable);
 		}
@@ -174,6 +178,7 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public List<User> findAllStudentNotClass() {
 		List<User> list = new ArrayList<>();
+		
 		for (User user : repositories.getAllStudentNotClass()) {
 			if (user.getUserInfo().getAClass() == null) {
 				list.add(user);
@@ -188,7 +193,9 @@ public class StudentServiceImp implements StudentService {
 		List<SelectStudentReponse> list = new ArrayList<>();
 
 		for (User user : repositories.getAllStudentNotClassByAdmissionYear(schoolYear, grade)) {
+			
 			SelectStudentReponse newItem = new SelectStudentReponse();
+			
 			if (user.getUserInfo().getAClass() == null) {
 				newItem.setId(user.getId());
 				newItem.setText(user.getFullName());
@@ -227,6 +234,12 @@ public class StudentServiceImp implements StudentService {
 	public User findStudentByUserName(String username) {
 
 		return repositories.findStudentByUsername(username);
+	}
+
+	@Override
+	public List<User> findByClassId(int classId) {
+		
+		return repositories.findByIdClass(classId);
 	}
 
 

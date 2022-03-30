@@ -82,7 +82,7 @@
 										<div align="center" id="message"></div>
 											<div class="card-body">
 												<h3>Teacher Subject</h3>
-												<div th:each="subject : ${subjectList}">
+												<div th:if="${cts.size() ==0}" th:each="subject : ${subjectList}">
 													<form id="classInsertForm" method="post">
 														<div class="row clearfix">
 															<input type="hidden" name="class" id="classId"
@@ -95,9 +95,10 @@
 																			th:value="${subject.id}"> <select
 																			class="col-md-5 form-control input-height users"
 																			name="users">
-																			<option th:each="teacher : ${subject.getUsers()}"
-																				th:value="${teacher.id}"
-																				th:utext="${teacher.fullName}"></option>
+							                              						<option th:each="teacher : ${subject.getUsers()}"
+																					th:value="${teacher.id}"
+																					th:utext="${teacher.fullName}"></option>
+																			
 																		</select>
 																	</div>
 																</div>
@@ -105,11 +106,39 @@
 														</div>
 													</form>
 												</div>
+											
+											
+												<div  th:if="${cts.size() >=1 }">
+									<div th:each="TeacherSubject : ${cts}">
+				             			<form id="classInsertForm"  method="post">
+					                      <div class="row clearfix">
+					                        <input type="hidden" name="class" id="classId" th:value="${class.id}">
+					                          
+					                        <div class="col-md-12 col-sm-12">
+					                          <div class="form-group">
+					                            <div class="form-group text-center row"  >
+					                              <label  class="col-md-3 col-form-label" >[[${TeacherSubject.getSubjects().subjectName}]]</label>
+					                                  <input type="hidden" class="subject" name="subject" th:value="${TeacherSubject.getSubjects().id}"> 
+					                              <select class="col-md-5 form-control input-height users" name="users">
+					                              	<th:block th:each = "teacher : ${TeacherSubject.subjects.users}">
+					                              		<option th:selected = "${teacher.id} == ${TeacherSubject.users.id}" th:value = "${teacher.id}" th:utext="${teacher.fullName}"></option>
+					                              	</th:block>
+					                              </select>
+					                              </div>
+					                          </div>
+					                        </div>
+					                     </div>
+					                    </form>
+			                  			</div>
+			                  		</div>
+			                  	</div>
 											</div>
 									</div>
 								</div>
+								
+								
 								<div align="center">
-									<button type="submit" id="change" class="btn btn-primary">Save</button>
+									<button type="submit"class="btn btn-primary change">Save</button>
 									<a class="btn btn-secondary" th:href="@{/show/class}">Cancel</a>
 								</div>
 								
@@ -119,8 +148,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	</div>
+
 
 
 	<script>

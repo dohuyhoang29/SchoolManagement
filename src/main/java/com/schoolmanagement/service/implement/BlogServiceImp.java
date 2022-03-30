@@ -72,8 +72,8 @@ public class BlogServiceImp implements BlogService {
 	}
 
 	@Override
-	public Page<Blog> PagingBlogUserScreen(int page) {
-		Pageable pageable = PageRequest.of(page -1, 9);
+	public Page<Blog> PagingBlogUserScreen(int page , int size) {
+		Pageable pageable = PageRequest.of(page -1, size);
 		
 		return blogRepositories.findAll(pageable);
 	}

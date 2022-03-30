@@ -44,4 +44,6 @@ public interface StudentService {
 	List<MarkRequest> findAllStudentHasMark(int type , int semester , int subjectId , int classId);
 
 	User findStudentByUserName(String username);
+	
+	List<User> findByClassId(int classId);
 }

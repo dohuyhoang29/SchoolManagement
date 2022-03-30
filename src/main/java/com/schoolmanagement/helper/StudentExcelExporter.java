@@ -46,13 +46,18 @@ public class StudentExcelExporter {
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
 		sheet.autoSizeColumn(columnCount);
 		Cell cell = row.createCell(columnCount);
+		
 		if (value instanceof Integer) {
+		
 			cell.setCellValue((Integer) value);
 		} else if (value instanceof Boolean) {
+		
 			cell.setCellValue((Boolean) value);
 		} else {
+		
 			cell.setCellValue((String) value);
 		}
+		
 		cell.setCellStyle(style);
 	}
 
@@ -74,13 +79,18 @@ public class StudentExcelExporter {
 			createCell(row, columnCount++, student.getDob().toString(), style);
 			createCell(row, columnCount++, student.getUserInfo().getAdmissionYear(), style);
 			createCell(row, columnCount++, student.getUserInfo().getGraduateYear(), style);
+			
 			if (student.getUserInfo().getStatus() == 1) {
+				
 				createCell(row, columnCount++, "Studying", style);
 			} else if (student.getUserInfo().getStatus() == 2) {
+				
 				createCell(row, columnCount++, "Absent", style);
 			} else {
+				
 				createCell(row, columnCount++, "Graduate", style);
 			}
+			
 			createCell(row, columnCount++, student.getUserInfo().getAClass().getClassName(), style);
 		}
 	}

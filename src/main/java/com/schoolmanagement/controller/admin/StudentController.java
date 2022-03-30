@@ -1,18 +1,5 @@
 package com.schoolmanagement.controller.admin;
 
-import com.schoolmanagement.helper.StudentExcelExporter;
-import com.schoolmanagement.helper.StudentExcelImporter;
-import com.schoolmanagement.model.AccountDetails;
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.StudentEvaluate;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.model.request.StudentManagementRequest;
-import com.schoolmanagement.model.request.StudentRequest;
-import com.schoolmanagement.service.ClassService;
-import com.schoolmanagement.service.ClassTeacherSubjectService;
-import com.schoolmanagement.service.StudentEvaluateService;
-import com.schoolmanagement.service.StudentService;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,9 +7,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,19 +31,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.schoolmanagement.helper.StudentExcelExporter;
+import com.schoolmanagement.helper.StudentExcelImporter;
+import com.schoolmanagement.model.AccountDetails;
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.StudentManagementRequest;
+import com.schoolmanagement.model.request.StudentRequest;
+import com.schoolmanagement.service.ClassService;
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.StudentService;
+
 @Controller
 public class StudentController {
 
 	@Autowired
 	private StudentService studentService;
+	
 	@Autowired
 	private ClassService classService;
+	
 	@Autowired
 	private ClassTeacherSubjectService classTeacherSubjectService;
-	@Autowired
-	private StudentEvaluateService studentEvaluateService;
+	
+//	@Autowired
+//	private StudentEvaluateService studentEvaluateService;
+	
 	@Autowired
 	private EntityManager entityManager;
+	
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -69,9 +75,11 @@ public class StudentController {
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("search") String search,
 			@Param("status") String status, @Param("grade") String grade, @Param("class-name") String className,
 			@Param("school-year") String schoolYear, @AuthenticationPrincipal AccountDetails accountDetails) {
+		
 		Page<User> page;
 
 		if (accountDetails.hasRole("ADMIN")) {
+			
 			page = studentService.searchStudent(search, status, currentPage, sortField, sortDir, grade, className,
 					schoolYear);
 		} else {
@@ -120,11 +128,14 @@ public class StudentController {
 
 			return "/admin/student/form_student";
 		}
+		
 		studentService.saveStudent(studentRequest, multipartFile);
 
 		if (studentRequest.getId() == null) {
+			
 			rdrAttr.addFlashAttribute("message", "Add student successfully");
 		} else {
+			
 			rdrAttr.addFlashAttribute("message", "Edit student successfully");
 		}
 
@@ -174,6 +185,7 @@ public class StudentController {
 	@RequestMapping("/export/student")
 	@ResponseBody
 	public void exportToExcel(HttpServletResponse response) throws IOException {
+		
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -191,6 +203,7 @@ public class StudentController {
 
 	@PostMapping("/import/student")
 	public String importFromExcel(@RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+		
 		if (multipartFile != null) {
 			StudentExcelImporter excelImporter = new StudentExcelImporter();
 			Role role = entityManager.find(Role.class, 4);
@@ -204,6 +217,8 @@ public class StudentController {
 	@PreAuthorize("hasAuthority('TEACHER')")
 	@GetMapping("/insert/student/mark")
 	public String insertStudentMark() {
+		
+		
 		return "/admin/index";
 	}
 

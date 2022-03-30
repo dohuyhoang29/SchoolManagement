@@ -2,6 +2,9 @@ package com.schoolmanagement.repositories;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -41,4 +44,14 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 			+ "JOIN User u ON m.updatedBy = u.id "
 			+ "WHERE m.studentId = :studentId AND  m.type = 5 AND m.semester = :semester")
 	List<MarkRequest> listAverageSubjectBySemester(@Param("studentId") int studentId , @Param("semester") int semester);
+
+	
+	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(m.id) FROM Mark m WHERE m.students.id = :studentid AND m.type = :type AND m.semester = :semester ")
+	MarkRequest findMarkMediumByStudent(@Param("studentid") int sid,@Param("type") int type  , @Param("semester") int semester);
+
+	@Modifying
+	@Transactional
+	@Query(value ="UPDATE mark  SET coefficient = :coefficient WHERE id = :markId ", nativeQuery = true)
+	void saveTypeMediumYear(@Param("coefficient") float coefficient , @Param("markId") int markId);
+
 }

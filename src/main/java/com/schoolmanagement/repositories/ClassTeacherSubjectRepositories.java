@@ -19,8 +19,8 @@ public interface ClassTeacherSubjectRepositories extends PagingAndSortingReposit
 	List<ClassTeacherSubject> findByIdTeacherClass(@Param("dataU") int idu , @Param("dataC") int idC);
 	
 	@Query(value ="SELECT s FROM ClassTeacherSubject s WHERE "
-			+ "s.users.id = :userId AND s.theClass.id = :classId AND s.subjects.id = :subjectId")
-	ClassTeacherSubject findByIdTeacherClass(@Param("userId") int userId , @Param("classId") int classId , @Param("subjectId") int subjectId);
+			+ "s.theClass.id = :classId AND s.subjects.id = :subjectId")
+	ClassTeacherSubject findByIdSubjectClass( @Param("classId") int classId , @Param("subjectId") int subjectId);
 	
 	
 	@Query(value ="SELECT s FROM ClassTeacherSubject s WHERE s.theClass.id = (:idc) ")

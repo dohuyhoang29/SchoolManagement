@@ -117,20 +117,33 @@
 																<input type="number" class="w-100" th:value="${coefficient.coeffi}" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
 															</td>
-															<td th:if="${markRq.getCoefficients().size() != 3  && type == 1}"><input type="hidden" class="markId" value="">
+															
+															
+														</th:block> 
+														
+														<th:block th:if="${markRq.getCoefficients() != null }">
+															
+															<td th:if="${markRq.getCoefficients().size() == 2   && type == 1}"><input type="hidden" class="markId" value="">
+																	<input  type="number" class="w-100" name="mark" id=""
+																	min=0 max=10 placeholder="Enter" required="required">
+															</td>
+															<td th:if="${markRq.getCoefficients().size() == 1  && type == 1}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
+																
 															</td>
-															<td th:if="${markRq.getCoefficients().size() != 3  && type == 1}"><input type="hidden" class="markId" value="">
-																<input  type="number" class="w-100" name="mark" id=""
-																min=0 max=10 placeholder="Enter" required="required">
-															</td>
-															<td th:if="${markRq.getCoefficients().size() != 2  && type == 2 || markRq.getCoefficients().size() != 2  && type == 3 }"><input type="hidden" class="markId" value="">
+															<td th:if="${markRq.getCoefficients().size() == 1   && type == 1}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
 															</td>
 															
-														</th:block> 
+															<td th:if="${markRq.getCoefficients().size() != 2  && type == 2 || markRq.getCoefficients().size() != 2  && type == 3 }"><input type="hidden" class="markId" value="">
+																<input  type="number" class="w-100" name="mark" id=""
+																min=0 max=10 placeholder="Enter" required="required">
+															</td>
+														
+														</th:block>
+														
 														 <th:block th:if="${markRq.getCoefficients() == null}"> 
 															<td th:if="${type ==1 || type == 4}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
@@ -155,7 +168,7 @@
 											<input type="hidden" th:value = "${currentPage}" id ="currentPage">
 											<div th:fragment="pagination">
 												<div th:if="${totalPages > 1}"
-													th:with="pageUrlPostfix = '?classId=' +${class.id} + '&type=' + ${type} + '&semester=' + ${semester} ">
+													th:with="pageUrlPostfix = '?classId=' +${class.id} + '&type=' + ${type} + '&semester=' + ${semester} + '&subjectId=' + ${subjects.id}  ">
 													<nav>
 														<ul class="pagination justify-content-end"
 															th:with="pageUrlPrefix = '/page/insert/mark/'">

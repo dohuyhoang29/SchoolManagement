@@ -46,57 +46,76 @@ public class TeacherExcelImporter {
 		rowIterator.next();
 
 		while (rowIterator.hasNext()) {
+			
 			Row nextRow = rowIterator.next();
 			Iterator<Cell> cellIterator = nextRow.cellIterator();
+			
 			while (cellIterator.hasNext()) {
+			
 				Cell nextCell = cellIterator.next();
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 				int columnIndex = nextCell.getColumnIndex();
 				switch (columnIndex) {
+				
 				case 0:
+					
 					fullName = nextCell.getStringCellValue();
 					break;
 				case 1:
+					
 					username = nextCell.getStringCellValue();
 					break;
 				case 2:
+					
 					BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 					password = encoder.encode((String) nextCell.getStringCellValue());
 					break;
 				case 3:
+					
 					email = nextCell.getStringCellValue();
 					break;
 				case 4:
+					
 					phone = nextCell.getStringCellValue();
 					break;
 				case 5:
+					
 					String dateDob = nextCell.getStringCellValue();
 					dob = LocalDate.parse(dateDob, formatter);
 					break;
 				case 6:
+					
 					address = nextCell.getStringCellValue();
 					break;
 				case 7:
+					
 					String dateStart = nextCell.getStringCellValue();
 					startDate = LocalDate.parse(dateStart, formatter);
 					break;
 				case 8:
+					
 					String dateEnd = nextCell.getStringCellValue();
 					endDate = LocalDate.parse(dateEnd, formatter);
 					break;
 				}
 			}
+			
 			UserInfo userInfo = new UserInfo();
 			userInfo.setStartDate(startDate);
 			userInfo.setEndDate(endDate);
 			userInfo.setDeleted(false);
+			
 			User user = new User(fullName, username, password, email, phone, dob, address, LocalDateTime.now(),
 					LocalDateTime.now(), userInfo);
+			
 			user.addRole(role);
 			listUser.add(user);
 		}
+		
 		workbook.close();
+		
+		
 		return listUser;
 	}
 }
