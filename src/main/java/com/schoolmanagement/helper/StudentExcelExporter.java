@@ -91,7 +91,7 @@ public class StudentExcelExporter {
 				createCell(row, columnCount++, "Graduate", style);
 			}
 			
-			createCell(row, columnCount++, student.getUserInfo().getAClass().getClassName(), style);
+			createCell(row, columnCount++, student.getAClass().getClassName(), style);
 		}
 	}
 

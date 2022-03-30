@@ -49,13 +49,13 @@ public class MarkServiceImp implements MarkService {
 	@Override
 	public List<Mark> findByStudentSubject(int subjectId, int studentId, int semester) {
 
-		return markRepositories.finbyStudentSubect(subjectId, studentId, semester);
+		return markRepositories.finByStudentSubject(subjectId, studentId, semester);
 	}
 
 	@Override
 	public Mark findMediumScore(int subjectId, int studentId, int type, int semester) {
 
-		return markRepositories.findMediumscore(subjectId, studentId, type, semester);
+		return markRepositories.findMediumScore(subjectId, studentId, type, semester);
 	}
 
 	@Override

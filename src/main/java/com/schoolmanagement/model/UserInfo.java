@@ -38,12 +38,6 @@ public class UserInfo {
 	@Column(name = "graduate_year")
 	private Integer graduateYear;
 
-	@ManyToOne( fetch = FetchType.LAZY)
-	@JoinColumn(name = "class_id")
-	private Class aClass;
-
-
-	
 	@Column(name = "status")
 	private Integer status;
 

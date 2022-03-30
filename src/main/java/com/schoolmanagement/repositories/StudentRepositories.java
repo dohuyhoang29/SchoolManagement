@@ -19,6 +19,10 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "WHERE ur.pk.roleId = 4")
 	List<User> findAllStudent();
 
+	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
+			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "WHERE ur.pk.roleId = 4 AND u.aClass.id = :id")
+	List<User> findAllStudentByClass(@Param("id") Integer id);
+
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
 			+ "WHERE ur.pk.roleId = 4 AND ui.admissionYear = :admissionYear")
@@ -26,14 +30,14 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% AND c.className LIKE %:className%")
 	Page<User> findStudentByFullNameAndClass(@Param("fullName") String fullName, @Param("className") String className,
 			Pageable pageable);
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND u.userInfo.status = :status AND u.aClass.className LIKE %:class%")
 	Page<User> findStudentByFullNameAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,
@@ -41,7 +45,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND u.userInfo.status = :status AND u.aClass.grade = :grade "
 			+ "AND u.aClass.className LIKE %:class% AND u.aClass.schoolYear = :schoolYear")
@@ -51,7 +55,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND u.userInfo.status = :status AND u.aClass.grade = :grade " + "AND u.aClass.className LIKE %:class%")
 	Page<User> findStudentByGradeAndStatus(@Param("fullName") String fullName, @Param("status") Integer status,
@@ -59,7 +63,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND u.userInfo.status = :status AND u.aClass.className LIKE %:class% "
 			+ "AND u.aClass.schoolYear = :schoolYear")
@@ -68,7 +72,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND c.grade = :grade AND c.className LIKE %:class%")
 	Page<User> findStudentByGrade(@Param("fullName") String fullName, @Param("grade") Integer grade,
@@ -76,7 +80,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND c.className LIKE %:class% AND c.schoolYear = :schoolYear")
 	Page<User> findStudentBySchoolYear(@Param("fullName") String fullName, @Param("class") String className,
@@ -84,7 +88,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User AS u " + "INNER JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "INNER JOIN Role AS r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id "
-			+ "INNER JOIN Class AS c ON c.id = ui.aClass.id "
+			+ "INNER JOIN Class AS c ON c.id = u.aClass.id "
 			+ "WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% "
 			+ "AND c.className LIKE %:class% AND c.schoolYear = :schoolYear " + "AND c.grade = :grade")
 	Page<User> findStudentBySchoolYearAndGrade(@Param("fullName") String fullName, @Param("class") String className,
@@ -92,25 +96,25 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId "
-			+ "WHERE ur.pk.roleId = 4 AND u.userInfo.aClass.id = (:classId) AND u.fullName LIKE %:fullName%")
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass.id = (:classId) AND u.fullName LIKE %:fullName%")
 	Page<User> findByClassId(@Param("classId") int id, @Param("fullName") String search, Pageable page);
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId "
-			+ "WHERE ur.pk.roleId = 4 AND u.userInfo.aClass.id = (:classId)")
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass.id = (:classId)")
 	List<User> findByIdClass(@Param("classId") int id);
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId "
-			+ "WHERE ur.pk.roleId = 4 AND u.userInfo.aClass IN :classList "
-			+ "AND u.fullName LIKE %:fullName% AND u.userInfo.aClass.className LIKE %:className%")
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass IN :classList "
+			+ "AND u.fullName LIKE %:fullName% AND u.aClass.className LIKE %:className%")
 	Page<User> findStudentByListClass(@Param("classList") Collection<Class> classList,
 			@Param("fullName") String fullName, @Param("className") String className, Pageable pageable);
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId "
-			+ "WHERE ur.pk.roleId = 4 AND u.userInfo.aClass IN :classList "
-			+ "AND u.fullName LIKE %:fullName% AND u.userInfo.aClass.className LIKE %:className% "
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass IN :classList "
+			+ "AND u.fullName LIKE %:fullName% AND u.aClass.className LIKE %:className% "
 			+ "AND u.aClass.grade = :grade")
 	Page<User> findStudentByListClassAndGrade(@Param("classList") Collection<Class> classList,
 			@Param("fullName") String fullName, @Param("className") String className, @Param("grade") Integer grade,
@@ -118,12 +122,12 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo ui ON ui.id = u.userInfo.id "
-			+ "WHERE ur.pk.roleId = 4 AND ui.aClass IS NULL")
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass IS NULL")
 	List<User> getAllStudentNotClass();
 
 	@Query(value = "SELECT u " + "FROM User u " + "INNER JOIN UserRole ur ON ur.pk.userId = u.id "
 			+ "INNER JOIN Role r ON r.id = ur.pk.roleId " + "INNER JOIN UserInfo ui ON ui.id = u.userInfo.id "
-			+ "WHERE ur.pk.roleId = 4 AND ui.aClass IS NULL " + "AND ui.admissionYear = :admissionYear - :grade + 10")
+			+ "WHERE ur.pk.roleId = 4 AND u.aClass IS NULL " + "AND ui.admissionYear = :admissionYear - :grade + 10")
 	List<User> getAllStudentNotClassByAdmissionYear(@Param("admissionYear") int admissionYear,
 			@Param("grade") int grade);
 
@@ -134,7 +138,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 
 	@Query(value = "SELECT new com.schoolmanagement.model.request.MarkRequest(u.id , u.fullName , u.dob , u.address , m.coefficient , m.id) "
 			+ "FROM User u " + "JOIN Mark m ON u.id = m.studentId " + "WHERE m.type = :type "
-			+ "AND m.semester = :semester " + "AND m.subjectId = :subjectId " + "AND u.userInfo.aClass.id = :classId")
+			+ "AND m.semester = :semester " + "AND m.subjectId = :subjectId " + "AND u.aClass.id = :classId")
 	List<MarkRequest> findAllStudentHasMark(@Param("type") int type, @Param("semester") int semester,
 			@Param("subjectId") int subjectId, @Param("classId") int classId);
 
@@ -142,9 +146,6 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 			+ "inner join role as r on r.id = ur.role_id  " + "INNER JOIN user_info AS ui ON u.user_info_id = ui.id "
 			+ "WHERE ur.role_id = 4 AND ui.admission_year = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
 	int countAllNewStudentLastYear();
-
-	@Query(value = "SELECT u FROM User u WHERE u.username = :username")
-	User findStudentByUsername(@Param("username") String username);
 
 	@Query(value = "SELECT COUNT(u.id) " + "FROM user AS u " + "INNER JOIN user_role AS ur ON u.id = ur.user_id  "
 			+ "inner join role as r on r.id = ur.role_id  " + "INNER JOIN user_info AS ui ON u.user_info_id = ui.id "
@@ -164,9 +165,9 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 			+ "WHERE ur.role_id = 4 AND c.grade = 12 AND ui.status = 2 "
 			+ "AND ui.graduate_year = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
 	int countAllStudentAbsentLastYear();
+
 	
-	
-	@Query(value ="SELECT s FROM User s WHERE s.userInfo.aClass.id = (:classId)")
+	@Query(value ="SELECT s FROM User s WHERE s.aClass.id = (:classId)")
 	Page<User> findByIdClass(@Param("classId") int id , Pageable pageable);
 	
 	

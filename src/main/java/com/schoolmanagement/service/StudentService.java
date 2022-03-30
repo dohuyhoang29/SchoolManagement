@@ -33,7 +33,7 @@ public interface StudentService {
 
 	List<User> findAllStudentNotClass();
 
-	List<SelectStudentReponse> findAllStudentNotClassByAdmissionYear(int schoolYear, int grade);
+	List<SelectStudentReponse> findAllStudentNotClassByAdmissionYear(int schoolYear, int grade, Integer id);
 
 	List<User> findAllByAdmissionYear(Integer admissionYear);
 
@@ -43,7 +43,9 @@ public interface StudentService {
 	
 	List<MarkRequest> findAllStudentHasMark(int type , int semester , int subjectId , int classId);
 
-	User findStudentByUserName(String username);
+	float getYearPointAverage();
+
+	int countAllStudentFailLastYear();
 	
 	List<User> findByClassId(int classId);
 }

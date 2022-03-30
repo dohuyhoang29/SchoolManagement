@@ -52,7 +52,7 @@ public class TeacherAddMarkController {
 	@Autowired
 	private MarkService markService;
 
-	
+
 	@PreAuthorize("hasAuthority('TEACHER')")
 	@GetMapping("/insert/mark/{classid}")
 	public String IndexAddMark(Model model, @PathVariable("classid") int id,
@@ -86,23 +86,23 @@ public class TeacherAddMarkController {
 		List<User> students = studentPages.getContent();
 
 		Class clas = classService.getClassById(classId);
-		
+
 		User teacher = userService.getUserByUsername(accountDetails.getUsername());
-		
+
 		List<ClassTeacherSubject> cts = classTeacherSubjectService.findByIdOther(teacher.getId(), classId);
-		
+
 		List<MarkRequest> markRq = new ArrayList<>();
-		
+
 		Subjects subjects = subjectService.findBySubjectID(subjectId);
-		
+
 		List<Integer> success = new ArrayList<>();
-		
+
 		List<Mark> lengthMarkStudent = new ArrayList<>();
-		
+
 		for (User u : students) {
-			
+
 			MarkRequest markRequest = new MarkRequest();
-			
+
 			markRequest.setStudentId(u.getId());
 			markRequest.setStudentName(u.getFullName());
 			markRequest.setDateOfBirth(u.getDob());
@@ -112,28 +112,28 @@ public class TeacherAddMarkController {
 					subjects.getId(), clas.getId());
 
 			if (listStudentHasMark != null && listStudentHasMark.size() > 0) {
-				
+
 				List<CoefficientRequest> marks = new ArrayList<>();
 
 				for (MarkRequest mr : listStudentHasMark) {
-					
+
 					CoefficientRequest cr = new CoefficientRequest();
-					
+
 					if (markRequest.getStudentId() == mr.getStudentId()) {
 						cr.setId(mr.getMarkId());
 						cr.setCoeffi(mr.getCoefficient());
 						marks.add(cr);
 					}
 				}
-				
+
 				markRequest.setCoefficients(marks);
 
 			}
 			markRq.add(markRequest);
 			if (markService.findByStudentSubject(subjects.getId(), u.getId(),1) != null) {
-				
+
 				lengthMarkStudent = markService.findByStudentSubject(subjects.getId(), u.getId(),1);
-				
+
 				if(lengthMarkStudent.size() > 7) {
 					success.add(1);
 				}
@@ -142,7 +142,7 @@ public class TeacherAddMarkController {
 
 		int result = 0;
 		if(success.size() == students.size()) {
-			
+
 			result = 1;
 		}
 
@@ -165,9 +165,9 @@ public class TeacherAddMarkController {
 
 	@PostMapping("/save/mark")
 	public ResponseEntity<Integer> ChangeAndSaveMark(@RequestBody MarkRequest markRequest) {
-		
+
 		Mark mark = markService.SaveMark(markRequest);
-		
+
 		return new ResponseEntity<Integer>(mark.getId(), HttpStatus.OK);
 	}
 

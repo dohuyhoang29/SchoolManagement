@@ -19,6 +19,7 @@ public class StudentManagementRequest {
   private String className;
   private Integer schoolYear;
   private String image;
+  private Class aClass;
   private StudentInfoRequest userInfo;
 
   public String getStudentImagePath() {

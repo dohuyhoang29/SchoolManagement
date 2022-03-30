@@ -117,12 +117,12 @@
 																<input type="number" class="w-100" th:value="${coefficient.coeffi}" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
 															</td>
-															
-															
-														</th:block> 
-														
+
+
+														</th:block>
+
 														<th:block th:if="${markRq.getCoefficients() != null }">
-															
+
 															<td th:if="${markRq.getCoefficients().size() == 2   && type == 1}"><input type="hidden" class="markId" value="">
 																	<input  type="number" class="w-100" name="mark" id=""
 																	min=0 max=10 placeholder="Enter" required="required">
@@ -130,20 +130,20 @@
 															<td th:if="${markRq.getCoefficients().size() == 1  && type == 1}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
-																
+
 															</td>
 															<td th:if="${markRq.getCoefficients().size() == 1   && type == 1}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
 															</td>
-															
+
 															<td th:if="${markRq.getCoefficients().size() != 2  && type == 2 || markRq.getCoefficients().size() != 2  && type == 3 }"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""
 																min=0 max=10 placeholder="Enter" required="required">
 															</td>
-														
+
 														</th:block>
-														
+
 														 <th:block th:if="${markRq.getCoefficients() == null}"> 
 															<td th:if="${type ==1 || type == 4}"><input type="hidden" class="markId" value="">
 																<input  type="number" class="w-100" name="mark" id=""

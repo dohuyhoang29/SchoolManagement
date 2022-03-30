@@ -1182,16 +1182,20 @@ INNER JOIN Role AS r ON r.id = ur.pk.roleId
 INNER JOIN UserInfo AS ui ON u.userInfo.id = ui.id 
 INNER JOIN Class AS c ON c.id = ui.aClass.id 
 WHERE ur.pk.roleId = 4 AND u.fullName LIKE %:fullName% 
-AND u.userInfo.aClass.grade = :grade AND u.aClass.className LIKE %:class%
+AND u.userInfo.aClass.grade = :grade AND u.aClass.className LIKE %:class%;
 
 SELECT COUNT(u.id)
       FROM user AS u
       INNER JOIN user_role AS ur ON u.id = ur.user_id 
       INNER JOIN role AS r ON r.id = ur.role_id 
       INNER JOIN user_info AS ui ON u.user_info_id = ui.id
-      WHERE ur.role_id = 4 AND ui.admission_year = YEAR(CURDATE(), INTERVAL 1 YEAR))
+      WHERE ur.role_id = 4 AND ui.admission_year = YEAR(CURDATE(), INTERVAL 1 YEAR));
 
-
+SELECT COUNT(m.id)
+FROM mark AS m
+INNER JOIN subjects AS s ON m.subjects_id = s.id
+INNER JOIN user AS u ON u.id = m.student_id
+WHERE m.student_id = 51 AND m.`type` = 5 AND m.semester = 1;
 
 
 

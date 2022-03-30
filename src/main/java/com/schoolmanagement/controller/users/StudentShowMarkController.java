@@ -1,5 +1,11 @@
 package com.schoolmanagement.controller.users;
 
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.MarkService;
+import com.schoolmanagement.service.StudentEvaluateService;
+import com.schoolmanagement.service.StudentService;
+import com.schoolmanagement.service.SubjectService;
+import com.schoolmanagement.service.UserService;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,12 +24,6 @@ import com.schoolmanagement.model.StudentEvaluate;
 import com.schoolmanagement.model.Subjects;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.MarkRequest;
-import com.schoolmanagement.service.ClassTeacherSubjectService;
-import com.schoolmanagement.service.MarkService;
-import com.schoolmanagement.service.StudentEvaluateService;
-import com.schoolmanagement.service.StudentService;
-import com.schoolmanagement.service.SubjectService;
-
 
 @Controller
 public class StudentShowMarkController {
@@ -32,13 +32,16 @@ public class StudentShowMarkController {
 	
 	@Autowired
 	private StudentService studentService;
+
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private MarkService markService;
 	
 	@Autowired
 	private SubjectService subjectService;
-	
+
 	@Autowired
 	private ClassTeacherSubjectService classTeacherSubjectService;
 	
@@ -47,15 +50,15 @@ public class StudentShowMarkController {
 		User students = studentService.findStudentByUserName(accountDetails.getUsername());
 		StudentEvaluate studentEvaluate1 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 1);
 		StudentEvaluate studentEvaluate2 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 2);
-		
+
 		List<Mark> mark1 = markService.findAllMarkByMedium(students.getId(), 5, 1);
 		List<Mark> mark2 = markService.findAllMarkByMedium(students.getId(), 5, 2);
 		List<MarkRequest> markRequests1 = subjectService.findByStudentSemester(students.getId(), 1);
-		List<MarkRequest> markRequests2 = subjectService.findByStudentSemester(students.getId(), 2);	
+		List<MarkRequest> markRequests2 = subjectService.findByStudentSemester(students.getId(), 2);
 		List<Subjects> listSubject = (List<Subjects>)subjectService.getAllSubject();
 		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectService.findAllByClassId(students.getUserInfo().getAClass().getId());
 		
-		
+
 		List<User> list = studentService.findByClassId(students.getUserInfo().getAClass().getId());
 		
 		float average1 = 0;
@@ -81,7 +84,7 @@ public class StudentShowMarkController {
 		
 		model.addAttribute("classStudentList", list);
 		model.addAttribute("classTeacherSubject", cts);
-		model.addAttribute("class", students.getUserInfo().getAClass());
+		model.addAttribute("class", students.getAClass());
 		model.addAttribute("markList1", markRequests1);
 		model.addAttribute("markList2", markRequests2);
 		model.addAttribute("average1",Float.valueOf(String.format(Locale.getDefault(), "%.2f", average1)));
@@ -98,6 +101,6 @@ public class StudentShowMarkController {
 		
 	
 		List<User> list = (List<User>)studentService.getAllStudent();
-		return new ResponseEntity<List<User>>(list , HttpStatus.OK);
+		return new ResponseEntity<>(list , HttpStatus.OK);
 	}
 }

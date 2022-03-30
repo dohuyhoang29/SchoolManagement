@@ -40,8 +40,8 @@ public class ClassTeacherSubjectController {
 
 	@GetMapping("/updateClassTeacher/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
-		
-		
+
+
 		Iterable<ClassTeacherSubject> cts = classTeacherSubjectService.findAllByClassId(id);
 
 		model.addAttribute("cts", cts);
@@ -56,9 +56,9 @@ public class ClassTeacherSubjectController {
 	
 	@PostMapping("/classTeacherSubject/change")
 	public ResponseEntity<Void> ChangeClassTeacherSubject(@RequestBody List<ClassTeacherSubjectRequest> dr) {
-		
+
 		for(int i = 0 ; i < dr.size() ; i++) {
-			
+
 			ClassTeacherSubject cts = new ClassTeacherSubject();
 			User users = teacherService.findByUserId(dr.get(i).getUserid());
 			Subjects subjects = subjectService.findBySubjectID(dr.get(i).getSubjectId());
@@ -66,7 +66,7 @@ public class ClassTeacherSubjectController {
 			ClassTeacherSubject e = classTeacherSubjectService.findById(users.getId(), class_u.getId(), subjects.getId());
 			
 			if(e != null && e.getId() != 0) {
-				
+
 				cts.setId(e.getId());
 			}
 			
@@ -76,7 +76,7 @@ public class ClassTeacherSubjectController {
 			
 			classTeacherSubjectService.Save(cts);
 		}
-		
+
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

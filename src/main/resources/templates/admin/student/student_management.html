@@ -349,9 +349,9 @@
                       <td th:if="${user.userInfo.status == 3}">
                         <span class="tag tag-secondary">Graduate</span>
                       </td>
-                      <td>[[${user.userInfo.aClass.grade}]]</td>
-                      <td class="text-center">[[${user.userInfo.aClass.className}]]</td>
-                      <td class="text-center">[[${user.userInfo.aClass.schoolYear}]]</td>
+                      <td>[[${user.aClass.grade}]]</td>
+                      <td class="text-center">[[${user.aClass.className}]]</td>
+                      <td class="text-center">[[${user.aClass.schoolYear}]]</td>
                       <td class="text-center">
                         <a th:href="@{/show/student/details/{id}(id=${user.id})}" sec:authorize="hasAnyAuthority('ADMIN')">
                           <button type="button" class="btn btn-success btn-sm">Detail</button>

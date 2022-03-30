@@ -47,7 +47,7 @@ public class AccountDetails implements UserDetails {
 	}
 
 	public Class getAClass() {
-		return this.user.getUserInfo().getAClass();
+		return this.user.getAClass();
 	}
 
 	public Set<Role> getRole () {

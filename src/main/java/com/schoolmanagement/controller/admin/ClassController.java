@@ -1,5 +1,18 @@
 package com.schoolmanagement.controller.admin;
 
+import java.util.ArrayList;
+import com.schoolmanagement.model.AccountDetails;
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.ClassTeacherSubject;
+import com.schoolmanagement.model.Role;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.response.SelectStudentReponse;
+import com.schoolmanagement.service.ClassService;
+import com.schoolmanagement.service.ClassTeacherSubjectService;
+import com.schoolmanagement.service.StudentService;
+import com.schoolmanagement.service.SubjectService;
+import com.schoolmanagement.service.TeacherService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,187 +32,163 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.schoolmanagement.model.AccountDetails;
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.ClassTeacherSubject;
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.model.request.response.SelectStudentReponse;
-import com.schoolmanagement.service.ClassService;
-import com.schoolmanagement.service.ClassTeacherSubjectService;
-import com.schoolmanagement.service.StudentService;
-import com.schoolmanagement.service.SubjectService;
-import com.schoolmanagement.service.TeacherService;
 
 @Controller
 public class ClassController {
 
-	@Autowired
-	private ClassService classService;
-	
-	@Autowired
-	private StudentService studentService;
-	
-	@Autowired
-	private SubjectService subjectService;
-	
-	@Autowired
-	private ClassTeacherSubjectService classTeacherSubjectService;
-	
-	@Autowired
-	private TeacherService teacherService;
-	
-	@Autowired
-	private EntityManager entityManager;
+  @Autowired
+  private ClassService classService;
+  @Autowired
+  private StudentService studentService;
+  @Autowired
+  private SubjectService subjectService;
+  @Autowired
+  private ClassTeacherSubjectService classTeacherSubjectService;
+  @Autowired
+  private TeacherService teacherService;
+  @Autowired
+  private EntityManager entityManager;
 
-	// index
-	@GetMapping("/show/class")
-	public String classList(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
+  //index
+  @GetMapping("/show/class")
+  public String classList(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
 
-		return listClassByPage(model, 1, "", accountDetails);
-	}
+    return listClassByPage(model, 1, "", accountDetails);
+  }
 
-	@GetMapping("/show/class/page/{page}")
-	public String listClassByPage(Model model, @PathVariable("page") int currentPage, @Param("search") String search,
-			@AuthenticationPrincipal AccountDetails accountDetails) {
-		Page<Class> page;
+  @GetMapping("/show/class/page/{page}")
+  public String listClassByPage(Model model, @PathVariable("page") int currentPage,
+      @Param("search") String search,
+      @AuthenticationPrincipal AccountDetails accountDetails) {
+    Page<Class> page;
 
-		if (accountDetails.hasRole("ADMIN")) {
-			
-			page = classService.getAllClassPage(search, currentPage);
-		} else {
-			
-			page = classService.getAllByTeacherId(accountDetails.getId(), currentPage);
-		}
+    if (accountDetails.hasRole("ADMIN")) {
+      page = classService.getAllClassPage(search, currentPage);
+    } else {
+      page = classService.getAllByTeacherId(accountDetails.getId(), currentPage);
+    }
 
-		int totalPages = page.getTotalPages();
-		Iterable<Class> classList = page.getContent();
-		
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("search", search);
-		model.addAttribute("classList", classList);
+    int totalPages = page.getTotalPages();
+    Iterable<Class> classList = page.getContent();
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("search", search);
+    model.addAttribute("classList", classList);
 
-		return "/admin/class/class_management";
-	}
+    return "/admin/class/class_management";
+  }
 
-	// insert and edit
-	@GetMapping("/insert/class")
-	public String insertClass(Model model) {
-		
-		model.addAttribute("class", new Class());
-		model.addAttribute("userList", teacherService.getAllUser());
-		model.addAttribute("studentList", studentService.findAllStudentNotClass());
+  // insert and edit
+  @GetMapping("/insert/class")
+  public String insertClass(Model model) {
+    model.addAttribute("class", new Class());
+    model.addAttribute("userList", teacherService.getAllUser());
+    model.addAttribute("studentList", studentService.findAllStudentNotClass());
 
-		return "/admin/class/form_class";
-	}
+    return "/admin/class/form_class";
+  }
 
-	@GetMapping("/insert/class/student")
-	public ResponseEntity<List<SelectStudentReponse>> insertClassByStudent(
-			@RequestParam("schoolYear") Integer schoolYear, @RequestParam("grade") Integer grade) {
+  @GetMapping("/insert/class/student")
+  public ResponseEntity<List<SelectStudentReponse>> insertClassByStudent(@RequestParam("schoolYear") Integer schoolYear,
+      @RequestParam("grade") Integer grade, @RequestParam("id") Integer id) {
 
-		List<SelectStudentReponse> listStudent = studentService.findAllStudentNotClassByAdmissionYear(schoolYear,
-				grade);
+    List<SelectStudentReponse> listStudent = studentService.findAllStudentNotClassByAdmissionYear(schoolYear, grade, id);
 
 		return new ResponseEntity<>(listStudent, HttpStatus.OK);
 	}
 
-	@GetMapping("/edit/class/{id}")
-	public String EditClass(@PathVariable("id") int id, Model model) {
-		
-		model.addAttribute("class", classService.getClassById(id));
-		model.addAttribute("userList", teacherService.getAllUser());
+  @GetMapping("/edit/class/{id}")
+  public String EditClass(@PathVariable("id") int id, Model model) {
+    Class aClass = classService.getClassById(id);
 
-		return "/admin/class/form_class";
-	}
+    model.addAttribute("class", classService.getClassById(id));
+    model.addAttribute("userList", teacherService.getAllUser());
 
-	@PostMapping("/save/class")
-	public String saveClass(Model model, @Valid Class aClass, BindingResult result,
-			RedirectAttributes redirectAttributes) {
-		
-		if (aClass.getId() == null) {
-			
-			if (classService.getClassByClassName(aClass.getClassName()) != null) {
-				result.rejectValue("className", "error.class", "Class Name already exist");
-			}
-			
-		} else {
-			
-			if (classService.getClassByClassName(aClass.getClassName()) != null && !Objects
-					.equals(classService.getClassByClassName(aClass.getClassName()).getId(), aClass.getId())) {
-				result.rejectValue("className", "error.class", "Class Name already exist");
-			}
-		}
+    return "/admin/class/form_class";
+  }
 
-		Role role = entityManager.find(Role.class, 3);
-		User u = aClass.getUser();
-		u.addRole(role);
+  @PostMapping("/save/class")
+  public String saveClass(Model model, @Valid Class aClass, BindingResult result,
+      RedirectAttributes redirectAttributes) {
+    if (aClass.getId() == null) {
+      if (classService.getClassByClassName(aClass.getClassName()) != null) {
+        result.rejectValue("className", "error.class", "Class Name already exist");
+      }
+    } else {
+      if (classService.getClassByClassName(aClass.getClassName()) != null && !Objects.equals(
+          classService.getClassByClassName(aClass.getClassName()).getId(), aClass.getId())) {
+        result.rejectValue("className", "error.class", "Class Name already exist");
+      }
+    }
 
-		if (result.hasErrors()) {
-			model.addAttribute("userList", teacherService.getAllUser());
+    Role role = entityManager.find(Role.class, 3);
+    User u = aClass.getUser();
+    u.addRole(role);
 
-			return "/admin/class/form_class";
-		}
+    if (result.hasErrors()) {
+      model.addAttribute("userList", teacherService.getAllUser());
+
+      return "/admin/class/form_class";
+    }
 
 //		teacherService.saveUser(u);
-		classService.saveClass(aClass);
+    classService.saveClass(aClass);
 
-		if (aClass.getId() == null) {
-			
-			redirectAttributes.addFlashAttribute("message", "Add class successfully");
-		} else {
-			
-			redirectAttributes.addFlashAttribute("message", "Edit class successfully");
-		}
+    if (aClass.getId() == null) {
+      redirectAttributes.addFlashAttribute("message", "Add class successfully");
+    } else {
+      redirectAttributes.addFlashAttribute("message", "Edit class successfully");
+    }
 
-		return "redirect:/show/class";
-	}
+    return "redirect:/show/class";
+  }
 
-	// details
-	@GetMapping("/details/class/{id}")
-	public String DetailClass(Model model, @PathVariable("id") int id) {
 
-		return DetailsClassPage(model, id, 1, "");
+  //details
+  @GetMapping("/details/class/{id}")
+  public String DetailClass(Model model, @PathVariable("id") int id) {
 
-	}
+    return DetailsClassPage(model, id, 1, "");
 
-	@GetMapping("/details/class/{classId}/{page}")
-	public String DetailsClassPage(Model model, @PathVariable("classId") int id, @PathVariable("page") int currentPage,
-			@Param("search") String search) {
-		
-		Iterable<ClassTeacherSubject> cts = classTeacherSubjectService.findAllByClassId(id);
+  }
 
-		Page<User> studentPage = studentService.findStudentByClassId(id, search, currentPage);
+  @GetMapping("/details/class/{classId}/{page}")
+  public String DetailsClassPage(Model model, @PathVariable("classId") int id
+      , @PathVariable("page") int currentPage, @Param("search") String search) {
+    Iterable<ClassTeacherSubject> cts = classTeacherSubjectService.findAllByClassId(id);
 
-		int totalPages = studentPage.getTotalPages();
+    Page<User> studentPage = studentService.findStudentByClassId(id, search, currentPage);
 
-		List<User> listStudent = studentPage.getContent();
+    int totalPages = studentPage.getTotalPages();
 
-		model.addAttribute("classTeacherSubject", cts);
-		model.addAttribute("class", classService.getClassById(id));
-		model.addAttribute("studentList", listStudent);
-		model.addAttribute("subjectList", subjectService.getAllSubject());
-		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("search", search);
+    List<User> listStudent = studentPage.getContent();
 
-		return "/admin/class/class_details";
-	}
+    model.addAttribute("classTeacherSubject", cts);
+    model.addAttribute("class", classService.getClassById(id));
+    model.addAttribute("studentList", listStudent);
+    model.addAttribute("subjectList", subjectService.getAllSubject());
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("search", search);
 
-	// search manager
-	@GetMapping("/show/class/search")
-	public String SearchClass(Model model, @RequestParam("search") String nameclass,
-			@AuthenticationPrincipal AccountDetails accountDetails) {
+    return "/admin/class/class_details";
+  }
 
-		return listClassByPage(model, 1, nameclass, accountDetails);
-	}
+  // search manager
+  @GetMapping("/show/class/search")
+  public String SearchClass(Model model, @RequestParam("search") String nameclass,
+      @AuthenticationPrincipal AccountDetails accountDetails) {
 
-	// seacher student by class Details
-	@GetMapping("/detail/class/student/search/{id}")
-	public String searchByNameStudent(Model model, @PathVariable("id") int id, @Param("search") String search) {
+    return listClassByPage(model, 1, nameclass, accountDetails);
+  }
 
-		return DetailsClassPage(model, id, 1, search);
-	}
+  //seacher student by class Details
+  @GetMapping("/detail/class/student/search/{id}")
+  public String searchByNameStudent(Model model, @PathVariable("id") int id,
+      @Param("search") String search) {
+
+    return DetailsClassPage(model, id, 1, search);
+  }
 }
