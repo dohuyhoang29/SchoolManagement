@@ -171,7 +171,7 @@ public class StudentServiceImp implements StudentService {
 
   @Override
   public Page<User> findAllStudentByClassId(int classid, int page) {
-    Pageable pageable = PageRequest.of(page - 1, 10);
+    Pageable pageable = PageRequest.of(page - 1, 30);
 
     return studentRepositories.findByIdClass(classid, pageable);
   }

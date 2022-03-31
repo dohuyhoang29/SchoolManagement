@@ -55,9 +55,6 @@ public class StudentController {
 	@Autowired
 	private ClassTeacherSubjectService classTeacherSubjectService;
 	
-//	@Autowired
-//	private StudentEvaluateService studentEvaluateService;
-	
 	@Autowired
 	private EntityManager entityManager;
 	

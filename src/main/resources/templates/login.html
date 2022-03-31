@@ -26,12 +26,12 @@
           <div class="card-title mt-3">Login to your account</div>
         </div>
         <div th:if="${param.error}" class="alert alert-danger">
-          Invalid username and password.
+          Invalid username or password.
         </div>
         <div th:if="${param.logout}" class="alert alert-success">
           You have been logged out.
         </div>
-        <form th:action="@{/admin/login}" method="post">
+        <form th:action="@{/login}" method="post">
           <div class="form-group">
             <input type="text" name="username" class="form-control" id="exampleInputEmail1"
                    aria-describedby="emailHelp" placeholder="Enter username" required autofocus>

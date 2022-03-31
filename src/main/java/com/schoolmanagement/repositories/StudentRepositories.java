@@ -166,6 +166,13 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 			+ "AND ui.graduate_year = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
 	int countAllStudentAbsentLastYear();
 
+	@Query(value = "SELECT COUNT(u.id) "
+			+ "FROM user AS u "
+			+ "INNER JOIN user_role AS ur ON u.id = ur.user_id "
+			+ "INNER JOIN mark AS m.student_id = u.id "
+			+ "WHERE m.type = 6 AND m.coefficient < 5 AND m.created_year < YEAR(CURDATE())", nativeQuery = true)
+	int countAllStudentFailLastYear();
+
 	
 	@Query(value ="SELECT s FROM User s WHERE s.aClass.id = (:classId)")
 	Page<User> findByIdClass(@Param("classId") int id , Pageable pageable);

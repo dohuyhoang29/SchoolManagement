@@ -221,11 +221,7 @@ public class MarkServiceImp implements MarkService {
 			
 			MarkRequest markOptional = markRepositories.findMarkMediumByStudent(student.getId() , 6 ,0);
 			
-			if(markOptional != null && markOptional.getMarkId() != 0 ) {
-				request.setId(markOptional.getMarkId());
-			}
-			
-			
+
 			if (markRepositories.Average(student.getId(), 1) > 0
 					&& markRepositories.Average(student.getId(), 2) > 0 ) {
 				
@@ -247,8 +243,9 @@ public class MarkServiceImp implements MarkService {
 			request.setCreatedDate(LocalDate.now());
 			request.setUpdatedDate(LocalDate.now());
 			
-			if(request.getId() != 0) {
-				
+			if(markOptional != null && markOptional.getMarkId() != 0) {
+				request.setId(markOptional.getMarkId());
+
 				markRepositories.saveTypeMediumYear(request.getCoefficient(), request.getId());
 			}else {
 				
