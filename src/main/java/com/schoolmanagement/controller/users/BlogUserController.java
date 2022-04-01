@@ -1,5 +1,6 @@
 package com.schoolmanagement.controller.users;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,26 @@ public class BlogUserController {
 	public String BlogViewDetail(Model model , @PathVariable("id") int blogId) {
 		Blog blog = blogService.findByIdBlog(blogId);
 		
-		Page<Blog>  pageBlog = blogService.PagingBlogUserScreen(1 , 3);
+		Page<Blog>  pageBlog = blogService.PagingBlogUserScreen(1 , 4);
 		
 		List<Blog> listBlog = pageBlog.getContent();
 		
+		List<Blog> list = new ArrayList<>();
+		
+		for(int i =0 ; i < listBlog.size(); i ++) {
+			if(listBlog.get(i).getId() == blog.getId()) {
+				
+			}else {
+				list.add(listBlog.get(i));
+			}
+		}
+		
+		if(list.size() > 3) {
+			list.remove(list.get(3));
+		}
+		
 		model.addAttribute("blog", blog);
-		model.addAttribute("listBlog", listBlog);
+		model.addAttribute("listBlog", list);
 		
 		
 		return "/user/blog_detail";

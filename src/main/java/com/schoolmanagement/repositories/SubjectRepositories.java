@@ -17,7 +17,6 @@ import com.schoolmanagement.model.request.MarkRequest;
 @Repository
 public interface SubjectRepositories extends PagingAndSortingRepository<Subjects, Integer> {
 
-	Subjects findById(int integer);
 
 	Iterable<Subjects> findAllBySubjectName(String subjectName);
 
@@ -27,8 +26,7 @@ public interface SubjectRepositories extends PagingAndSortingRepository<Subjects
 	@Query(value = "SELECT s FROM Subjects s WHERE s.subjectName LIKE %:data%")
 	Page<Subjects> subjectFind(@Param("data") String data, Pageable pageable);
 	
-	@Query(value="SELECT s FROM Subjects s ORDER BY s.id ASC")
-	List<Subjects> findAllMarkByASC();
+	
 
 	@Transactional
 	@Query(value = "SELECT new com.schoolmanagement.model.request.MarkRequest(s.subjectName, s.id, m.studentId, m.type, m.semester, "

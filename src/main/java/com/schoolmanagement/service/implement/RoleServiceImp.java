@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoleServiceImp implements RoleService {
-  @Autowired
-  private RoleRepositories repo;
+	@Autowired
+	private RoleRepositories repo;
 
-  @Override
-  public void saveRole(Role role){
-    repo.save(role);
-  }
+	@Override
+	public void saveRole(Role role) {
+		
+		repo.save(role);
+	}
 }

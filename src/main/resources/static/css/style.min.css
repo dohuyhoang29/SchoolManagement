@@ -18039,7 +18039,7 @@ svg {
 }
 
 .theme-green #header_top {
-    background: #21ba45
+    background: rgb(255, 0, 255)
 }
 
 .theme-green #header_top .nav-link {
@@ -18051,16 +18051,16 @@ svg {
 }
 
 .theme-green .card-title {
-    color: #21ba45
+    color: rgb(255, 0, 255)
 }
 
 .theme-green .btn-primary {
-    background: #21ba45;
+    background: rgb(255, 128, 255);
     border: 0
 }
 
 .theme-green.offcanvas-active #header_top {
-    background: #21ba45
+    background: rgb(255, 128, 192)
 }
 
 .theme-green.offcanvas-active.gradient #header_top {
@@ -18080,7 +18080,7 @@ svg {
 }
 
 .theme-cyan #header_top {
-    background: #17a2b8
+    background: rgb(255, 128, 255);
 }
 
 .theme-cyan #header_top .nav-link {
@@ -18092,7 +18092,7 @@ svg {
 }
 
 .theme-cyan #left-sidebar {
-    background: #17a2b8
+    background: rgb(255, 128, 255)
 }
 
 .theme-cyan #left-sidebar .brand-name {
@@ -18126,20 +18126,20 @@ svg {
 }
 
 .theme-cyan .card-title {
-    color: #17a2b8
+    color: rgb(255, 0, 0)
 }
 
 .theme-cyan .btn-primary {
-    background: #17a2b8;
+    background: rgb(255, 0, 0);
     border: 0
 }
 
 .theme-cyan.offcanvas-active #header_top {
-    background: #17a2b8
+    background: rgb(255, 0, 0)
 }
 
 .theme-cyan.offcanvas-active.gradient #header_top {
-    background: linear-gradient(145deg, #00b5ad, #17a2b8)
+    background: linear-gradient(145deg,#c91d3b, #e22b2b)
 }
 
 .theme-cyan.gradient #header_top {
@@ -18148,17 +18148,17 @@ svg {
 
 @media screen and (max-width: 1200px) {
     .theme-cyan.gradient #header_top {
-        background: linear-gradient(145deg, #00b5ad, #17a2b8)
+        background: linear-gradient(145deg,#c91d3b, #e22b2b);
     }
 }
 
 .theme-cyan.gradient #left-sidebar {
     height: 100%;
-    background: linear-gradient(145deg, #00b5ad, #17a2b8)
+    background: linear-gradient(145deg,#c91d3b, #e22b2b)
 }
 
 .theme-cyan.gradient .btn-primary {
-    background: linear-gradient(145deg, #00b5ad, #17a2b8)
+    background: linear-gradient(145deg,#c91d3b, #e22b2b)
 }
 
 .theme-blush #left-sidebar {
@@ -18225,14 +18225,14 @@ svg {
 }
 
 .theme-blush.gradient #header_top {
-    background: linear-gradient(145deg, #2185d0, #de5d83)
+    background: linear-gradient(145deg,#c91d3b, #e22b2b)
 }
 
 .theme-blush.gradient #left-sidebar {
     height: 100%;
-    background: linear-gradient(145deg, #2185d0, #de5d83)
+    background: linear-gradient(145deg,#c91d3b, #e22b2b)
 }
 
 .theme-blush.gradient .btn-primary {
-    background: linear-gradient(145deg, #2185d0, #de5d83)
+    background: linear-gradient(145deg, #c91d3b, #e22b2b)
 }

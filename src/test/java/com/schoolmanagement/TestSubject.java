@@ -15,16 +15,16 @@ import org.springframework.test.annotation.Rollback;
 @Rollback(value = false)
 public class TestSubject {
 
-  @Autowired
-  private SubjectRepositories repo;
+	@Autowired
+	private SubjectRepositories repo;
 
-  @Test
-  public void getSubject() {
-    Subjects subjects = repo.findById(1);
+	@Test
+	public void getSubject() {
+		Subjects subjects = repo.findById(1).get();
 
-    for (User user : subjects.getUsers()) {
-      System.out.println(user.getFullName());
-    }
-    System.out.println(subjects.getUsers().size());
-  }
+		for (User user : subjects.getUsers()) {
+			System.out.println(user.getFullName());
+		}
+		System.out.println(subjects.getUsers().size());
+	}
 }

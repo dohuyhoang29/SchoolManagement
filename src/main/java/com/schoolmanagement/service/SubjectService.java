@@ -10,8 +10,6 @@ import com.schoolmanagement.model.request.MarkRequest;
 public interface SubjectService {
 	Iterable<Subjects> getAllSubject();
 
-	List<Subjects> findAllSubjectAscId();
-	
 	void SaveSubject(Subjects subjects);
 
 	Subjects findBySubjectID(int id);

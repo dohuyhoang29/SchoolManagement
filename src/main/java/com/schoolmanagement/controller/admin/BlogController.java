@@ -43,14 +43,19 @@ public class BlogController {
 
 	@GetMapping("/show/blog")
 	public String IndexBlog(Model model, Authentication authentication) {
-		return showBlogByPage(model, 1, "", "", "id", "asc", "");
+		
+		LocalDate fromDate = LocalDate.parse("2000-02-20");
+		
+		LocalDate toDate = LocalDate.now();
+		
+		return showBlogByPage(model, 1, "", fromDate, "id", "asc", toDate);
 	}
 
 	// paging
 	@GetMapping("/show/blog/{page}")
 	public String showBlogByPage(Model model, @PathVariable("page") Integer currentPage,
-			@Param("search") String search, @Param("fromDate") String fromDate,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("toDate") String toDate) {
+			@Param("search") String search, @Param("fromDate") LocalDate fromDate,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("toDate") LocalDate toDate) {
 		
 		Page<Blog> page = blogService.searchBlog(search, fromDate, toDate,currentPage, sortField, sortDir);
 
@@ -159,8 +164,9 @@ public class BlogController {
 
 	// search
 	@GetMapping("/show/blog/search")
-	public String searchBlog(@RequestParam(value = "search") String search,
-			@RequestParam(value = "fromDate") String fromDate, @RequestParam(value = "toDate") String toDate, Model model){
+	public String searchBlog(@Param(value = "search") String search,
+			@Param(value = "fromDate") LocalDate fromDate,
+			@Param(value = "toDate") LocalDate toDate, Model model){
 		
 		
 		return showBlogByPage(model, 1, search, fromDate, "id", "asc", toDate);

@@ -1,16 +1,17 @@
 package com.schoolmanagement.service;
 
-import com.schoolmanagement.model.Class;
-import com.schoolmanagement.model.User;
-import com.schoolmanagement.model.request.StudentRequest;
-import com.schoolmanagement.model.request.response.SelectStudentReponse;
 import java.io.IOException;
-import com.schoolmanagement.model.request.MarkRequest;
-
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.MarkRequest;
+import com.schoolmanagement.model.request.StudentRequest;
+import com.schoolmanagement.model.request.response.SelectStudentReponse;
 
 public interface StudentService {
 	void saveStudent(StudentRequest studentRequest, MultipartFile multipartFile) throws IOException;
@@ -62,4 +63,7 @@ public interface StudentService {
 	List<Integer> countAllStudentAbsentLast10Year();
 	
 	List<User> findByClassId(int classId);
+	
+	Page<User> PagingMarkIndex(String fullName , int schoolYear , int grade , int average,int page);
+	
 }

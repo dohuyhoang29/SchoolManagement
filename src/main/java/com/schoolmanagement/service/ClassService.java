@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.request.MarkRequest;
 import com.schoolmanagement.model.request.SchoolYearClassRequest;
 
 public interface ClassService {
@@ -24,5 +25,7 @@ public interface ClassService {
 
   List<Class> getAllClassInCurrentYear();
 
-  int countAllClass();
+	int countAllClass();
+
+	List<MarkRequest> findAverageOneAndTwo (int classId );
 }

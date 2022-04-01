@@ -22,38 +22,42 @@ public class BlogServiceImp implements BlogService {
 
 	@Override
 	public void SaveBlog(Blog blog) {
+		
 		blogRepositories.save(blog);
 	}
 
 	@Override
 	public Iterable<Blog> FindAllBlog(){
+		
 		return blogRepositories.findAllBlog();
 	}
 
 	@Override
 	public Blog findByIdBlog(int id) {
-		return blogRepositories.findById(id);
+		
+		return blogRepositories.findById(id).get();
 	}
 
 	@Override
-	public Page<Blog> searchBlog(String search, String fromDate, String toDate,
+	public Page<Blog> searchBlog(String search, LocalDate fromDate, LocalDate toDate,
 			int currentPage, String sortField, String sortDir) {
+		
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ?sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
 
 		DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().append(DateTimeFormatter.ofPattern("MM/dd/yyyy")).toFormatter();
-		if (fromDate.equalsIgnoreCase("") && toDate.equalsIgnoreCase("")) {
+		if (fromDate == null && toDate == null) {
 			return blogRepositories.findBlogByHeader(search, pageable);
 		}
-		if (!fromDate.equalsIgnoreCase("") && toDate.equalsIgnoreCase("")) {
-			return blogRepositories.findAllByHeaderAndFromDate(search, LocalDate.parse(fromDate, dateTimeFormatter), pageable);
+		if (fromDate != null && toDate == null) {
+			return blogRepositories.findAllByHeaderAndFromDate(search, fromDate, pageable);
 		}
-		if (fromDate.equalsIgnoreCase("") && !toDate.equalsIgnoreCase("")) {
-			return blogRepositories.findAllByHeaderAndToDate(search, LocalDate.parse(toDate, dateTimeFormatter), pageable);
+		if (fromDate == null && toDate != null) {
+			return blogRepositories.findAllByHeaderAndToDate(search, toDate, pageable);
 		}
-		if (!fromDate.equalsIgnoreCase("") && !toDate.equalsIgnoreCase("")) {
-			return blogRepositories.findAllByHeaderAndFromDateAndToDate(search, LocalDate.parse(fromDate, dateTimeFormatter), LocalDate.parse(toDate, dateTimeFormatter), pageable);
+		if (fromDate != null && toDate != null) {
+			return blogRepositories.findAllByHeaderAndFromDateAndToDate(search, fromDate, toDate, pageable);
 		}
 
 		return null;
@@ -61,12 +65,13 @@ public class BlogServiceImp implements BlogService {
 
 	@Override
 	public int countAllBlog() {
+		
 		return blogRepositories.countAll();
 	}
 
 	@Override
 	public void DeleteBlog(int id) {
-		Blog blog = blogRepositories.findById(id);
+		Blog blog = blogRepositories.findById(id).get();
 		
 		blogRepositories.delete(blog);
 	}
@@ -75,6 +80,6 @@ public class BlogServiceImp implements BlogService {
 	public Page<Blog> PagingBlogUserScreen(int page , int size) {
 		Pageable pageable = PageRequest.of(page -1, size);
 		
-		return blogRepositories.findAll(pageable);
+		return blogRepositories.findAllByBlogNew(pageable);
 	}
 }

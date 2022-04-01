@@ -1,8 +1,9 @@
 package com.schoolmanagement.model.request;
 
-import com.schoolmanagement.model.Class;
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
+
+import com.schoolmanagement.model.Class;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,22 +12,22 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StudentManagementRequest {
-  private Integer id;
-  private String fullName;
-  private String address;
-  private LocalDate dob;
-  private Integer grade;
-  private String className;
-  private Integer schoolYear;
-  private String image;
-  private Class aClass;
-  private StudentInfoRequest userInfo;
+	private Integer id;
+	private String fullName;
+	private String address;
+	private LocalDate dob;
+	private Integer grade;
+	private String className;
+	private Integer schoolYear;
+	private String image;
+	private Class aClass;
+	private StudentInfoRequest userInfo;
 
-  public String getStudentImagePath() {
-    if (image == null && id == null) {
-      return null;
-    }
+	public String getStudentImagePath() {
+		if (image == null && id == null) {
+			return null;
+		}
 
-    return "/upload/image/student_image/" + image;
-  }
+		return "/upload/image/student_image/" + image;
+	}
 }

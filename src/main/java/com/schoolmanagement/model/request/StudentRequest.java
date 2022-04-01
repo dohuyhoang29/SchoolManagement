@@ -1,28 +1,28 @@
 package com.schoolmanagement.model.request;
 
-import com.schoolmanagement.model.Role;
-import com.schoolmanagement.validation.AdmissionYearValid;
-import com.schoolmanagement.validation.DuplicateEmail;
-import com.schoolmanagement.validation.GraduateYearValid;
-import com.schoolmanagement.validation.StudentDob;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.schoolmanagement.validation.AdmissionYearValid;
+import com.schoolmanagement.validation.DuplicateEmail;
+import com.schoolmanagement.validation.GraduateYearValid;
+import com.schoolmanagement.validation.StudentDob;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter

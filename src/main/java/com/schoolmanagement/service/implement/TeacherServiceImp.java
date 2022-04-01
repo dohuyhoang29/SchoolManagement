@@ -57,6 +57,7 @@ public class TeacherServiceImp implements TeacherService {
 
 	@Override
 	public Iterable<User> saveAllUser(Iterable<User> list) {
+		
 		return repo.saveAll(list);
 	}
 
@@ -102,17 +103,21 @@ public class TeacherServiceImp implements TeacherService {
 		Pageable page = PageRequest.of(pageNumber - 1, 10, sort);
 
 		if (status.equalsIgnoreCase("all")) {
+			
 			return teacherRepositories.searchUsersByFullName(fullName, page);
 		} else if (status.equalsIgnoreCase("true")) {
+			
 			return teacherRepositories.searchUsersByFullNameAndDeleted(fullName, true, page);
 		} else {
+			
 			return teacherRepositories.searchUsersByFullNameAndDeleted(fullName, false, page);
 		}
 	}
 
 	@Override
 	public User findByUserId(int id) {
-		return repo.findById(id);
+		
+		return repo.findById(id).get();
 	}
 
 	@Override
@@ -122,6 +127,7 @@ public class TeacherServiceImp implements TeacherService {
 		if(user.isPresent()) {
 			teacherDetail = modelMapper.map(user.get(), TeacherDetailRequest.class);
 		}
+		
 		return teacherDetail;
 	}
 
@@ -132,26 +138,31 @@ public class TeacherServiceImp implements TeacherService {
 		if (user.isPresent()) {
 			editTeacherRequest = modelMapper.map(user.get(), EditTeacherRequest.class);
 		}
+		
 		return editTeacherRequest;
 	}
 
 	@Override
 	public void makeRetired(Integer id) {
+		
 		teacherRepositories.changeDeleted(true, id);
 	}
 
 	@Override
 	public void makeWorking(Integer id) {
+		
 		teacherRepositories.changeDeleted(false, id);
 	}
 
 	@Override
 	public int countTeacher() {
+		
 		return teacherRepositories.countAllTeacher();
 	}
 
 	@Override
 	public void deleterole(int roleid, int userid) {
+		
 		repo.deleterole(roleid, userid);
 
 	}

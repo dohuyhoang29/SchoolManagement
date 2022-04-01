@@ -20,7 +20,7 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	List<Mark> findByClassSubjectId(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
 
 	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.students.id = :studentId AND  m.semester = :semester")
-	List<Mark> finByStudentSubject(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("semester") int semester );
+	List<Mark> findByStudentSubject(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("semester") int semester );
 	
 	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.students.id = :studentId AND m.type = :type AND m.semester = :semester")
 	Mark findMediumScore(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
@@ -51,12 +51,15 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	List<MarkRequest> listAverageSubjectBySemester(@Param("studentId") int studentId , @Param("semester") int semester);
 
 	
-	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(m.id) FROM Mark m WHERE m.students.id = :studentid AND m.type = :type AND m.semester = :semester ")
+	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(m.id , m.coefficient) FROM Mark m WHERE m.students.id = :studentid AND m.type = :type AND m.semester = :semester ")
 	MarkRequest findMarkMediumByStudent(@Param("studentid") int sid,@Param("type") int type  , @Param("semester") int semester);
 
 	@Modifying
 	@Transactional
 	@Query(value ="UPDATE mark  SET coefficient = :coefficient WHERE id = :markId ", nativeQuery = true)
 	void saveTypeMediumYear(@Param("coefficient") float coefficient , @Param("markId") int markId);
+
+	@Query(value="SELECT m FROM Mark m WHERE  m.students.id = :studentId AND m.type = :type AND m.semester = :semester")
+	Mark findAverageYear( @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
 
 }

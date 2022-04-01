@@ -93,7 +93,7 @@
 			</div>
 		</nav>
 		
-		<div style="margin-left: 2%">
+		<div th:if="${class != null}" style="margin-left: 2%">
 			<div class="row">
 				<div class="col-6 m-ml-2">
 					<label>School Year : [[${class.schoolYear}]]</label>
@@ -137,7 +137,7 @@
 				<br>
 				
 				<br>
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<table class="table">
 						<tbody>
 							<tr>
@@ -217,7 +217,16 @@
 				              							<td class="align-center" th:text="${coefficients.coefficient}"></td>
 				              						</th:block>
 			              						</tr>
-			              					
+			              					</th:block>
+			              					<th:block th:if="${markList1 == null}">
+			              						<tr>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              						</tr>
 			              					</th:block>
 			              				</tbody>
 			              			</table>
@@ -232,7 +241,7 @@
 			
 				
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-6">
 						<table class="table">
 						<tbody>
 							<tr>
@@ -312,7 +321,16 @@
 				              							<td class="align-center" th:text="${coefficients.coefficient}"></td>
 				              						</th:block>
 			              						</tr>
-			              					
+			              					</th:block>
+			              					<th:block th:if="${markList2 == null}">
+			              						<tr>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              							<td>No data</td>
+			              						</tr>
 			              					</th:block>
 			              				</tbody>
 			              			</table>

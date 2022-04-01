@@ -13,8 +13,7 @@ import com.schoolmanagement.model.Blog;
 
 @Repository
 public interface BlogRepositories extends PagingAndSortingRepository<Blog, Integer> {
-	Blog findById(int id);
-
+	
 	@Query(value="SELECT b FROM Blog b ORDER BY b.updatedDate DESC")
 	Iterable<Blog> findAllBlog();
 	
@@ -36,4 +35,7 @@ public interface BlogRepositories extends PagingAndSortingRepository<Blog, Integ
 
 	@Query(value = "SELECT COUNT (b.id) FROM Blog b")
 	int countAll();
+	
+	@Query(value="SELECT b FROM Blog b ORDER BY b.updatedDate DESC")
+	Page<Blog> findAllByBlogNew(Pageable pageable);
 }

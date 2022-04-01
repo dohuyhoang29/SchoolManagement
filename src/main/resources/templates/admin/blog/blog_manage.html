@@ -71,13 +71,13 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
                         <input id="fromDate" data-provide="datepicker" th:value="${fromDate}"
-                               data-date-autoclose="true" class="form-control" placeholder="From">
+                               data-date-autoclose="true" class="form-control" placeholder="From"  data-date-format='yyyy-mm-dd'>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
                           <input id="toDate" data-provide="datepicker" th:value="${toDate}"
-                                 data-date-autoclose="true" class="form-control" placeholder="To">
+                              data-date-format='yyyy-mm-dd'    data-date-autoclose="true" class="form-control" placeholder="To">
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
@@ -153,5 +153,18 @@
 <script src="/js/core.js"></script>
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#fromDate').datepicker({
+			dateFormat: 'yy-mm-dd',
+			startDate: new Date('2000-01-01')
+		});
+
+		$('#toDate').datepicker({
+			dateFormat: 'yy-mm-dd',
+			startDate: new Date('2000-01-01')
+		});
+	});
+</script>
 </body>
 </html>

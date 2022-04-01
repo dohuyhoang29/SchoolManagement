@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.ClassTeacherSubject;
@@ -46,21 +47,31 @@ public class StudentShowMarkController {
 	private ClassTeacherSubjectService classTeacherSubjectService;
 	
 	@GetMapping("/student/show/mark")
-	public String IndexStudent(Model model , @AuthenticationPrincipal AccountDetails accountDetails) {
+	public String IndexStudent(Model model , @AuthenticationPrincipal AccountDetails accountDetails  , RedirectAttributes rdrAttr) {
 		User students = userService.getUserByUsername(accountDetails.getUsername());
 		StudentEvaluate studentEvaluate1 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 1);
 		StudentEvaluate studentEvaluate2 = evaluateService.findStudentEvaluateByStudentId(students.getId(), 2);
+
+		if(students.getAClass() == null) {
+
+			rdrAttr.addFlashAttribute("message","Unused account");
+
+
+			return "redirect:/logout";
+		}
+
 
 		List<Mark> mark1 = markService.findAllMarkByMedium(students.getId(), 5, 1);
 		List<Mark> mark2 = markService.findAllMarkByMedium(students.getId(), 5, 2);
 		List<MarkRequest> markRequests1 = subjectService.findByStudentSemester(students.getId(), 1);
 		List<MarkRequest> markRequests2 = subjectService.findByStudentSemester(students.getId(), 2);
 		List<Subjects> listSubject = (List<Subjects>)subjectService.getAllSubject();
+		
 		Iterable<ClassTeacherSubject>  cts = classTeacherSubjectService.findAllByClassId(students.getAClass().getId());
-		
 
-		List<User> list = studentService.findByClassId(students.getAClass().getId());
 		
+		List<User> list = studentService.findByClassId(students.getAClass().getId());
+
 		float average1 = 0;
 		float average2 = 0;
 		

@@ -1,6 +1,7 @@
 package com.schoolmanagement.service.implement;
 
 import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.Mark;
 import com.schoolmanagement.model.Role;
 import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.AverageMarkRequest;
@@ -169,9 +170,9 @@ public class StudentServiceImp implements StudentService {
     studentRepositories.saveAll(studentList);
   }
 
-  @Override
-  public Page<User> findAllStudentByClassId(int classid, int page) {
-    Pageable pageable = PageRequest.of(page - 1, 30);
+	@Override
+	public Page<User> findAllStudentByClassId(int classid, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 10);
 
     return studentRepositories.findByIdClass(classid, pageable);
   }
@@ -334,5 +335,44 @@ public class StudentServiceImp implements StudentService {
 		return studentRepositories.findByIdClass(classId);
 	}
 
+	@Override
+	public Page<User> PagingMarkIndex(String fullName , int schoolYear , int grade , int average,int page) {
 
+		Pageable pageable = PageRequest.of(page - 1, 10);
+
+		Page<User> pageUser =   studentRepositories.findAllStudentHasClassId(fullName, grade,schoolYear , pageable);
+
+		if(average == 1) {
+
+			pageUser = studentRepositories.findAllStudentHasClassId(fullName,  grade,schoolYear, pageable);
+		}
+
+
+		if(average == 2) {
+
+			pageUser = studentRepositories.AllStudentHasClassIdAndMark(fullName, grade,schoolYear, 8, 10, pageable);
+		}
+
+		if(average == 3) {
+
+			pageUser = studentRepositories.AllStudentHasClassIdAndMark(fullName,  grade,schoolYear, (float) 6.5, 8, pageable);
+		}
+
+		if(average == 4) {
+
+			pageUser = studentRepositories.AllStudentHasClassIdAndMark(fullName,  grade,schoolYear, 5, (float)  6.5, pageable);
+		}
+
+		if(average == 5 ) {
+
+			pageUser = studentRepositories.AllStudentHasClassIdAndMark(fullName,  grade,schoolYear, 0, 5, pageable);
+		}
+
+		if(average == 6 ) {
+
+			pageUser = studentRepositories.AllStudentHasClassIdAndNoHasMark(fullName,  grade,schoolYear, pageable);
+		}
+
+		return pageUser;
+	}
 }

@@ -261,5 +261,43 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
   @Query(value = "SELECT s FROM User s WHERE s.aClass.id = (:classId)")
   Page<User> findByIdClass(@Param("classId") int id, Pageable pageable);
 
+	@Query(value = "SELECT u FROM User u "
+			+ "	JOIN UserRole AS ur ON u.id = ur.pk.userId "
+			+ "	JOIN Class c ON c.id = u.aClass.id "
+			+ "	WHERE ur.pk.roleId = 4 "
+			+ " AND u.fullName LIKE %:fullName% "
+			+ " AND c.grade = :grade "
+			+ "	AND c.schoolYear  = :schoolYear "
+			+ "	AND u.aClass.id IS NOT  NULL")
+	Page<User> findAllStudentHasClassId(@Param("fullName") String fullName ,
+			@Param("grade") int grade , @Param("schoolYear") int SchoolYear,Pageable pageable);
 
+	@Query(value = "SELECT u FROM User u "
+			+ "	JOIN UserRole AS ur ON u.id = ur.pk.userId "
+			+ "	JOIN Class c ON c.id = u.aClass.id "
+			+ "	JOIN Mark m ON m.studentId = u.id "
+			+ "	WHERE ur.pk.roleId = 4 "
+			+ " AND u.fullName LIKE %:fullName% "
+			+ " AND c.grade = :grade "
+			+ "	AND c.schoolYear = :schoolYear "
+			+ "	AND m.coefficient >= :min "
+			+ "	AND m.coefficient < :max "
+			+ "	AND m.type = 6  "
+			+ "	AND u.aClass.id IS NOT  NULL" )
+	Page<User> AllStudentHasClassIdAndMark(@Param("fullName") String fullName ,
+			@Param("grade") int grade , @Param("schoolYear") int SchoolYear,
+			@Param("min") float min , @Param("max") float max, Pageable pageable);
+
+	@Query(value = "SELECT u FROM User u "
+			+ "	JOIN UserRole AS ur ON u.id = ur.pk.userId "
+			+ "	JOIN Class c ON c.id = u.aClass.id "
+			+ "	JOIN Mark m ON m.studentId = u.id "
+			+ "	WHERE ur.pk.roleId = 4 "
+			+ " AND u.fullName LIKE %:fullName% "
+			+ " AND c.grade = :grade "
+			+ "	AND c.schoolYear = :schoolYear "
+			+ "	AND m.id IS NULL "
+			+ "	AND u.aClass.id IS NOT  NULL" )
+	Page<User> AllStudentHasClassIdAndNoHasMark(@Param("fullName") String fullName ,
+			@Param("grade") int grade , @Param("schoolYear") int SchoolYear, Pageable pageable);
 }

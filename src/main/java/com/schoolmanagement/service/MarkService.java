@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.schoolmanagement.model.Mark;
+import com.schoolmanagement.model.User;
 import com.schoolmanagement.model.request.MarkRequest;
 
 @Service
@@ -28,4 +29,9 @@ public interface MarkService {
 	Mark SaveMark(MarkRequest markRequest);
 	
 	Float Average(int studentid  , int semester);
+	
+	MarkRequest findMarkMediumByStudent(int studentId , int type , int semester);
+	
+	
+	List<Mark> IndexMarkView(List<User> studentList);
 }

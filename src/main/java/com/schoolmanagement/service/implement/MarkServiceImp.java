@@ -49,7 +49,7 @@ public class MarkServiceImp implements MarkService {
 	@Override
 	public List<Mark> findByStudentSubject(int subjectId, int studentId, int semester) {
 
-		return markRepositories.finByStudentSubject(subjectId, studentId, semester);
+		return markRepositories.findByStudentSubject(subjectId, studentId, semester);
 	}
 
 	@Override
@@ -145,22 +145,21 @@ public class MarkServiceImp implements MarkService {
 
 		markRepositories.save(mark);
 
-		if (markRepositories.finByStudentSubject(markRequest.getSubjects(), markRequest.getStudents(),
+		if (markRepositories.findByStudentSubject(markRequest.getSubjects(), markRequest.getStudents(),
 				markRequest.getSemester()) != null) {
 			
 			Mark marks = new Mark();
 			
 			List<Mark> listMarkSubject = new ArrayList<>();
-			
-			listMarkSubject.addAll(markRepositories.finByStudentSubject(markRequest.getSubjects(),
+
+			listMarkSubject.addAll(markRepositories.findByStudentSubject(markRequest.getSubjects(),
 					markRequest.getStudents(), markRequest.getSemester()));
-			
-			
+
 			if (listMarkSubject.size() > 7) {
-				
-				Mark mediumscore = markRepositories.findMediumScore(markRequest.getSubjects(), markRequest.getStudents(),
-						5, markRequest.getSemester());
-				
+
+				Mark mediumscore = markRepositories.findMediumScore(markRequest.getSubjects(),
+						markRequest.getStudents(), 5, markRequest.getSemester());
+
 				if (mediumscore != null && mediumscore.getId() != 0) {
 					marks.setId(mediumscore.getId());
 				}
@@ -175,33 +174,33 @@ public class MarkServiceImp implements MarkService {
 				marks.setType(5);
 
 				if (listMarkSubject.size() > 0) {
-					
+
 					float areaMarksubject = 0;
-					
+
 					for (int j = 0; j < listMarkSubject.size(); j++) {
 
 						if (listMarkSubject.get(j).getType() == 1) {
-							
+
 							areaMarksubject += listMarkSubject.get(j).getCoefficient();
 						}
 
 						if (listMarkSubject.get(j).getType() == 2) {
-							
+
 							areaMarksubject += listMarkSubject.get(j).getCoefficient();
 						}
 
 						if (listMarkSubject.get(j).getType() == 3) {
-							
+
 							areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 2);
 						}
 
 						if (listMarkSubject.get(j).getType() == 4) {
-							
+
 							areaMarksubject += (listMarkSubject.get(j).getCoefficient() * 3);
 						}
 
 						if (j == 7) {
-							
+
 							areaMarksubject = areaMarksubject / 12;
 						}
 					}
@@ -213,49 +212,92 @@ public class MarkServiceImp implements MarkService {
 				}
 			}
 		}
-		
-		
-		if(markRepositories.listAverageSubject(student.getId()).size() == (listSubject.size() *2) ) {
+
+		if (markRepositories.listAverageSubject(student.getId()).size() == (listSubject.size() * 2)) {
 			Mark request = new Mark();
 			float medium = 0;
-			
-			MarkRequest markOptional = markRepositories.findMarkMediumByStudent(student.getId() , 6 ,0);
-			
 
-			if (markRepositories.Average(student.getId(), 1) > 0
-					&& markRepositories.Average(student.getId(), 2) > 0 ) {
-				
+			MarkRequest markOptional = markRepositories.findMarkMediumByStudent(student.getId(), 6, 0);
+
+			if (markRepositories.Average(student.getId(), 1) > 0 && markRepositories.Average(student.getId(), 2) > 0) {
+
 				float medium1 = markRepositories.Average(student.getId(), 1);
 				float medium2 = markRepositories.Average(student.getId(), 2);
-				
+
 				medium = (medium1 + (medium2 * 2)) / 3;
-					
-				request.setCoefficient(Float.valueOf(String.format(Locale.getDefault(), "%.2f" , medium)));
-			
-			}else {
-				
+
+				request.setCoefficient(Float.valueOf(String.format(Locale.getDefault(), "%.2f", medium)));
+
+			} else {
+
 				request.setCoefficient(medium);
 			}
-			
+
 			request.setStudents(student);
 			request.setType(6);
 			request.setSemester(0);
 			request.setCreatedDate(LocalDate.now());
 			request.setUpdatedDate(LocalDate.now());
-			
-			if(markOptional != null && markOptional.getMarkId() != 0) {
+
+			if (markOptional != null && markOptional.getMarkId() != 0) {
+
 				request.setId(markOptional.getMarkId());
 
 				markRepositories.saveTypeMediumYear(request.getCoefficient(), request.getId());
-			}else {
-				
+			} else {
+
 				markRepositories.save(request);
 			}
-			
-			
+
 		}
-		
+
 		return mark;
+	}
+
+	@Override
+	public MarkRequest findMarkMediumByStudent(int studentId, int type, int semester) {
+		// TODO Auto-generated method stub
+		return markRepositories.findMarkMediumByStudent(studentId, type, semester);
+	}
+
+	@Override
+	public List<Mark> IndexMarkView(List<User> studentList) {
+
+		List<Mark> marks = new ArrayList<>();
+		List<Subjects> listSubject = (List<Subjects>) subjectRepositories.findAll();
+
+		for (User student : studentList) {
+
+			List<MarkRequest> listMark = markRepositories.listAverageSubject(student.getId());
+
+			int totalSubject = listSubject.size() *2;
+
+			Mark mark = new Mark();
+			float medium = 0;
+
+			mark.setCoefficient(medium);
+
+			if (listMark != null) {
+
+				int totalRq = listMark.size();
+
+				if (totalRq == totalSubject) {
+
+					if (markRepositories.findMarkMediumByStudent(student.getId(), 6, 0) != null) {
+						MarkRequest mrq = markRepositories.findMarkMediumByStudent(student.getId(), 6, 0);
+						medium = mrq.getCoefficient();
+					}
+					mark.setCoefficient(Float.valueOf(String.format(Locale.getDefault(), "%.2f", medium)));
+
+				}
+
+			}
+
+			mark.setStudents(student);
+			marks.add(mark);
+		}
+
+		return marks;
 	}
 
 }

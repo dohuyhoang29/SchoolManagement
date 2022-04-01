@@ -33,94 +33,103 @@
   <div th:include="partials/leftbar"></div>
 
 
-  <!-- Start project content area -->
-  <div class="page">
-    <!-- Start Page header -->
-    <div th:include="partials/navbar"></div>
-    <!-- Start Page title and tab -->
-    <div class="section-body">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center ">
-          <div class="header-action">
-            <h1 class="page-title">Student</h1>
-            <ol class="breadcrumb page-breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Student List</li>
-            </ol>
-          </div>
-          <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item"><a class="nav-link active"
-                                    th:href="@{/show/student}">List
-              View</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/insert/student}">Add</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="section-body mt-4">
-      <div class="container-fluid">
-        <div class="tab-content">
-          <div class="tab-pane active" id="Staff-all">
-            <div class="card">
-              <div class="card-body">
-              </div>
-            </div>
-            <div class="table-responsive card">
-              <div class="card-body">
-                <div class="bd-example">
-		              <label>Student Name  : <span th:text="${student.fullName}"></span></label> <br>
-		              <label>Class Name : <span th:text="${student.aClass.className}"></span> <a class="btn btn-secondary text-white">Details</a></label><br>
-		              <label>Grade : <span th:text="${student.aClass.grade}"></span></label><br>
-		              <label>School Year : <span th:text="${student.aClass.schoolYear}"></span></label><br>
-		              <label>Homeroom Teacher : <span th:text="${student.aClass.user.fullName}"></span> <a class="btn btn-secondary text-white">Details</a></label>
-		              <hr>
-		              <label>Marks</label>
-		              <hr>
-		              <div class="row">
-			              	<div class="col-lg-6" align="center">Semester 1</div>
-	              			<div class="col-lg-6" align="center">Semester 2</div>
-		            
-		              </div>
-		               <table class="table">
-              				<thead>
-              					<tr>
-              						<th>Subject</th>
-              						<th>Oral</th>
-              						<th>15 minutes</th>
-              						<th>1 houser</th>
-              						<th>Semester</th>
-              						<th>Average</th>
-              						<th>|</th>
-              						<th>Oral</th>
-              						<th>15 minutes</th>
-              						<th>1 houser</th>
-              						<th>Semester</th>
-              						<th>Average</th>
-              					</tr>
-              				</thead>
-              				<tbody>
-              					<tr  th:each="listMark : ${listRquest}">
-              						<td th:text="${listMark.subjectName}"></td>
-              						<th:block th:if="${listMark.coefficients != null}" th:each="coefficients, state : ${listMark.coefficients}">
-              							<td class="align-center" th:text="${coefficients.coefficient}"></td>
-              							<td class="align-center" th:if="${state.count == 5}">|</td>
-              						</th:block>
-              					</tr>
-              				</tbody>
-              			</table>
-		              <a class="btn btn-secondary text-white" th:href="@{/show/mark}">Cancel</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Start Main project js, jQuery, Bootstrap -->
-<script src="/bundles/lib.vendor.bundle.js"></script>
+		<!-- Start project content area -->
+		<div class="page">
+			<!-- Start Page header -->
+			<div th:include="partials/navbar"></div>
+			<!-- Start Page title and tab -->
+			<div class="section-body">
+				<div class="container-fluid">
+					<div class="d-flex justify-content-between align-items-center ">
+						<div class="header-action">
+							<h1 class="page-title">Student</h1>
+							<ol class="breadcrumb page-breadcrumb">
+								<li class="breadcrumb-item"><a href="#">Ericsson</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Student
+									List</li>
+							</ol>
+						</div>
+						<ul class="nav nav-tabs page-header-tab">
+							<li class="nav-item"><a class="nav-link active"
+								th:href="@{/show/student}">List View</a></li>
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{/insert/student}">Add</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="section-body mt-4">
+				<div class="container-fluid">
+					<div class="tab-content">
+						<div class="tab-pane active" id="Staff-all">
+							<div class="card">
+								<div class="card-body"></div>
+							</div>
+							<div class="table-responsive card">
+								<div class="card-body">
+									<div class="bd-example">
+										<label>Student Name : <span
+											th:text="${student.fullName}"></span></label> <br> <label>Class
+											Name : <span th:text="${student.aClass.className}"></span> <a
+											th:href="@{/details/class/{id}(id=${student.aClass.id})}"
+											class="btn btn-secondary text-white">Details</a>
+										</label><br> <label>Grade : <span
+											th:text="${student.aClass.grade}"></span></label><br> <label>School
+											Year : <span th:text="${student.aClass.schoolYear}"></span>
+										</label><br> <label>Homeroom Teacher : <span
+											th:text="${student.aClass.user.fullName}"></span> <a
+											th:href="@{/show/teacher/details/{id}(id=${student.aClass.user.id})}"
+											class="btn btn-secondary text-white">Details</a></label>
+										<hr>
+										<label>Marks</label>
+										<hr>
+										<div class="row">
+											<div class="col-lg-6" align="center">Semester 1</div>
+											<div class="col-lg-6" align="center">Semester 2</div>
+
+										</div>
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Subject</th>
+													<th>Oral</th>
+													<th>15 minutes</th>
+													<th>1 houser</th>
+													<th>Semester</th>
+													<th>Average</th>
+													<th>|</th>
+													<th>Oral</th>
+													<th>15 minutes</th>
+													<th>1 houser</th>
+													<th>Semester</th>
+													<th>Average</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="listMark : ${listRquest}">
+													<td th:text="${listMark.subjectName}"></td>
+													<th:block th:if="${listMark.coefficients != null}"
+														th:each="coefficients, state : ${listMark.coefficients}">
+														<td class="align-center"
+															th:text="${coefficients.coefficient}"></td>
+														<td class="align-center" th:if="${state.count == 5}">|</td>
+													</th:block>
+												</tr>
+											</tbody>
+										</table>
+										<a class="btn btn-secondary text-white"
+											href="javascript: history.back(1)">Cancel</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Start Main project js, jQuery, Bootstrap -->
+	<script src="/bundles/lib.vendor.bundle.js"></script>
 
 <!-- Start Plugin Js -->
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>

@@ -25,17 +25,20 @@ public class SubjectServiceImp implements SubjectService {
 
 	@Override
 	public Iterable<Subjects> getAllSubject() {
+		
 		return subjectRepositories.findAll();
 	}
 
 	@Override
 	public void SaveSubject(Subjects subjects) {
+		
 		subjectRepositories.save(subjects);
 	}
 
 	@Override
 	public Subjects findBySubjectID(int id) {
-		return subjectRepositories.findById(id);
+		
+		return subjectRepositories.findById(id).get();
 	}
 
 	@Override
@@ -60,17 +63,15 @@ public class SubjectServiceImp implements SubjectService {
 	public Subjects findSubjectBySubjectName(String name) {
 		Optional<Subjects> subjects = subjectRepositories.findByName(name);
 		if (subjects.isPresent()) {
+			
 			return subjects.get();
 		} else {
+			
 			return null;
 		}
 	}
 
-	@Override
-	public List<Subjects> findAllSubjectAscId() {
-
-		return subjectRepositories.findAllMarkByASC();
-	}
+	
 
 	@Override
 	public List<MarkRequest> findByStudent(int studentId) {

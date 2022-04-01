@@ -1,10 +1,12 @@
 package com.schoolmanagement.controller.admin;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,57 +31,65 @@ public class MarkController {
 	private StudentService studentService;
 
 	@GetMapping("/show/mark")
-	public String IndexMark(Model model) {
-		Iterable<User> stduents = studentService.getAllStudent();
-		List<Mark> marks = new ArrayList<>();
+	public String MarkIndex(Model model) {
 		
-		try {
-			for (User student : stduents) {
-				
-				Mark mark = new Mark();
-				float medium = 0;
-				
-				if (markService.Average(student.getId(), 1) > 0
-						&& markService.Average(student.getId(), 2) > 0 ) {
-					
-					float medium1 = markService.Average(student.getId(), 1);
-					float medium2 = markService.Average(student.getId(), 2);
-					
-					medium = (medium1 + (medium2 * 2)) / 3;
-						
-					mark.setCoefficient(Float.valueOf(String.format(Locale.getDefault(), "%.2f" , medium)));
-				
-				}else {
-					
-					mark.setCoefficient(medium);
-				}
-				
-				
-				mark.setStudents(student);
-				marks.add(mark);
-			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
+		
+		return PagingMarkIndex(model ,1, "",2022, 10 , 1 );
+	}
+	
+	@GetMapping("/show/mark/page/{pageNumber}")
+	public String PagingMarkIndex(Model model , @PathVariable("pageNumber") int currentPage,
+			@Param("studentName") String studentName , 
+			@Param("schoolYear") int schoolYear , @Param("grade") int grade 
+			, @Param("average") Integer average ) {
+		
+		int year = LocalDate.now().getYear();
+		List<Integer> listYear = new ArrayList<>();
+		
+		for(int i = 2000 ; i <= year ; i++) {
+			listYear.add(i);
 		}
 		
-		model.addAttribute("markList", marks);
-		model.addAttribute("listSubject", subjectService.findAllSubjectAscId());
+		Page<User> pageUserMark = studentService.PagingMarkIndex(studentName, schoolYear , grade , average,currentPage);
+		
+		int totalPages = pageUserMark.getTotalPages();
+		
+		List<User> listUser = pageUserMark.getContent();
+		
+		List<Mark> list = markService.IndexMarkView(listUser);
+		
+		model.addAttribute("markList", list);
+		model.addAttribute("grade", grade);
+		model.addAttribute("studentName", studentName);
+		model.addAttribute("schoolYear", schoolYear);
+		model.addAttribute("average", average);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("listYear", listYear);
 		
 		return "/admin/mark/mark_management";
 	}
-
+	
 	
 	@GetMapping("/detail/mark/{studentId}")
-	public String MarkDetails(Model model , @PathVariable("studentId") int studentId) {
-		
+	public String MarkDetails(Model model, @PathVariable("studentId") int studentId) {
+
 		User student = studentService.getStudentById(studentId);
-		
+
 		List<MarkRequest> listRquest = subjectService.findByStudent(studentId);
-		
+
 		model.addAttribute("student", student);
 		model.addAttribute("listRquest", listRquest);
-		
+
 		return "/admin/mark/mark_details";
+	}
+	
+	
+	@GetMapping("/show/mark/search")
+	public String SearchMarkList(Model model , @Param("studentName") String studentName , 
+			@Param("schoolYear") int schoolYear , @Param("grade") int grade 
+			, @Param("average") Integer average , @Param("currentPage") int currentPage) {
+		
+		return PagingMarkIndex(model ,currentPage, studentName,schoolYear, grade , average);
 	}
 }

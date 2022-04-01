@@ -13,28 +13,43 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.schoolmanagement.model.Class;
+import com.schoolmanagement.model.Subjects;
+import com.schoolmanagement.model.User;
+import com.schoolmanagement.model.request.CoefficientRequest;
+import com.schoolmanagement.model.request.MarkRequest;
 import com.schoolmanagement.model.request.SchoolYearClassRequest;
 import com.schoolmanagement.repositories.ClassRepositories;
+import com.schoolmanagement.repositories.StudentRepositories;
+import com.schoolmanagement.repositories.SubjectRepositories;
 import com.schoolmanagement.service.ClassService;
 
 @Service
 public class ClassServiceImp implements ClassService {
 
 	@Autowired
+	private StudentRepositories studentRepositories;
+	
+	@Autowired
 	private ClassRepositories classRepositories;
 
+	@Autowired
+	private SubjectRepositories subjectRepositories;
+	
 	@Override
 	public void saveClass(Class aClass) {
+		
 		classRepositories.save(aClass);
 	}
 
 	@Override
 	public Class getClassById(Integer id) {
+		
 		return classRepositories.findById(id).get();
 	}
 
 	@Override
 	public Iterable<Class> getAllClass() {
+		
 		return classRepositories.findAll();
 	}
 
@@ -89,6 +104,54 @@ public class ClassServiceImp implements ClassService {
 	@Override
 	public int countAllClass() {
 		return classRepositories.countAll();
+	}
+
+	@Override
+	public List<MarkRequest> findAverageOneAndTwo(int classId) {
+
+		List<User> studentList = studentRepositories.findAllStudentByClass(classId);
+		Iterable<Subjects> subjectList = subjectRepositories.findAll();
+
+		List<MarkRequest> listMarkRq = new ArrayList<>();
+
+		for(User u : studentList) {
+			MarkRequest mr = new MarkRequest();
+
+			mr.setClassName(u.getAClass().getClassName());
+			mr.setSchoolYear(u.getAClass().getSchoolYear());
+			mr.setGade(u.getAClass().getGrade());
+			mr.setStudentName(u.getFullName());
+			mr.setDateOfBirth(u.getDob());
+			mr.setAddress(u.getAddress());
+			mr.setStudentId(u.getId());
+
+			List<CoefficientRequest> listCq = new ArrayList<>();
+			for(Subjects s : subjectList) {
+
+
+				MarkRequest markRequest = classRepositories.DataExport(u.getId(), classId, s.getId());
+				CoefficientRequest cRequest = new CoefficientRequest();
+
+				if( markRequest != null) {
+
+					cRequest.setCoefficient(markRequest.getCoeff());
+				}else {
+
+					cRequest.setCoefficient("No data");
+				}
+
+				listCq.add(cRequest);
+			}
+
+
+			mr.setCoefficients(listCq);
+
+			listMarkRq.add(mr);
+
+		}
+
+		// TODO Auto-generated method stub
+		return listMarkRq;
 	}
 
 }

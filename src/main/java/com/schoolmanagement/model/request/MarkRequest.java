@@ -42,6 +42,13 @@ public class MarkRequest {
 	
 	private CoefficientRequest coeffs;
 	
+	private String className;
+	
+	private int schoolYear;
+	
+	private int gade;
+	
+	
 	
 	private int currentPage;
 	
@@ -58,9 +65,12 @@ public class MarkRequest {
 		this.coeff = coefficient;
 		
 	}
+	
+	
 	//m.id, m.coefficient, m.semester,s.subject_name , u.full_name 
-	public MarkRequest(int markId) {
+	public MarkRequest(int markId , float coefficient) {
 		this.markId = markId;
+		this.coefficient = coefficient;
 	}
 	
 	
@@ -83,12 +93,47 @@ public class MarkRequest {
 		
 	}
 	
+	public MarkRequest( String coeffi) {
+		
+		this.coeff = coeffi;
+	}
+	
 	public MarkRequest() {
 		
 	}
 	
 	
 	
+	public String getClassName() {
+		return className;
+	}
+
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+
+	public int getSchoolYear() {
+		return schoolYear;
+	}
+
+
+	public void setSchoolYear(int schoolYear) {
+		this.schoolYear = schoolYear;
+	}
+
+
+	public int getGade() {
+		return gade;
+	}
+
+
+	public void setGade(int gade) {
+		this.gade = gade;
+	}
+
+
 	public CoefficientRequest getCoeffs() {
 		return coeffs;
 	}

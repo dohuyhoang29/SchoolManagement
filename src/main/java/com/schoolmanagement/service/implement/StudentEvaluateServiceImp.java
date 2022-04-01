@@ -17,22 +17,25 @@ public class StudentEvaluateServiceImp implements StudentEvaluateService {
 
 	@Override
 	public void saveStudentEvaluate(StudentEvaluate studentEvaluate) {
+
 		studentEvaluateRepositories.save(studentEvaluate);
 	}
 
 	@Override
 	public StudentEvaluate findStudentEvaluateByStudentId(Integer id, Integer semester) {
+
 		return studentEvaluateRepositories.findStudentEvaluateByStudentId(id, semester);
 	}
 
 	@Override
 	public List<StudentEvaluate> studentEvaluate(int studentId) {
-		
+
 		return studentEvaluateRepositories.studentEvaluate(studentId);
 	}
 
-  @Override
-  public Iterable<StudentEvaluate> getAllByStudent(User student) {
-    return studentEvaluateRepositories.findAllByStudent(student);
-  }
+	@Override
+	public Iterable<StudentEvaluate> getAllByStudent(User student) {
+
+		return studentEvaluateRepositories.findAllByStudent(student);
+	}
 }
