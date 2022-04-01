@@ -135,7 +135,9 @@
 			                  		</tbody>
 			                  	</table>
 			                  	<div class="card-body">
-				                  	<div th:fragment="pagination">
+														<div class="bd-example"
+																 th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir}, '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}, '/show/student/')">
+														</div>
 										<div th:if="${totalPages} > 1" th:with="pageUrlPostfix = '?search='+ ${search} ">
 											<nav>
 												<ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/details/class/'">

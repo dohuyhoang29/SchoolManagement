@@ -39,13 +39,27 @@ public interface StudentService {
 
 	int countAllStudent();
 
-	int countAllNewStudentLastYear();
-	
 	List<MarkRequest> findAllStudentHasMark(int type , int semester , int subjectId , int classId);
 
 	float getYearPointAverage();
 
+	int countAllNewStudentLastYear();
+
 	int countAllStudentFailLastYear();
+
+	int countAllNewStudentThisYear();
+
+	int countAllStudentGraduateLastYear();
+
+	int countAllStudentAbsentLastYear();
+
+	List<Integer> countAllNewStudentLast10Year();
+
+	List<Integer> countAllStudentFailLast10Year();
+
+	List<Integer> countAllStudentGraduateLast10Year();
+
+	List<Integer> countAllStudentAbsentLast10Year();
 	
 	List<User> findByClassId(int classId);
 }

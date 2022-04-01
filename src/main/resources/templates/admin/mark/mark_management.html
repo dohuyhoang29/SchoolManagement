@@ -82,9 +82,9 @@
                 	<tr th:each="mark : ${markList}">
                 		<td th:text="${mark.students.id}"></td>
                 		<td th:text="${mark.students.fullName}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.className}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.schoolYear}"></td>
-                		<td th:text="${mark.students.userInfo.aClass.grade}"></td>
+                		<td th:text="${mark.students.aClass.className}"></td>
+                		<td th:text="${mark.students.aClass.schoolYear}"></td>
+                		<td th:text="${mark.students.aClass.grade}"></td>
                 		<td th:text="${mark.coefficient}">
                 		<td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}" class="btn btn-secondary text-white">Details</a></td>
                 	</tr>

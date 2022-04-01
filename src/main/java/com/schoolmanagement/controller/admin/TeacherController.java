@@ -96,16 +96,12 @@ public class TeacherController {
 	public String saveTeacher(@Valid @ModelAttribute("user") InsertTeacherRequest user, BindingResult result,
 			@RequestParam("fileImage") MultipartFile multipartFile, RedirectAttributes rdrAttr) throws IOException {
 
-//		if (user.getDob() == null) {
-//			result.rejectValue("dob", "error.insertTeacherRequest","Enter dob");
-//		}
-
 		if (result.hasErrors()) {
 			
 			return "/admin/teacher/form_teacher";
 		}
 
-//		rdrAttr.addFlashAttribute("message", "Add teacher successfully");
+		rdrAttr.addFlashAttribute("message", "Add teacher successfully");
 		teacherService.saveUser(user, multipartFile);
 
 		return "redirect:/show/teacher";

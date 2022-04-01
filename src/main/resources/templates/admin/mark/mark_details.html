@@ -70,10 +70,10 @@
               <div class="card-body">
                 <div class="bd-example">
 		              <label>Student Name  : <span th:text="${student.fullName}"></span></label> <br>
-		              <label>Class Name : <span th:text="${student.userInfo.aClass.className}"></span> <a class="btn btn-secondary text-white">Details</a></label><br>
-		              <label>Grade : <span th:text="${student.userInfo.aClass.grade}"></span></label><br>
-		              <label>School Year : <span th:text="${student.userInfo.aClass.schoolYear}"></span></label><br>
-		              <label>Homeroom Teacher : <span th:text="${student.userInfo.aClass.user.fullName}"></span> <a class="btn btn-secondary text-white">Details</a></label>
+		              <label>Class Name : <span th:text="${student.aClass.className}"></span> <a class="btn btn-secondary text-white">Details</a></label><br>
+		              <label>Grade : <span th:text="${student.aClass.grade}"></span></label><br>
+		              <label>School Year : <span th:text="${student.aClass.schoolYear}"></span></label><br>
+		              <label>Homeroom Teacher : <span th:text="${student.aClass.user.fullName}"></span> <a class="btn btn-secondary text-white">Details</a></label>
 		              <hr>
 		              <label>Marks</label>
 		              <hr>

@@ -265,13 +265,70 @@ public class StudentServiceImp implements StudentService {
 
   @Override
   public int countAllStudentFailLastYear() {
-		List<AverageMarkRequest> list = markRepositories.getAllAverageMarkLastYear(
-        String.valueOf(LocalDate.now().getYear()));
 
-    return 0;
+    return studentRepositories.countAllStudentFailLastYear();
   }
 
-	@Override
+  @Override
+  public int countAllNewStudentThisYear() {
+    return studentRepositories.countAllNewStudentThisYear();
+  }
+
+  @Override
+  public int countAllStudentGraduateLastYear() {
+    return studentRepositories.countAllStudentGraduateLastYear();
+  }
+
+  @Override
+  public int countAllStudentAbsentLastYear() {
+    return studentRepositories.countAllStudentAbsentLastYear();
+  }
+
+  @Override
+  public List<Integer> countAllNewStudentLast10Year() {
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      list.add(studentRepositories.countAllNewStudentByYear(LocalDate.now().getYear() - i));
+//      list.add(studentRepositories.countAllNewStudentByYear(2012 - i));
+    }
+
+    return list;
+  }
+
+  @Override
+  public List<Integer> countAllStudentFailLast10Year() {
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      list.add(studentRepositories.countAllStudentFailByYear(LocalDate.now().getYear() - i));
+//      list.add(studentRepositories.countAllStudentFailByYear(2012 - i));
+    }
+
+    return list;
+  }
+
+  @Override
+  public List<Integer> countAllStudentGraduateLast10Year() {
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      list.add(studentRepositories.countAllStudentGraduateByYear(LocalDate.now().getYear() - i));
+//      list.add(studentRepositories.countAllStudentGraduateByYear(2012 - i));
+    }
+
+    return list;
+  }
+
+  @Override
+  public List<Integer> countAllStudentAbsentLast10Year() {
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      list.add(studentRepositories.countAllStudentAbsentByYear(LocalDate.now().getYear() - i));
+//      list.add(studentRepositories.countAllStudentAbsentByYear(2012 - i));
+    }
+
+    return list;
+  }
+
+  @Override
 	public List<User> findByClassId(int classId) {
 
 		return studentRepositories.findByIdClass(classId);

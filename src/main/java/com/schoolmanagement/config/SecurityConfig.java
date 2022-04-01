@@ -1,5 +1,6 @@
 package com.schoolmanagement.config;
 
+import com.schoolmanagement.service.UserAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/insert/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
         .antMatchers("/show/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
         .antMatchers("/edit/**").hasAnyAuthority("ADMIN", "TEACHER", "HOMEROOM_TEACHER")
-        .antMatchers("/","/blog/**").permitAll()
+        //.antMatchers("/","/blog/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin().loginPage("/login")
@@ -62,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .failureUrl("/login?error=true")
         .permitAll()
         .and()
-        .csrf().disable()
+        //.csrf().disable()
         .logout()
         .logoutSuccessUrl("/login?logout=true")
         .invalidateHttpSession(true)

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.schoolmanagement.model.Class;
@@ -38,11 +39,12 @@ public class ClassServiceImp implements ClassService {
 	}
 
 	@Override
-	public Page<Class> getAllClassPage(String b , int page){
-		Pageable pages = PageRequest.of(page -1, 10);
+	public Page<Class> getAllClassPage(String b , int page, String sortField, String sortDir){
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+		Pageable pages = PageRequest.of(page -1, 10, sort);
 		
-		if(b == "") {
-			
+		if(b == null) {
 			return classRepositories.findAll(pages);
 		}else {
 			return classRepositories.listClass(b, pages);
@@ -50,9 +52,11 @@ public class ClassServiceImp implements ClassService {
 	}
 
 	@Override
-	public Page<Class> getAllByTeacherId(Integer id, int page) {
-		Pageable pages = PageRequest.of(page -1, 10);
-
+	public Page<Class> getAllByTeacherId(Integer id, int page, String sortField, String sortDir) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+		Pageable pages = PageRequest.of(page -1, 1, sort);
+		Page<Class> list = classRepositories.getAllByTeacherId(id, pages);
 		return classRepositories.getAllByTeacherId(id, pages);
 	}
 

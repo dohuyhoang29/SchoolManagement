@@ -14,9 +14,9 @@ public interface ClassService {
 
   Iterable<Class> getAllClass();
 
-  Page<Class> getAllClassPage(String b , int page);
+  Page<Class> getAllClassPage(String b , int page, String sortField, String sortDir);
 
-  Page<Class> getAllByTeacherId(Integer id, int page);
+  Page<Class> getAllByTeacherId(Integer id, int page, String sortField, String sortDir);
 
   List<SchoolYearClassRequest> getSchoolYear();
 

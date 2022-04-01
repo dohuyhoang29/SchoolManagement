@@ -91,7 +91,8 @@
             <li class="nav-item"><a class="nav-link active"
                                     th:href="@{/show/student}">List
               View</a></li>
-            <li class="nav-item"><a sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link" th:href="@{/insert/student}">Add</a>
+            <li class="nav-item"><a sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link"
+                                    th:href="@{/insert/student}">Add</a>
             </li>
           </ul>
         </div>
@@ -112,7 +113,8 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <form th:action="@{/show/student/search}" method="get" sec:authorize="hasAnyAuthority('ADMIN')">
+                <form th:action="@{/show/student/search}" method="get"
+                      sec:authorize="hasAnyAuthority('ADMIN')">
                   <div class="row">
                     <div class="col-lg-2 col-md-6 col-sm-12">
                       <div class="input-group">
@@ -124,17 +126,24 @@
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
                         <select class="form-control input-height" name="grade">
-                          <option value="" th:selected="${grade == '' ? true : false}" hidden>Grade</option>
-                          <option th:selected="${grade == '10' ? true : false}" value="10">10</option>
-                          <option th:selected="${grade == '11' ? true : false}" value="11">11</option>
-                          <option th:selected="${grade == '12' ? true : false}" value="12">12</option>
+                          <option value="" th:selected="${grade == '' ? true : false}" hidden>
+                            Grade
+                          </option>
+                          <option th:selected="${grade == '10' ? true : false}" value="10">10
+                          </option>
+                          <option th:selected="${grade == '11' ? true : false}" value="11">11
+                          </option>
+                          <option th:selected="${grade == '12' ? true : false}" value="12">12
+                          </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
                         <select class="form-control input-height" name="class-name">
-                          <option th:selected="${className == '' ? true : false}" value="" selected hidden>Class</option>
+                          <option th:selected="${className == '' ? true : false}" value="" selected
+                                  hidden>Class
+                          </option>
                           <th:block th:each="class : ${classList}">
                             <option th:value="${class.className}"
                                     th:selected="${className} == ${class.className}"
@@ -196,7 +205,8 @@
                     </div>
                   </div>
                 </form>
-                <form th:action="@{/show/student/teacher/search}" method="get" sec:authorize="hasAnyAuthority('TEACHER')">
+                <form th:action="@{/show/student/teacher/search}" method="get"
+                      sec:authorize="hasAnyAuthority('TEACHER')">
                   <div class="row">
                     <div class="col-lg-2 col-md-6 col-sm-12">
                       <div class="input-group">
@@ -208,17 +218,24 @@
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
                         <select class="form-control input-height" name="grade">
-                          <option value="" th:selected="${grade == '' ? true : false}" hidden>Grade</option>
-                          <option th:selected="${grade == '10' ? true : false}" value="10">10</option>
-                          <option th:selected="${grade == '11' ? true : false}" value="11">11</option>
-                          <option th:selected="${grade == '12' ? true : false}" value="12">12</option>
+                          <option value="" th:selected="${grade == '' ? true : false}" hidden>
+                            Grade
+                          </option>
+                          <option th:selected="${grade == '10' ? true : false}" value="10">10
+                          </option>
+                          <option th:selected="${grade == '11' ? true : false}" value="11">11
+                          </option>
+                          <option th:selected="${grade == '12' ? true : false}" value="12">12
+                          </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-12">
                       <div class="input-group">
                         <select class="form-control input-height" name="class-name">
-                          <option th:selected="${className == '' ? true : false}" value="" selected hidden>Class</option>
+                          <option th:selected="${className == '' ? true : false}" value="" selected
+                                  hidden>Class
+                          </option>
                           <th:block th:each="class : ${classList}">
                             <option th:value="${class.className}"
                                     th:selected="${className} == ${class.className}"
@@ -237,7 +254,8 @@
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
                 <th:block sec:authorize="hasAnyAuthority('ADMIN')">
-                  <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
+                  <thead
+                      th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
                   <tr th:with="pageUrlPrefix = '/show/student/'">
                     <th>
                       <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
@@ -284,7 +302,8 @@
                   </thead>
                 </th:block>
                 <th:block sec:authorize="hasAnyAuthority('TEACHER')">
-                  <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}">
+                  <thead
+                      th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}">
                   <tr th:with="pageUrlPrefix = '/show/student/'">
                     <th>
                       <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
@@ -332,206 +351,65 @@
                   <tbody>
                 </th:block>
                 <tbody>
-                  <th:block th:each="user : ${studentList}">
-                    <tr>
-                      <td><img class="avatar" th:src="${user.getStudentImagePath}" alt=""></td>
-                      <td class="">
-                        <span class="font-16">[[${user.fullName}]]</span>
-                      </td>
-                      <td class="pr-20">[[${user.address}]]</td>
-                      <td>[[${user.dob}]]</td>
-                      <td th:if="${user.userInfo.status == 1}">
-                        <span class="tag tag-success">Studying</span>
-                      </td>
-                      <td th:if="${user.userInfo.status == 2}">
-                        <span class="tag tag-warning">Absent</span>
-                      </td>
-                      <td th:if="${user.userInfo.status == 3}">
-                        <span class="tag tag-secondary">Graduate</span>
-                      </td>
-                      <td>[[${user.aClass.grade}]]</td>
-                      <td class="text-center">[[${user.aClass.className}]]</td>
-                      <td class="text-center">[[${user.aClass.schoolYear}]]</td>
-                      <td class="text-center">
-                        <a th:href="@{/show/student/details/{id}(id=${user.id})}" sec:authorize="hasAnyAuthority('ADMIN')">
-                          <button type="button" class="btn btn-success btn-sm">Detail</button>
-                        </a>
-                        <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/edit/student/{id}(id=${user.id})}">
-                          <button type="button" class="btn btn-success btn-sm">Edit</button>
-                        </a>
-                        <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                                title="Student Evaluate" data-type="confirm" th:href="@{/insert/evaluate/{student-id}/{semester}(student-id = ${user.id}, semester = 1)}">
-                          <button type="button" class="btn btn-success btn-sm">Student Evaluate</button>
-                        </a>
-                        <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')" class="btn btn-icon btn-sm js-sweetalert"
-                           title="Student Evaluate" data-type="confirm" th:href="@{/show/student-class-detail/{id}(id = ${user.id})}">
-                          <button type="button" class="btn btn-success btn-sm">Details Marks</button>
-                        </a>
-                      </td>
-                    </tr>
-                  </th:block>
+                <th:block th:each="user : ${studentList}">
+                  <tr>
+                    <td><img class="avatar" th:src="${user.getStudentImagePath}" alt=""></td>
+                    <td class="">
+                      <span class="font-16">[[${user.fullName}]]</span>
+                    </td>
+                    <td class="pr-20">[[${user.address}]]</td>
+                    <td>[[${user.dob}]]</td>
+                    <td th:if="${user.userInfo.status == 1}">
+                      <span class="tag tag-success">Studying</span>
+                    </td>
+                    <td th:if="${user.userInfo.status == 2}">
+                      <span class="tag tag-warning">Absent</span>
+                    </td>
+                    <td th:if="${user.userInfo.status == 3}">
+                      <span class="tag tag-secondary">Graduate</span>
+                    </td>
+                    <td>[[${user.aClass.grade}]]</td>
+                    <td class="text-center">[[${user.aClass.className}]]</td>
+                    <td class="text-center">[[${user.aClass.schoolYear}]]</td>
+                    <td class="text-center">
+                      <a th:href="@{/show/student/details/{id}(id=${user.id})}"
+                         sec:authorize="hasAnyAuthority('ADMIN')">
+                        <button type="button" class="btn btn-success btn-sm">Detail</button>
+                      </a>
+                      <a sec:authorize="hasAnyAuthority('ADMIN')"
+                         th:href="@{/edit/student/{id}(id=${user.id})}">
+                        <button type="button" class="btn btn-success btn-sm">Edit</button>
+                      </a>
+                      <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')"
+                         class="btn btn-icon btn-sm js-sweetalert"
+                         title="Student Evaluate" data-type="confirm"
+                         th:href="@{/insert/evaluate/{student-id}/{semester}(student-id = ${user.id}, semester = 1)}">
+                        <button type="button" class="btn btn-success btn-sm">Student Evaluate
+                        </button>
+                      </a>
+                      <a sec:authorize="hasAnyAuthority('HOMEROOM_TEACHER')"
+                         class="btn btn-icon btn-sm js-sweetalert"
+                         title="Student Evaluate" data-type="confirm"
+                         th:href="@{/show/student-class-detail/{id}(id = ${user.id})}">
+                        <button type="button" class="btn btn-success btn-sm">Details Marks</button>
+                      </a>
+                    </td>
+                  </tr>
+                </th:block>
                 </tbody>
               </table>
               <th:block sec:authorize="hasAnyAuthority('ADMIN')">
                 <div class="card-body">
-                  <div class="bd-example">
-                    <div th:fragment="pagination">
-                      <div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir} + '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}">
-                        <nav>
-                          <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
-
-                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
-                            </li>
-                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
-                            </li>
-
-                            <th:block th:if="${totalPages <= 6}" >
-                              <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
-                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                              </li>
-                            </th:block>
-
-                            <th:block th:if="${totalPages > 6}">
-                              <th:block th:if="${currentPage <= 4}">
-                                <li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-                                </li>
-                              </th:block>
-                              <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
-                                <li th:class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-
-                                <button th:class="page-link">...</button>
-
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-                                </li>
-                              </th:block>
-                              <th:block th:if="${currentPage >= totalPages - 3}">
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-                              </th:block>
-                            </th:block>
-
-                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
-                            </li>
-
-                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
-                            </li>
-
-                          </ul>
-                        </nav>
-                      </div>
-                    </div>
+                  <div class="bd-example"
+                       th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir}, '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}, '/show/student/')">
                   </div>
                 </div>
               </th:block>
               <th:block sec:authorize="hasAnyAuthority('TEACHER')">
                 <div class="card-body">
                   <div class="bd-example">
-                    <div th:fragment="pagination">
-                      <div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}">
-                        <nav>
-                          <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/student/'">
-
-                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + '1' + ${pageUrlPostfix} }">First</a>
-                            </li>
-                            <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
-                            </li>
-
-                            <th:block th:if="${totalPages <= 6}" >
-                              <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
-                                <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                              </li>
-                            </th:block>
-
-                            <th:block th:if="${totalPages > 6}">
-                              <th:block th:if="${currentPage <= 4}">
-                                <li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-                                </li>
-                              </th:block>
-                              <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
-                                <li th:class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-
-                                <button th:class="page-link">...</button>
-
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">[[${totalPages}]]</a>
-                                </li>
-                              </th:block>
-                              <th:block th:if="${currentPage >= totalPages - 3}">
-                                <li class="page-item">
-                                  <a class="page-link" th:href="@{${pageUrlPrefix} + 1 + ${pageUrlPostfix} }">1</a>
-                                </li>
-
-                                <button class="page-link">...</button>
-
-                                <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-                                  <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-                                </li>
-                              </th:block>
-                            </th:block>
-
-                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1} + ${pageUrlPostfix}}">Next</a>
-                            </li>
-
-                            <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                              <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix} }">Last</a>
-                            </li>
-
-                          </ul>
-                        </nav>
-                      </div>
+                    <div th:fragment="pagination"
+                         th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir}, '&search=' + ${search} + '&className=' + ${className} + '&grade=' +${grade}, '/show/student/')">
                     </div>
                   </div>
                 </div>

@@ -143,6 +143,11 @@
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Last year's statistics</h3>
+                      <input id="new-student-last-year" type="hidden" th:value="${totalNewStudentLastYear}">
+                      <input id="new-student-this-year" type="hidden" th:value="${totalNewStudentThisYear}">
+                      <input id="graduate-student-last-year" type="hidden" th:value="${totalGraduateLastYear}">
+                      <input id="absent-student-last-year" type="hidden" th:value="${totalAbsentLastYear}">
+                      <input id="fail-student-last-year" type="hidden" th:value="${totalFailLastYear}">
                       <div class="card-options">
                         <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
                             class="fe fe-chevron-up"></i></a>
@@ -166,7 +171,69 @@
 
 <!-- Start Main project js, jQuery, Bootstrap -->
 <script src="/bundles/lib.vendor.bundle.js"></script>
+<script th:inline="javascript">
+  $(document).ready(function() {
+    var newStudent = [[${totalNewStudent10Year}]];
+    var failStudent = [[${totalGraduate10Year}]];
+    var graduateStudent = [[${totalAbsent10Year}]];
+    var absentStudent = [[${totalFail10Year}]];
+    var listYear = [];
 
+    for (let i =0; i < 10; i++) {
+      listYear[i] = new Date().getFullYear() - i;
+      // listYear[i] = 2012 - i;
+    }
+
+    const options = {
+      series: [{
+        name: 'New Student',
+        data: [newStudent[0], newStudent[1], newStudent[2], newStudent[3],
+          newStudent[4], newStudent[5], newStudent[6], newStudent[7], newStudent[8],
+          newStudent[9]]
+      }, {
+        name: 'Fail Student',
+        data: [failStudent[0], failStudent[1], failStudent[2], failStudent[3],
+          failStudent[4], failStudent[5], failStudent[6], failStudent[7], failStudent[8],
+          failStudent[9]]
+      }, {
+        name: 'Graduate Student',
+        data: [graduateStudent[0], graduateStudent[1], graduateStudent[2], graduateStudent[3],
+          graduateStudent[4], graduateStudent[5], graduateStudent[6], graduateStudent[7], graduateStudent[8],
+          graduateStudent[9]]
+      }, {
+        name: 'Absent Student',
+        data: [absentStudent[0], absentStudent[1], absentStudent[2], absentStudent[3],
+          absentStudent[4], absentStudent[5], absentStudent[6], absentStudent[7], absentStudent[8],
+          absentStudent[9]]
+      }],
+      chart: {
+        height: 430,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'year',
+        categories: [listYear[0], listYear[1], listYear[2], listYear[3],
+          listYear[4], listYear[5], listYear[6], listYear[7], listYear[8],
+          listYear[9]]
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        },
+      },
+    };
+
+    const chart = new ApexCharts(document.querySelector("#chart-last-10-year"),
+        options);
+    chart.render();
+  });
+</script>
 <!-- Start all plugin js -->
 <script src="/bundles/counterup.bundle.js"></script>
 <script src="/bundles/apexcharts.bundle.js"></script>
