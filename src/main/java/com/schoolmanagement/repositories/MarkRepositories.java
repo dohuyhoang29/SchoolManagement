@@ -16,17 +16,17 @@ import com.schoolmanagement.model.request.MarkRequest;
 
 @Repository
 public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integer> {
-	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.students.id = :studentId AND m.type = :type AND m.semester = :semester")
+	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.studentId = :studentId AND m.type = :type AND m.semester = :semester")
 	List<Mark> findByClassSubjectId(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
 
-	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.students.id = :studentId AND  m.semester = :semester")
+	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.studentId = :studentId AND  m.semester = :semester")
 	List<Mark> findByStudentSubject(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("semester") int semester );
 	
-	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.students.id = :studentId AND m.type = :type AND m.semester = :semester")
+	@Query(value="SELECT m FROM Mark m WHERE m.subjects.id = :subjectid AND m.studentId = :studentId AND m.type = :type AND m.semester = :semester")
 	Mark findMediumScore(@Param("subjectid") int sbid , @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
 
 	
-	@Query(value="SELECT m FROM Mark m WHERE m.students.id = :studentId AND m.type = :type AND m.semester = :semester ORDER By m.subjects.id ")
+	@Query(value="SELECT m FROM Mark m WHERE m.studentId = :studentId AND m.type = :type AND m.semester = :semester ORDER By m.subjects.id ")
 	List<Mark> findAllMarkByMedium(@Param("studentId") int sid,@Param("type") int type  , @Param("semester") int semester);
 	
 	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(s.id, m.coefficient, m.semester,s.subjectName , u.fullName )"
@@ -37,9 +37,9 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	List<MarkRequest> listAverageSubject(@Param("studentId") int studentId);
 	
 	@Query(value ="SELECT AVG(m.coefficient) FROM Mark m WHERE m.studentId = :studentId AND m.type = 5 AND m.semester = :semester")
-	float Average( @Param("studentId") int studentId , @Param("semester") int semester );
+	Float Average( @Param("studentId") int studentId , @Param("semester") int semester );
 
-	@Query(value ="SELECT  new com.schoolmanagement.model.request.AverageMarkRequest(m.students.id, m.semester, AVG(m.coefficient)) "
+	@Query(value ="SELECT  new com.schoolmanagement.model.request.AverageMarkRequest(m.studentId, m.semester, AVG(m.coefficient)) "
 			+ "FROM Mark m WHERE m.type = 5 AND SUBSTRING(m.createdDate, 1, 4)  = :lastYear")
 	List<AverageMarkRequest> getAllAverageMarkLastYear(@Param("lastYear") String lastYear);
 	
@@ -51,7 +51,7 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	List<MarkRequest> listAverageSubjectBySemester(@Param("studentId") int studentId , @Param("semester") int semester);
 
 	
-	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(m.id , m.coefficient) FROM Mark m WHERE m.students.id = :studentid AND m.type = :type AND m.semester = :semester ")
+	@Query(value="SELECT new com.schoolmanagement.model.request.MarkRequest(m.id , m.coefficient) FROM Mark m WHERE m.studentId = :studentid AND m.type = :type AND m.semester = :semester ")
 	MarkRequest findMarkMediumByStudent(@Param("studentid") int sid,@Param("type") int type  , @Param("semester") int semester);
 
 	@Modifying
@@ -59,7 +59,11 @@ public interface MarkRepositories extends PagingAndSortingRepository<Mark, Integ
 	@Query(value ="UPDATE mark  SET coefficient = :coefficient WHERE id = :markId ", nativeQuery = true)
 	void saveTypeMediumYear(@Param("coefficient") float coefficient , @Param("markId") int markId);
 
-	@Query(value="SELECT m FROM Mark m WHERE  m.students.id = :studentId AND m.type = :type AND m.semester = :semester")
+	@Query(value="SELECT m FROM Mark m WHERE  m.studentId = :studentId AND m.type = :type AND m.semester = :semester")
 	Mark findAverageYear( @Param("studentId") int sid , @Param("type") int type , @Param("semester") int semester );
 
+	
+	@Query(value ="SELECT m FROM Mark m where m.studentId = :studentId GROUP BY m.studentId ")
+	Mark StudentExist(@Param("studentId") int studentId);
+	
 }

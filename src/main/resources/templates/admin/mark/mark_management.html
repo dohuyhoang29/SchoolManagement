@@ -52,7 +52,7 @@
             <li class="nav-item"><a class="nav-link active"
                                     th:href="@{/show/student}">List
               View</a></li>
-
+            
           </ul>
         </div>
       </div>
@@ -63,7 +63,7 @@
           <div class="tab-pane active" id="Staff-all">
             <div class="card">
               <div class="card-body">
-                <form method="get" sec:authorize="hasAnyAuthority('ADMIN')" th:action="@{/show/mark/search}">
+              	<form th:action="@{/show/mark/search}"  method="get" sec:authorize="hasAnyAuthority('ADMIN')">
                   <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
@@ -83,26 +83,24 @@
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="grade" id="grade"
-                                th:value="${grade}">
-                          <option th:selected="${grade == 10}" value="10">10</option>
-                          <option th:selected="${grade == 11}" value="11">11</option>
-                          <option th:selected="${grade == 12}" value="12">12</option>
+                         <select class="form-control input-height" name="grade" id="grade" th:value="${grade}"  >
+                          	<option th:selected="${grade == 10}" value="10"  >10</option>
+                         	<option th:selected="${grade == 11}" value="11"  >11</option>
+                         	<option th:selected="${grade == 12}" value="12"  >12</option>
 
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="average" id="average">
-                          <option th:selected="${average == 1}" value="1" selected>All Average
-                            Mark
-                          </option>
-                          <option th:selected="${average == 2}" value="2">Excellent</option>
-                          <option th:selected="${average == 3}" value="3">Good</option>
-                          <option th:selected="${average == 4}" value="4">Average</option>
-                          <option th:selected="${average == 5}" value="5">Below Average</option>
-                          <option th:selected="${average == 6}" value="6">Not yet summed up</option>
+                        <select class="form-control input-height" name="average" id ="average" >
+                         	<option th:selected="${average == 1}" value= "1" selected >All Average Mark</option>
+                         	<option th:selected="${average == 2}" value= "2">Excellent</option>
+                         	<option th:selected="${average == 3}" value= "3">Good</option>
+                         	<option th:selected="${average == 4}" value= "4">Average</option>
+                         	<option th:selected="${average == 5}" value= "5">Below Average</option>
+                         	<option th:selected="${average == 6}" value ="6">Mark Not yet summed up</option>
+                         	<option th:selected="${average == 7}" value ="7">Mark Empty</option>
                         </select>
                       </div>
                     </div>
@@ -117,34 +115,36 @@
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
                 <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Student Name</th>
-                  <th>Class Name</th>
-                  <th>School Year</th>
-                  <th>Grader</th>
-                  <th>Average Marks</th>
-                  <th>Actions</th>
-                </tr>
+	                <tr>
+	                  <th>ID </th>
+	                  <th>Student Name</th>
+	                  <th >Class Name</th>
+	                  <th>School Year</th>
+	                  <th>Grader</th> 
+	                  <th>Average Marks</th>
+	                  <th>Actions</th>
+	                </tr>
                 </thead>
                 <tbody>
-                <tr th:each="mark : ${markList}">
-                  <td th:text="${mark.students.id}"></td>
-                  <td th:text="${mark.students.fullName}"></td>
-                  <td th:text="${mark.students.aClass.className}"></td>
-                  <td th:text="${mark.students.aClass.schoolYear}"></td>
-                  <td th:text="${mark.students.aClass.grade}"></td>
-                  <td>
-                    <label th:if="${mark.coefficient > 0}">
-                      [[${mark.coefficient}]]
-                    </label>
-                    <label th:if="${mark.coefficient == 0}">
-                      Not yet summed up
-                    </label>
-                  </td>
-                  <td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}"
-                         class="btn btn-secondary text-white">Details</a></td>
-                </tr>
+                	<tr th:each="mark : ${markList}">
+                		<td th:text="${mark.students.id}"></td>
+                		<td th:text="${mark.students.fullName}"></td>
+                		<td th:text="${mark.students.aClass.className}"></td>
+                		<td th:text="${mark.students.aClass.schoolYear}"></td>
+                		<td th:text="${mark.students.aClass.grade}"></td>
+                		<td>
+                			<label th:if="${mark.coefficient > 0}">
+                				[[${mark.coefficient}]]
+                			</label>
+                			<label th:if="${mark.coefficient == 0}">
+								Mark not yet summed up
+							</label>
+							<label th:if="${mark.coefficient == null}">
+								Mark Empty
+							</label>
+                		</td>
+                		<td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}" class="btn btn-secondary text-white">Details</a></td>
+                	</tr>
                 </tbody>
               </table>
               <div class="card-body">

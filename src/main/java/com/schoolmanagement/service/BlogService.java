@@ -1,7 +1,5 @@
 package com.schoolmanagement.service;
 
-import java.time.LocalDate;
-
 import org.springframework.data.domain.Page;
 
 import com.schoolmanagement.model.Blog;
@@ -13,7 +11,7 @@ public interface BlogService {
 
 	Blog findByIdBlog(int id);
 
-	Page<Blog> searchBlog(String search, LocalDate fromDate, LocalDate toDate, int currentPage, String sortField,
+	Page<Blog> searchBlog(String search, String fromDate, String toDate, int currentPage, String sortField,
 			String sortDir);
 
 	void DeleteBlog(int id);

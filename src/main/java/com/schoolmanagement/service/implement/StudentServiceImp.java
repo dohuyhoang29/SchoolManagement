@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -334,7 +335,7 @@ public class StudentServiceImp implements StudentService {
 	@Override
 	public Page<User> PagingMarkIndex(String fullName, int schoolYear, int grade, int average, int page) {
 
-		Pageable pageable = PageRequest.of(page - 1, 10);
+		Pageable pageable = PageRequest.of(page - 1, 1);
 
 		Page<User> pageUser = studentRepositories.findAllStudentHasClassId(fullName, grade, schoolYear, pageable);
 
@@ -366,6 +367,31 @@ public class StudentServiceImp implements StudentService {
 		}
 
 		if (average == 6) {
+			pageUser = studentRepositories.findAllStudentHasClassId(fullName, grade, schoolYear, pageable);
+			
+			
+			List<User> users =  new ArrayList<>();
+			
+			
+			
+			for(User u : pageUser.getContent()) {
+				
+				if(markRepositories.findMarkMediumByStudent(u.getId(), 6, 0) != null) {
+					
+				}else if(markRepositories.StudentExist(u.getId()) != null) {
+					users.add(u);
+				}
+				
+			}
+			
+			Page<User> pages = new PageImpl<User>(users, pageable, users.size());
+			
+			
+			pageUser = pages;
+			
+		}
+		
+		if (average == 7) {
 
 			pageUser = studentRepositories.AllStudentHasClassIdAndNoHasMark(fullName, grade, schoolYear, pageable);
 		}

@@ -119,10 +119,41 @@ public class ClassExcelExporter {
 				
 			}
 			
-			String average1 = Float.valueOf(String.format(Locale.getDefault(), "%.2f" , markService.Average(markRequest.getStudentId(), 1))).toString() ;
-			String average2 =  Float.valueOf(String.format(Locale.getDefault(), "%.2f" , markService.Average(markRequest.getStudentId(), 2))).toString() ;
-			MarkRequest rq = markService.findMarkMediumByStudent(markRequest.getStudentId(), 6, 0);
-			String averageYear = Float.valueOf(String.format(Locale.getDefault(), "%.2f" ,rq.getCoefficient())).toString() ;
+			
+			
+			String average1 = "";
+			String average2 = "";
+			String averageYear = "";
+			
+			if(markService.Average(markRequest.getStudentId(), 1) != null && markService.Average(markRequest.getStudentId(), 1) >= 0) {
+				
+				average1 = Float.valueOf(String.format(Locale.getDefault(), "%.2f" , markService.Average(markRequest.getStudentId(), 1))).toString() ;
+				
+				
+			}else {
+				
+				average1 = "";
+			}
+			
+			if(markService.Average(markRequest.getStudentId(), 2) != null && markService.Average(markRequest.getStudentId(), 2) >= 0) {
+				
+				average2 = Float.valueOf(String.format(Locale.getDefault(), "%.2f" , markService.Average(markRequest.getStudentId(), 2))).toString() ;
+						
+			}else {
+				
+				average2 = "";
+			}
+			
+			if( markService.findMarkMediumByStudent(markRequest.getStudentId(), 6, 0) != null) {
+			
+				MarkRequest rq = markService.findMarkMediumByStudent(markRequest.getStudentId(), 6, 0);
+				
+				averageYear = Float.valueOf(String.format(Locale.getDefault(), "%.2f" ,rq.getCoefficient())).toString() ;
+			
+			}else {
+				averageYear="";
+			}
+			
 			
 			createCell(row, columnCount++, average1 , style);
 			createCell(row, columnCount++, average2, style);

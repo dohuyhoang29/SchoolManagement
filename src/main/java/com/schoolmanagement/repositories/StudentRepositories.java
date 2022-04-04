@@ -275,7 +275,7 @@ public interface StudentRepositories extends PagingAndSortingRepository<User, In
 	@Query(value = "SELECT u FROM User u "
 			+ "	JOIN UserRole AS ur ON u.id = ur.pk.userId "
 			+ "	JOIN Class c ON c.id = u.aClass.id "
-			+ "	JOIN Mark m ON m.studentId = u.id "
+			+ "	LEFT JOIN Mark m ON m.studentId = u.id "
 			+ "	WHERE ur.pk.roleId = 4 "
 			+ " AND u.fullName LIKE %:fullName% "
 			+ " AND c.grade = :grade "

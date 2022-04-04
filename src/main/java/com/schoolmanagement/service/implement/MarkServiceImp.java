@@ -271,11 +271,18 @@ public class MarkServiceImp implements MarkService {
 			List<MarkRequest> listMark = markRepositories.listAverageSubject(student.getId());
 
 			int totalSubject = listSubject.size() *2;
-
+			
 			Mark mark = new Mark();
 			float medium = 0;
 
-			mark.setCoefficient(medium);
+			if(markRepositories.StudentExist(student.getId()) != null) {
+				mark.setCoefficient(medium);
+			}else {
+				mark.setCoefficient(null);
+			}
+			
+			
+			
 
 			if (listMark != null) {
 
