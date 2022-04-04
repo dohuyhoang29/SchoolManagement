@@ -71,7 +71,8 @@ public class ClassServiceImp implements ClassService {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
 		Pageable pages = PageRequest.of(page -1, 1, sort);
-		Page<Class> list = classRepositories.getAllByTeacherId(id, pages);
+		
+		
 		return classRepositories.getAllByTeacherId(id, pages);
 	}
 

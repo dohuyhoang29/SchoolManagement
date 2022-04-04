@@ -51,52 +51,50 @@ public class ClassController {
 	private ClassService classService;
 	@Autowired
 	private StudentService studentService;
-	
+
 	@Autowired
 	private SubjectService subjectService;
-	
+
 	@Autowired
 	private ClassTeacherSubjectService classTeacherSubjectService;
-	
+
 	@Autowired
 	private TeacherService teacherService;
-	
+
 	@Autowired
 	private EntityManager entityManager;
 
 	@Autowired
 	private MarkService markService;
-	
+
 	// index
 	@GetMapping("/show/class")
-	  public String classList(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
-	    return listClassByPage(model, 1, "className", "asc", "", accountDetails);
-	  }
+	public String classList(Model model, @AuthenticationPrincipal AccountDetails accountDetails) {
+		return listClassByPage(model, 1, "className", "asc", "", accountDetails);
+	}
 
-	 @GetMapping("/show/class/{page}")
-	  public String listClassByPage(Model model, @PathVariable("page") int currentPage,
-	      @Param("sortField") String sortField, @Param("sortDir") String sortDir,
-	      @Param("search") String search,
-	      @AuthenticationPrincipal AccountDetails accountDetails) {
-	    Page<Class> page;
-	    if (accountDetails.hasRole("ADMIN")) {
-	      page = classService.getAllClassPage(search, currentPage, sortField, sortDir);
-	    } else {
-	      page = classService.getAllByTeacherId(accountDetails.getId(), currentPage, sortField, sortDir);
-	    }
-	    int totalPages = page.getTotalPages();
-	    Iterable<Class> classList = page.getContent();
-	    model.addAttribute("currentPage", currentPage);
-	    model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("sortField", sortField);
-	    model.addAttribute("sortDir", sortDir);
-	    model.addAttribute("search", search);
-	    model.addAttribute("classList", classList);
-	    String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
-	    model.addAttribute("reverseSortDir", reverseSortDir);
-	    return "/admin/class/class_management";
-	  }
-	  
+	@GetMapping("/show/class/{page}")
+	public String listClassByPage(Model model, @PathVariable("page") int currentPage,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("search") String search,
+			@AuthenticationPrincipal AccountDetails accountDetails) {
+		Page<Class> page;
+		if (accountDetails.hasRole("ADMIN")) {
+			page = classService.getAllClassPage(search, currentPage, sortField, sortDir);
+		} else {
+			page = classService.getAllByTeacherId(accountDetails.getId(), currentPage, sortField, sortDir);
+		}
+		int totalPages = page.getTotalPages();
+		Iterable<Class> classList = page.getContent();
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("search", search);
+		model.addAttribute("classList", classList);
+		String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
+		model.addAttribute("reverseSortDir", reverseSortDir);
+		return "/admin/class/class_management";
+	}
 
 	// insert and edit
 	@GetMapping("/insert/class")
@@ -121,7 +119,7 @@ public class ClassController {
 
 	@GetMapping("/edit/class/{id}")
 	public String EditClass(@PathVariable("id") int id, Model model) {
-		
+
 		model.addAttribute("class", classService.getClassById(id));
 		model.addAttribute("userList", teacherService.getAllUser());
 
@@ -131,16 +129,18 @@ public class ClassController {
 	@PostMapping("/save/class")
 	public String saveClass(Model model, @Valid Class aClass, BindingResult result,
 			RedirectAttributes redirectAttributes) {
-		
+
 		if (aClass.getId() == null) {
-			
+
 			if (classService.getClassByClassName(aClass.getClassName()) != null) {
+				
 				result.rejectValue("className", "error.class", "Class Name already exist");
 			}
 		} else {
-			
+
 			if (classService.getClassByClassName(aClass.getClassName()) != null && !Objects
 					.equals(classService.getClassByClassName(aClass.getClassName()).getId(), aClass.getId())) {
+				
 				result.rejectValue("className", "error.class", "Class Name already exist");
 			}
 		}
@@ -159,8 +159,10 @@ public class ClassController {
 		classService.saveClass(aClass);
 
 		if (aClass.getId() == null) {
+			
 			redirectAttributes.addFlashAttribute("message", "Add class successfully");
 		} else {
+			
 			redirectAttributes.addFlashAttribute("message", "Edit class successfully");
 		}
 
@@ -198,11 +200,12 @@ public class ClassController {
 	}
 
 	// search manager
-	 @GetMapping("/show/class/search")
-	  public String SearchClass(Model model, @RequestParam("search") String nameclass,
-	      @AuthenticationPrincipal AccountDetails accountDetails) {
-	    return listClassByPage(model, 1, "className", "asc", nameclass, accountDetails);
-	  }
+	@GetMapping("/show/class/search")
+	public String SearchClass(Model model, @RequestParam("search") String nameclass,
+			@AuthenticationPrincipal AccountDetails accountDetails) {
+		
+		return listClassByPage(model, 1, "className", "asc", nameclass, accountDetails);
+	}
 
 	// seacher student by class Details
 	@GetMapping("/detail/class/student/search/{id}")
@@ -210,12 +213,12 @@ public class ClassController {
 
 		return DetailsClassPage(model, id, 1, search);
 	}
-	
+
 	// export
 	@RequestMapping("/export/studentByClass/{classId}")
 	@ResponseBody
-	public void exportToExcel(@PathVariable("classId") int classId,HttpServletResponse response) throws IOException {
-		
+	public void exportToExcel(@PathVariable("classId") int classId, HttpServletResponse response) throws IOException {
+
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -227,9 +230,9 @@ public class ClassController {
 		List<MarkRequest> markRqList = classService.findAverageOneAndTwo(classId);
 
 		Iterable<Subjects> listSubject = subjectService.getAllSubject();
-		
-		ClassExcelExporter excelExporter = new ClassExcelExporter(markRqList,listSubject, markService);
-		
+
+		ClassExcelExporter excelExporter = new ClassExcelExporter(markRqList, listSubject, markService);
+
 		excelExporter.export(response);
 	}
 

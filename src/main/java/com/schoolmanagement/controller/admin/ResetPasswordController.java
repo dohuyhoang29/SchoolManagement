@@ -15,28 +15,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class ResetPasswordController {
 
-  @Autowired
-  private UserService userService;
+	@Autowired
+	private UserService userService;
 
-  @GetMapping("/reset-password/{id}")
-  public String showFormResetPassword(@PathVariable("id") Integer id, Model model) {
-    model.addAttribute("user", userService.findByUserId(id));
-    model.addAttribute("reset", new ResetPasswordRequest());
+	@GetMapping("/reset-password/{id}")
+	public String showFormResetPassword(@PathVariable("id") Integer id, Model model) {
+		model.addAttribute("user", userService.findByUserId(id));
+		model.addAttribute("reset", new ResetPasswordRequest());
 
-    return "/admin/reset_password";
-  }
+		return "/admin/reset_password";
+	}
 
-  @PostMapping("/reset-password/save/{id}")
-  public String resetPassword(@PathVariable("id") Integer id, Model model,
-      @Valid @ModelAttribute("reset") ResetPasswordRequest resetPasswordRequest, BindingResult result) {
-    if (result.hasErrors())  {
-      model.addAttribute("user", userService.findByUserId(id));
+	@PostMapping("/reset-password/save/{id}")
+	public String resetPassword(@PathVariable("id") Integer id, Model model,
+			@Valid @ModelAttribute("reset") ResetPasswordRequest resetPasswordRequest, BindingResult result) {
+		if (result.hasErrors()) {
+			model.addAttribute("user", userService.findByUserId(id));
 
-      return "/admin/reset_password";
-    }
+			return "/admin/reset_password";
+		}
 
-    userService.resetPassword(resetPasswordRequest, id);
+		userService.resetPassword(resetPasswordRequest, id);
 
-    return "redirect:/show/student";
-  }
+		return "redirect:/show/student";
+	}
 }

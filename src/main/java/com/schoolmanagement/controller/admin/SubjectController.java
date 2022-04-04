@@ -44,8 +44,10 @@ public class SubjectController {
 		Page<Subjects> page;
 		
 		if (search.equalsIgnoreCase("")) {
+			
 			page = subjectService.getAllSubjectByPage(currentPage, sortField, sortDir);
 		} else {
+			
 			page = subjectService.findSubjectByName(search, currentPage, sortField, sortDir);
 		
 		}
@@ -106,6 +108,7 @@ public class SubjectController {
 		if (subjects.getId() == null) {
 			
 			if (subjectService.findSubjectBySubjectName(subjects.getSubjectName()) != null) {
+				
 				result.rejectValue("subjectName", "error.subjects", "Subject Name already exists");
 			}
 			
@@ -114,6 +117,7 @@ public class SubjectController {
 			if (subjectService.findSubjectBySubjectName(subjects.getSubjectName()) != null
 					&& !Objects.equals(subjects.getId(),
 							subjectService.findSubjectBySubjectName(subjects.getSubjectName()).getId())) {
+				
 				result.rejectValue("subjectName", "error.subjects", "Subject Name already exists");
 			}
 			

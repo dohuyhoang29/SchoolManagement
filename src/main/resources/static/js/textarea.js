@@ -89,15 +89,11 @@ $(document).ready(function() {
 			result = true;
 		}
 		
-		
 		if(!result){
 			return ;
 		}else{
 			console.log(result)
 		}
-		
-		
-		
 		
 		event.preventDefault();
 	})

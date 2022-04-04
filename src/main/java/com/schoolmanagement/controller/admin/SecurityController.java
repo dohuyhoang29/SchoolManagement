@@ -8,6 +8,7 @@ public class SecurityController {
 	
 	@GetMapping("/403")
 	public String access403() {
+		
 		return "/403";
 	}
 }

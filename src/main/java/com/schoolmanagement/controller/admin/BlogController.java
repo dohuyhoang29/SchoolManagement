@@ -164,9 +164,9 @@ public class BlogController {
 
 	// search
 	@GetMapping("/show/blog/search")
-	public String searchBlog(@Param(value = "search") String search,
-			@Param(value = "fromDate") LocalDate fromDate,
-			@Param(value = "toDate") LocalDate toDate, Model model){
+	public String searchBlog(@Param("search") String search,
+			@Param("fromDate") LocalDate fromDate,
+			@Param("toDate") LocalDate toDate, Model model){
 		
 		
 		return showBlogByPage(model, 1, search, fromDate, "id", "asc", toDate);

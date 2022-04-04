@@ -1,8 +1,6 @@
 package com.schoolmanagement.service.implement;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +15,7 @@ import com.schoolmanagement.service.BlogService;
 
 @Service
 public class BlogServiceImp implements BlogService {
+	
 	@Autowired
 	private BlogRepositories blogRepositories;
 
@@ -46,17 +45,20 @@ public class BlogServiceImp implements BlogService {
 		sort = sortDir.equalsIgnoreCase("asc") ?sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
 
-		DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().append(DateTimeFormatter.ofPattern("MM/dd/yyyy")).toFormatter();
 		if (fromDate == null && toDate == null) {
+			
 			return blogRepositories.findBlogByHeader(search, pageable);
 		}
 		if (fromDate != null && toDate == null) {
+			
 			return blogRepositories.findAllByHeaderAndFromDate(search, fromDate, pageable);
 		}
 		if (fromDate == null && toDate != null) {
+			
 			return blogRepositories.findAllByHeaderAndToDate(search, toDate, pageable);
 		}
 		if (fromDate != null && toDate != null) {
+			
 			return blogRepositories.findAllByHeaderAndFromDateAndToDate(search, fromDate, toDate, pageable);
 		}
 

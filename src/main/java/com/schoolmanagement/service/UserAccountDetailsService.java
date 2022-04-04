@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.schoolmanagement.model.AccountDetails;
 import com.schoolmanagement.model.User;
-import com.schoolmanagement.service.UserService;
 
 public class UserAccountDetailsService implements UserDetailsService {
 
@@ -21,6 +20,7 @@ public class UserAccountDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
+		
 		return new AccountDetails(user);
 	}
 }

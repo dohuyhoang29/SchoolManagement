@@ -77,8 +77,11 @@ public class StudentShowMarkController {
 		
 		if(listSubject.size() == mark1.size()) {
 			for(int i = 0 ; i < mark1.size() ; i ++) {
+				
 				average1 += mark1.get(i).getCoefficient();
+				
 				if(i+ 1 == mark1.size()) {
+					
 					average1 = average1/mark1.size();
 				}	
 			}
@@ -86,7 +89,9 @@ public class StudentShowMarkController {
 		
 		if(listSubject.size() == mark2.size()) {
 			for(int i = 0 ; i < mark2.size() ; i ++) {
+				
 				average2 += mark2.get(i).getCoefficient();
+				
 				if(i+ 1 == mark2.size()) {
 					average2 = average2/mark2.size();
 				}	
@@ -112,6 +117,7 @@ public class StudentShowMarkController {
 		
 	
 		List<User> list = (List<User>)studentService.getAllStudent();
+		
 		return new ResponseEntity<>(list , HttpStatus.OK);
 	}
 }
