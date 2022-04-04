@@ -52,7 +52,6 @@ public class SubjectController {
 		
 		}
 		
-		long totalItems = page.getTotalElements();
 		int totalPages = page.getTotalPages();
 		
 		Iterable<Subjects> listSubject = page.getContent();
@@ -60,7 +59,6 @@ public class SubjectController {
 		
 				
 		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalItems", totalItems);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);

@@ -57,7 +57,7 @@ public class BlogController {
 			@Param("search") String search, @Param("fromDate") LocalDate fromDate,
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("toDate") LocalDate toDate) {
 		
-		Page<Blog> page = blogService.searchBlog(search, fromDate, toDate,currentPage, sortField, sortDir);
+		Page<Blog> page = blogService.searchBlog(search, fromDate, toDate, currentPage, sortField, sortDir);
 
 		long totalPages = page.getTotalPages();
 		

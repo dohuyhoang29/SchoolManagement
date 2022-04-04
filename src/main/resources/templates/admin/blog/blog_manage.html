@@ -26,7 +26,7 @@
 
 <div id="main_content">
   <!-- Start Main top header -->
- <div th:include="partials/header"></div>
+  <div th:include="partials/header"></div>
   <!-- Start Rightbar setting panel -->
   <div th:include="partials/rightbar"></div>
   <!-- Start Main leftbar navigation -->
@@ -49,7 +49,8 @@
             </ol>
           </div>
           <ul class="nav nav-tabs page-header-tab">
-            <li class="nav-item"><a class="nav-link active" th:href="@{/show/blog}">List View</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/show/blog}">List View</a>
+            </li>
             <li class="nav-item"><a class="nav-link" th:href="@{/insert/blog}">Add</a></li>
           </ul>
         </div>
@@ -65,23 +66,28 @@
                   <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <input type="text" id="search" name="search" class="form-control w-75" th:value="${search}" placeholder="What you want to find ?">
-	                    </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                      <div class="input-group">
-                        <input id="fromDate" data-provide="datepicker" th:value="${fromDate}"
-                               data-date-autoclose="true" class="form-control" placeholder="From"  data-date-format='yyyy-mm-dd'>
+                        <input type="text" id="search" name="search" class="form-control w-75"
+                               th:value="${search}" placeholder="What you want to find ?">
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                          <input id="toDate" data-provide="datepicker" th:value="${toDate}"
-                              data-date-format='yyyy-mm-dd'    data-date-autoclose="true" class="form-control" placeholder="To">
+                        <input id="fromDate" data-provide="datepicker" name="fromDate"
+                               data-date-autoclose="true" class="form-control" placeholder="From"
+                               data-date-format='yyyy-MM-dd'>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-group">
+                        <input id="toDate" data-provide="datepicker" name="toDate"
+                               data-date-format='yyyy-MM-dd' data-date-autoclose="true"
+                               class="form-control" placeholder="To">
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-sm btn-primary btn-block" style="width: 100px;height: 30px; margin-top: 4px">Search</button>
+                      <button type="submit" class="btn btn-sm btn-primary btn-block"
+                              style="width: 100px;height: 30px; margin-top: 4px">Search
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -89,7 +95,8 @@
             </div>
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
-                <thead th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&formDate=' + ${fromDate} + '&toDate=' +${toDate}">
+                <thead
+                    th:with="pageUrlPostfix = '&sortDir=' + ${reverseSortDir} + '&search=' + ${search} + '&formDate=' + ${fromDate} + '&toDate=' +${toDate}">
                 <tr th:with="pageUrlPrefix = '/show/blog/'">
                   <th>
                     <a th:href="@{${pageUrlPrefix} + ${currentPage} + '?sortField=id' + ${pageUrlPostfix}}">
@@ -115,23 +122,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="blog : ${blogs}" >
-                  	<td th:text="${blog.id}"></td>
-                    <td th:text="${blog.header}"></td>
-                    <td th:text="${blog.user.fullName}"></td>
-                    <td th:text="${blog.createdDate}"></td>
-                    <td class="text-center">
-                      <a th:href="@{/detail/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm"><i class="fa fa-eye"></i></a>
-                      <a th:href="@{/edit/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm text-warning" ><i class="fa fa-edit"></i></a>
-                      <a th:href="@{/delete/blog/{id}(id = ${blog.id})}" class="btn btn-icon btn-sm text-danger"><i class="fa fa-trash"></i></a>
-                    </td>
-                  </tr>
+                <tr th:each="blog : ${blogs}">
+                  <td th:text="${blog.id}"></td>
+                  <td th:text="${blog.header}"></td>
+                  <td th:text="${blog.user.fullName}"></td>
+                  <td th:text="${blog.createdDate}"></td>
+                  <td class="text-center">
+                    <a th:href="@{/detail/blog/{id}(id=${blog.id})}" class="btn btn-icon btn-sm"><i
+                        class="fa fa-eye"></i></a>
+                    <a th:href="@{/edit/blog/{id}(id=${blog.id})}"
+                       class="btn btn-icon btn-sm text-warning"><i class="fa fa-edit"></i></a>
+                    <a th:href="@{/delete/blog/{id}(id = ${blog.id})}"
+                       class="btn btn-icon btn-sm text-danger"><i class="fa fa-trash"></i></a>
+                  </td>
+                </tr>
                 </tbody>
               </table>
               <div class="card-body">
                 <div class="bd-example"
-                  th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir},
-                  '&search=' + ${search} + '&formDate=' + ${fromDate} + '&toDate=' +${toDate}, '/show/blog/')">
+                     th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir},
+                  '&search=' + ${search} + '&fromDate=' + ${fromDate} + '&toDate=' +${toDate}, '/show/blog/')">
                 </div>
               </div>
             </div>
@@ -154,17 +164,17 @@
 <script src="/assets/js/form/dropify.js"></script>
 <script src="/assets/js/page/summernote.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('#fromDate').datepicker({
-			dateFormat: 'yy-mm-dd',
-			startDate: new Date('2000-01-01')
-		});
+  $(document).ready(function () {
+    $('#fromDate').datepicker({
+      dateFormat: 'yyyy-mm-dd',
+      startDate: new Date('2000-01-01')
+    });
 
-		$('#toDate').datepicker({
-			dateFormat: 'yy-mm-dd',
-			startDate: new Date('2000-01-01')
-		});
-	});
+    $('#toDate').datepicker({
+      dateFormat: 'yyyy-mm-dd',
+      startDate: new Date('2000-01-01')
+    });
+  });
 </script>
 </body>
 </html>

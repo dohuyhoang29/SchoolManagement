@@ -47,7 +47,7 @@
             <h1 class="page-title">Class</h1>
             <ol class="breadcrumb page-breadcrumb">
               <li class="breadcrumb-item"><a href="#">Ericsson</a></li>
-              <li  class="breadcrumb-item active" aria-current="page">
+              <li class="breadcrumb-item active" aria-current="page">
                 Class Details
               </li>
             </ol>
@@ -67,191 +67,129 @@
                     <h3 class="card-title">Basic Information</h3>
                   </div>
                   <div class="card-body">
-                  	<form>
-                  		<div class="form-group">
-                  			<div class="form-group row">
-                  				<label>Class Name : <span th:text="${class.className}"></span>
-													</label>
-                  				&emsp;&emsp;|&emsp;
-			                  	<label> Grade : <span th:text="${class.grade}"></span></label>
-                  			</div>
-                  		</div>
-                  		<hr>
-                  		<div class="form-group">
-                  			<div class="form-group row">
-                  				<label> School Year : <span th:text="${class.schoolYear}"></span></label>
-                  				&emsp;&emsp;|&emsp;
-			                  	<label>Homeroom Teacher : <span th:text="${class.user.fullName}"></span></label>
-                  			</div>
-                  		</div>
-                  	</form>
-                  	<hr>
-                  	
-                  	<div class="row">
-                  		<div class="col-lg-6 " th:if="${studentList.size() >=1}">
-                  			<label class="font-weight-bold">Student</label>
-                  				<hr>
-			                  	<form th:action="@{'/detail/class/student/search/'+ ${class.id}}"  method="get">
-					                  <div class="row">
-					                    <div class="col-lg-5 col-md-6 col-sm-12">
-					                      <div class="input-group">
-					                        <input type="text" id="search" name="search" th:value="${search}"
-					                               class="form-control" 
-					                               placeholder="Name">
-					                      </div>
-					                    </div>
-					                    <div class="col-lg-1 col-md-4 col-sm-12">
-					                      <input type="submit" class="btn btn-primary text-white" value="Search">
-					                    </div>
-					                  </div>
-			                	</form>
-			                  	<table class="table">
-			                  		<thead>
-			                  			<tr>
-			                  				<th>Student Name</th>
-			                  				<th>Date of Birth</th>
-			                  				<th>Address</th>
-			                  				<th>Status</th>
-			                  				<th>Action</th>
-			                  			</tr>
-			                  		</thead>
-			                  		<tbody>
-			                  			<tr th:each="student : ${studentList}">
-			                  				<td th:text="${student.fullName}"></td>
-			                  				<td th:text="${student.dob}"></td>
-			                  				<td th:text="${student.address}"></td>
-			                  				<td th:if="${student.userInfo.status == 1}">
-			                   					<span class="tag tag-success">Studying</span>
-						                    </td>
-			                    			<td th:if="${student.userInfo.status == 2}">
-			                      				<span class="tag tag-warning">Absent</span>
-			                    			</td>
-			                    			<td th:if="${student.userInfo.status == 3}">
-			                   					<span class="tag tag-secondary ">Graduate</span>
-			                    			</td>
-			                  				<td><a class="btn btn-sm btn-warning text-white" th:href="@{/edit/student/{id}(id=${student.id})}">Edit</a></td>
-			                  				
-			                  			</tr>
-			                  		</tbody>
-			                  	</table>
-			                  	<div class="card-body">
-														<div class="bd-example"
-																 th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir}, '&search=' + ${search}  +'&status=' + ${status} + '&className=' + ${className} + '&grade=' +${grade} + '&schoolYear=' + ${schoolYear}, '/show/student/')">
+                    <form>
+                      <div class="form-group">
+                        <div class="form-group row">
+                          <label>Class Name : <span th:text="${class.className}"></span>
+                          </label>
+                          &emsp;&emsp;|&emsp;
+                          <label> Grade : <span th:text="${class.grade}"></span></label>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="form-group">
+                        <div class="form-group row">
+                          <label> School Year : <span th:text="${class.schoolYear}"></span></label>
+                          &emsp;&emsp;|&emsp;
+                          <label>Homeroom Teacher : <span
+                              th:text="${class.user.fullName}"></span></label>
+                        </div>
+                      </div>
+                    </form>
+                    <hr>
+										<div class="row">
+											<div class="col-lg-6">
+												<div th:if="${studentList.size() >=1}">
+													<label class="font-weight-bold">Student</label>
+													<hr>
+													<form th:action="@{'/detail/class/student/search/'+ ${class.id}}"
+																method="get">
+														<div class="row">
+															<div class="col-lg-5 col-md-6 col-sm-12">
+																<div class="input-group">
+																	<input type="text" id="search" name="search" th:value="${search}"
+																				 class="form-control"
+																				 placeholder="Name">
+																</div>
+															</div>
+															<div class="col-lg-1 col-md-4 col-sm-12">
+																<input type="submit" class="btn btn-primary text-white"
+																			 value="Search">
+															</div>
 														</div>
-										<div th:if="${totalPages} > 1" th:with="pageUrlPostfix = '?search='+ ${search} ">
-											<nav>
-												<ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/details/class/'">
+													</form>
+													<table class="table">
+														<thead>
+														<tr>
+															<th>Student Name</th>
+															<th>Date of Birth</th>
+															<th>Address</th>
+															<th>Status</th>
+															<th>Action</th>
+														</tr>
+														</thead>
+														<tbody>
+														<tr th:each="student : ${studentList}">
+															<td th:text="${student.fullName}"></td>
+															<td th:text="${student.dob}"></td>
+															<td th:text="${student.address}"></td>
+															<td th:if="${student.userInfo.status == 1}">
+																<span class="tag tag-success">Studying</span>
+															</td>
+															<td th:if="${student.userInfo.status == 2}">
+																<span class="tag tag-warning">Absent</span>
+															</td>
+															<td th:if="${student.userInfo.status == 3}">
+																<span class="tag tag-secondary ">Graduate</span>
+															</td>
+															<td><a class="btn btn-sm btn-warning text-white"
+																		 th:href="@{/edit/student/{id}(id=${student.id})}">Edit</a></td>
 
-													<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-														<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">First</a>
-													</li>
-													<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-														<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${currentPage - 1} + ${pageUrlPostfix}}">Previous</a>
-													</li>
-
-													<th:block th:if="${totalPages <= 6}" >
-														<li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
-															<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-																	<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-														</li>
-													</th:block>
-
-													<th:block th:if="${totalPages > 6}">
-															<th:block th:if="${currentPage <= 4}">
-																<li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-																		<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i} + ${pageUrlPostfix} }">[[${i}]]</a>
-																		<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-																</li>
-
-																<button class="page-link">...</button>
-
-																<li class="page-item">
-																		<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} + ${pageUrlPostfix}}">[[${totalPages}]]</a>
-																</li>
-															</th:block>
-															<th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
-																<li th:class="page-item">
-																		<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">1</a>
-																</li>
-
-																<button class="page-link">...</button>
-
-																<li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-																		<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i}+ ${pageUrlPostfix} }">[[${i}]]</a>
-																		<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-																</li>
-
-																<button th:class="page-link">...</button>
-
-																<li class="page-item">
-																		<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${totalPages} + ${pageUrlPostfix}}">[[${totalPages}]]</a>
-																</li>
-															</th:block>
-															<th:block th:if="${currentPage >= totalPages - 3}">
-																<li class="page-item">
-																		<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${1} + ${pageUrlPostfix}}">1</a>
-																</li>
-
-																<button class="page-link">...</button>
-
-																<li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-																		<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${i}+ ${pageUrlPostfix} }">[[${i}]]</a>
-																		<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-																</li>
-															</th:block>
-													</th:block>
-
-													<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
-														<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${currentPage + 1} + ${pageUrlPostfix} }">Next</a>
-													</li>
-
-													<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-														<a class="page-link" th:href="@{${pageUrlPrefix} + ${class.id}+ '/' + ${totalPages} + ${pageUrlPostfix}}">Last</a>
-													</li>
-												</ul>
-											</nav>
+														</tr>
+														</tbody>
+													</table>
+													<div class="card-body">
+														<div class="bd-example"
+																 th:insert="partials/pagination :: page(${totalPages}, ${sortField}, ${reverseSortDir}, '&search=' + ${search}, '/details/class/' + ${class.id} + '/')">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6" th:if="${classTeacherSubject.size() >=1 }">
+												<label class="font-weight-bold">Subject</label>
+												<hr>
+												<div th:each="TeacherSubject : ${classTeacherSubject}">
+													<form id="classInsertForm" method="post">
+														<div class="row clearfix">
+															<div class="col-md-12 col-sm-12">
+																<div class="form-group">
+																	<input type="hidden" name="class" id="classId"
+																				 th:value="${class.id}">
+																</div>
+															</div>
+															<div class="col-md-12 col-sm-12">
+																<div class="form-group">
+																	<div class="form-group row">
+																		<label class="col-md-3 col-form-label">[[${TeacherSubject.getSubjects().subjectName}]]</label>
+																		<input type="hidden" class="subject" name="subject"
+																					 th:value="${TeacherSubject.getSubjects().id}">
+																		<select class="col-md-5 form-control input-height users"
+																						name="users">
+																			<th:block th:each="teacher : ${TeacherSubject.subjects.users}">
+																				<option
+																						th:selected="${teacher.id} == ${TeacherSubject.users.id}"
+																						th:value="${teacher.id}"
+																						th:utext="${teacher.fullName}"></option>
+																			</th:block>
+																		</select>
+																		<a class="btn btn-primary text-white ml-4 change" id="change">Change</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</form>
+												</div>
+											</div>
 										</div>
-									</div>
-	              				</div>
-			                  </div>
-			            		<div style="margin : 0 50px;"></div>
-			            			
-			                  		<div  class="col-lg-5" th:if="${classTeacherSubject.size() >=1 }">
-			                  			<label class="font-weight-bold">Subject</label>
-			                  			<hr>
-			                  			<div th:each="TeacherSubject : ${classTeacherSubject}">
-					             			<form id="classInsertForm"  method="post">
-						                      <div class="row clearfix">
-						                        <div class="col-md-12 col-sm-12">
-						                          <div class="form-group">
-						                            <input type="hidden" name="class" id="classId" th:value="${class.id}">
-						                          </div>
-						                        </div>
-						                        <div class="col-md-12 col-sm-12">
-						                          <div class="form-group">
-						                            <div class="form-group row" >
-						                              <label  class="col-md-3 col-form-label" >[[${TeacherSubject.getSubjects().subjectName}]]</label>
-						                                  <input type="hidden" class="subject" name="subject" th:value="${TeacherSubject.getSubjects().id}"> 
-						                              <select class="col-md-5 form-control input-height users" name="users">
-						                              	<th:block th:each = "teacher : ${TeacherSubject.subjects.users}">
-						                              		<option th:selected = "${teacher.id} == ${TeacherSubject.users.id}" th:value = "${teacher.id}" th:utext="${teacher.fullName}"></option>
-						                              	</th:block>
-						                              </select>
-						                              <a class="btn btn-primary text-white ml-4 change" id="change" >Change</a>
-						                            </div>
-						                          </div>
-						                        </div>
-						                     </div>
-						                    </form>
-			                  			</div>
-			                  		</div>
-			                  	</div>
-                  	<hr>
-                  	<div>
-                  		<a th:href="@{/edit/class/{id}(id=${class.id})}" class="btn btn-warning text-white col-lg-1">Edit</a>
-                  		<a href="javascript: history.back(1)" class="btn btn-secondary text-white col-lg-1">Cancel</a>
-                  		<a th:href="@{/export/studentByClass/{classId}(classId = ${class.id})}" class="btn btn-success text-white col-lg-1">Export</a>
-                  	</div>
+                  </div>
+                  <hr>
+                  <div class="align-center">
+                    <a th:href="@{/edit/class/{id}(id=${class.id})}"
+                       class="btn btn-warning text-white col-lg-1">Edit</a>
+                    <a th:href="@{/show/class}"
+                       class="btn btn-secondary text-white col-lg-1">Cancel</a>
+                    <a th:href="@{/export/studentByClass/{classId}(classId = ${class.id})}"
+										 		class="btn btn-success text-white col-lg-1">Export</a>
                   </div>
                 </div>
               </div>
@@ -261,6 +199,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <script>

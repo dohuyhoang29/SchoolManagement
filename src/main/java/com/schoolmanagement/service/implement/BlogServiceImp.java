@@ -43,7 +43,7 @@ public class BlogServiceImp implements BlogService {
 		
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ?sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(currentPage - 1, 10, sort);
+		Pageable pageable = PageRequest.of(currentPage - 1, 1, sort);
 
 		if (fromDate == null && toDate == null) {
 			

@@ -108,22 +108,14 @@
                               <option th:field="*{grade}" value="11">11</option>
                               <option th:field="*{grade}" value="12">12</option>
                             </select>
-                            <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
-                               th:errors="*{schoolYear}"></p>
                           </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
                           <div class="form-group">
                             <label for="school-year">School Year</label>
-<!--                            <input th:field="*{schoolYear}" name="start-date" id="school-year"-->
-<!--                                   class="yearpicker changeStudent" data-date-autoclose="true"-->
-<!--                                   th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">-->
-                            <select class="form-control input-height changeStudent" id="school-year" name="department"
-                                    th:field="*{schoolYear}">
-                              <option th:field="*{schoolYear}" value="2022">2022</option>
-                              <option th:field="*{schoolYear}" value="2021">2021</option>
-                              <option th:field="*{schoolYear}" value="2020">2020</option>
-                            </select>
+                            <input th:field="*{schoolYear}" id="school-year"
+                                   class="yearpicker changeStudent" data-date-autoclose="true"
+                                   th:classappend="${#fields.hasErrors('schoolYear') ? 'form-control error-input' : 'form-control'}">
                             <p class="error-message" th:if="${#fields.hasErrors('schoolYear')}"
                                th:errors="*{schoolYear}"></p>
                           </div>
@@ -149,7 +141,7 @@
                               <option th:if="${class.id == null}" th:each="user : ${studentList}"
                                       th:value="${user.id}"
                                       th:utext="${user.fullName}"></option>
-                              <option th:if="${class.id != null}" th:each="user : ${class.students}"
+                              <option th:each="user : ${class.students}"
                                       th:value="${user.id}"
                                       th:utext="${user.fullName}"></option>
                             </select>

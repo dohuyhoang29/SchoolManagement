@@ -88,8 +88,8 @@ public class MarkController {
 	@GetMapping("/show/mark/search")
 	public String SearchMarkList(Model model , @Param("studentName") String studentName , 
 			@Param("schoolYear") int schoolYear , @Param("grade") int grade 
-			, @Param("average") Integer average , @Param("currentPage") int currentPage) {
+			, @Param("average") Integer average) {
 		
-		return PagingMarkIndex(model ,currentPage, studentName,schoolYear, grade , average);
+		return PagingMarkIndex(model ,1, studentName,schoolYear, grade , average);
 	}
 }

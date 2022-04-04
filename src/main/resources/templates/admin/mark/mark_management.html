@@ -52,7 +52,7 @@
             <li class="nav-item"><a class="nav-link active"
                                     th:href="@{/show/student}">List
               View</a></li>
-            
+
           </ul>
         </div>
       </div>
@@ -63,42 +63,46 @@
           <div class="tab-pane active" id="Staff-all">
             <div class="card">
               <div class="card-body">
-              	<form  method="get" sec:authorize="hasAnyAuthority('ADMIN')">
+                <form method="get" sec:authorize="hasAnyAuthority('ADMIN')" th:action="@{/show/mark/search}">
                   <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
                         <input type="text" id="studentName" name="studentName"
-                               class="form-control"  th:value="${studentName}"
+                               class="form-control" th:value="${studentName}"
                                placeholder="Name Student">
                       </div>
                     </div>
                     <div class="col-lg-2 col-md-6 col-sm-12">
                       <div class="input-group">
                         <select class="form-control input-height" name="schoolYear" id="schoolYear">
-	                          <option th:selected="${schoolYear == year }" th:each="year : ${listYear}" th:value="${year}" th:utext="${year}"></option>
+                          <option th:selected="${schoolYear == year }" th:each="year : ${listYear}"
+                                  th:value="${year}" th:utext="${year}"></option>
 
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                         <select class="form-control input-height" name="grade" id="grade" th:value="${grade}"  >
-                          	<option th:selected="${grade == 10}" value="10"  >10</option>
-                         	<option th:selected="${grade == 11}" value="11"  >11</option>
-                         	<option th:selected="${grade == 12}" value="12"  >12</option>
+                        <select class="form-control input-height" name="grade" id="grade"
+                                th:value="${grade}">
+                          <option th:selected="${grade == 10}" value="10">10</option>
+                          <option th:selected="${grade == 11}" value="11">11</option>
+                          <option th:selected="${grade == 12}" value="12">12</option>
 
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-group">
-                        <select class="form-control input-height" name="average" id ="average" >
-                         	<option th:selected="${average == 1}" value= "1" selected >All Average Mark</option>
-                         	<option th:selected="${average == 2}" value= "2">Excellent</option>
-                         	<option th:selected="${average == 3}" value= "3">Good</option>
-                         	<option th:selected="${average == 4}" value= "4">Average</option>
-                         	<option th:selected="${average == 5}" value= "5">Below Average</option>
-                         	<option th:selected="${average == 6}" value ="6">Not yet summed up</option>
+                        <select class="form-control input-height" name="average" id="average">
+                          <option th:selected="${average == 1}" value="1" selected>All Average
+                            Mark
+                          </option>
+                          <option th:selected="${average == 2}" value="2">Excellent</option>
+                          <option th:selected="${average == 3}" value="3">Good</option>
+                          <option th:selected="${average == 4}" value="4">Average</option>
+                          <option th:selected="${average == 5}" value="5">Below Average</option>
+                          <option th:selected="${average == 6}" value="6">Not yet summed up</option>
                         </select>
                       </div>
                     </div>
@@ -113,112 +117,139 @@
             <div class="table-responsive card">
               <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
                 <thead>
-	                <tr>
-	                  <th>ID </th>
-	                  <th>Student Name</th>
-	                  <th >Class Name</th>
-	                  <th>School Year</th>
-	                  <th>Grader</th> 
-	                  <th>Average Marks</th>
-	                  <th>Actions</th>
-	                </tr>
+                <tr>
+                  <th>ID</th>
+                  <th>Student Name</th>
+                  <th>Class Name</th>
+                  <th>School Year</th>
+                  <th>Grader</th>
+                  <th>Average Marks</th>
+                  <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                	<tr th:each="mark : ${markList}">
-                		<td th:text="${mark.students.id}"></td>
-                		<td th:text="${mark.students.fullName}"></td>
-                		<td th:text="${mark.students.aClass.className}"></td>
-                		<td th:text="${mark.students.aClass.schoolYear}"></td>
-                		<td th:text="${mark.students.aClass.grade}"></td>
-                		<td>
-                			<label th:if="${mark.coefficient > 0}">
-                				[[${mark.coefficient}]]
-                			</label>
-                			<label th:if="${mark.coefficient == 0}">
-								Not yet summed up
-							</label>
-                		</td>
-                		<td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}" class="btn btn-secondary text-white">Details</a></td>
-                	</tr>
+                <tr th:each="mark : ${markList}">
+                  <td th:text="${mark.students.id}"></td>
+                  <td th:text="${mark.students.fullName}"></td>
+                  <td th:text="${mark.students.aClass.className}"></td>
+                  <td th:text="${mark.students.aClass.schoolYear}"></td>
+                  <td th:text="${mark.students.aClass.grade}"></td>
+                  <td>
+                    <label th:if="${mark.coefficient > 0}">
+                      [[${mark.coefficient}]]
+                    </label>
+                    <label th:if="${mark.coefficient == 0}">
+                      Not yet summed up
+                    </label>
+                  </td>
+                  <td><a th:href="@{/detail/mark/{id}(id= ${mark.students.id})}"
+                         class="btn btn-secondary text-white">Details</a></td>
+                </tr>
                 </tbody>
               </table>
               <div class="card-body">
                 <div class="bd-example">
-                 	<div th:fragment="pagination">
-                	<div th:if="${totalPages > 1}" th:with="pageUrlPostfix = '?studentName=' + ${studentName} + '&schoolYear=' + ${schoolYear} + '&grade=' + ${grade} + '&average='+ ${average}" >
-	                	<nav>
-		                    <ul class="pagination justify-content-end" th:with="pageUrlPrefix = '/show/mark/page/'">
+                  <div th:fragment="pagination">
+                    <div th:if="${totalPages > 1}"
+                         th:with="pageUrlPostfix = '?studentName=' + ${studentName} + '&schoolYear=' + ${schoolYear} + '&grade=' + ${grade} + '&average='+ ${average}">
+                      <nav>
+                        <ul class="pagination justify-content-end"
+                            th:with="pageUrlPrefix = '/show/mark/page/'">
 
-		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + '1' +${pageUrlPostfix} }">First</a>
-		                      </li>
-		                      <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage - 1} +${pageUrlPostfix}}">Previous</a>
-		                      </li>
+                          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"
+                               th:href="@{${pageUrlPrefix} + '1' +${pageUrlPostfix} }">First</a>
+                          </li>
+                          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"
+                               th:href="@{${pageUrlPrefix} + ${currentPage - 1} +${pageUrlPostfix}}">Previous</a>
+                          </li>
 
-		                      <th:block th:if="${totalPages <= 6}" >
-		                        <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
-		                          <a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
-                                  <button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        </li>
-		                      </th:block>
+                          <th:block th:if="${totalPages <= 6}">
+                            <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                th:class="${i != currentPage ? 'page-item' : 'page-item disabled'}">
+                              <a th:if="${currentPage != i}" class="page-link"
+                                 th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
+                              <button th:if="${currentPage == i}" class="page-link active">
+                                [[${i}]]
+                              </button>
+                            </li>
+                          </th:block>
 
-		                      <th:block th:if="${totalPages > 6}">
-		                      		<th:block th:if="${currentPage <= 4}">
-		                      			<li th:each="i : ${#numbers.sequence(1, 5)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}  }">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
+                          <th:block th:if="${totalPages > 6}">
+                            <th:block th:if="${currentPage <= 4}">
+                              <li th:each="i : ${#numbers.sequence(1, 5)}"
+                                  th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link"
+                                   th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}  }">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">
+                                  [[${i}]]
+                                </button>
+                              </li>
 
-		                        		<button class="page-link">...</button>
+                              <button class="page-link">...</button>
 
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix} }">[[${totalPages}]]</a>
-		                        		</li>
-		                      		</th:block>
-		                      		<th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
-		                        		<li th:class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 +${pageUrlPostfix} }">1</a>
-		                        		</li>
+                              <li class="page-item">
+                                <a class="page-link"
+                                   th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix} }">[[${totalPages}]]</a>
+                              </li>
+                            </th:block>
+                            <th:block th:if="${currentPage > 4 && currentPage < totalPages - 3}">
+                              <li th:class="page-item">
+                                <a class="page-link"
+                                   th:href="@{${pageUrlPrefix} + 1 +${pageUrlPostfix} }">1</a>
+                              </li>
 
-		                        		<button class="page-link">...</button>
+                              <button class="page-link">...</button>
 
-		                      			<li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
+                              <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+                                  th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link"
+                                   th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">
+                                  [[${i}]]
+                                </button>
+                              </li>
 
-		                        		<button th:class="page-link">...</button>
+                              <button th:class="page-link">...</button>
 
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix} }">[[${totalPages}]]</a>
-		                        		</li>
-		                      		</th:block>
-		                      		<th:block th:if="${currentPage >= totalPages - 3}">
-		                        		<li class="page-item">
-		                          			<a class="page-link" th:href="@{${pageUrlPrefix} + 1 +${pageUrlPostfix}  }">1</a>
-		                        		</li>
+                              <li class="page-item">
+                                <a class="page-link"
+                                   th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix} }">[[${totalPages}]]</a>
+                              </li>
+                            </th:block>
+                            <th:block th:if="${currentPage >= totalPages - 3}">
+                              <li class="page-item">
+                                <a class="page-link"
+                                   th:href="@{${pageUrlPrefix} + 1 +${pageUrlPostfix}  }">1</a>
+                              </li>
 
-		                        		<button class="page-link">...</button>
+                              <button class="page-link">...</button>
 
-		                      			<li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}" th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
-		                          			<a th:if="${currentPage != i}" class="page-link" th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
-		                          			<button th:if="${currentPage == i}" class="page-link active">[[${i}]]</button>
-		                        		</li>
-		                      		</th:block>
-		                      </th:block>
+                              <li th:each="i : ${#numbers.sequence(totalPages - 4, totalPages)}"
+                                  th:class="${currentPage != i  ? 'page-item' : 'page-item disabled'}">
+                                <a th:if="${currentPage != i}" class="page-link"
+                                   th:href="@{${pageUrlPrefix} + ${i} +${pageUrlPostfix}}">[[${i}]]</a>
+                                <button th:if="${currentPage == i}" class="page-link active">
+                                  [[${i}]]
+                                </button>
+                              </li>
+                            </th:block>
+                          </th:block>
 
-		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${currentPage + 1}+${pageUrlPostfix} }">Next</a>
-		                      </li>
+                          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'} ">
+                            <a class="page-link"
+                               th:href="@{${pageUrlPrefix} + ${currentPage + 1}+${pageUrlPostfix} }">Next</a>
+                          </li>
 
-		                      <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-		                        <a class="page-link" th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix}}">Last</a>
-		                      </li>
+                          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"
+                               th:href="@{${pageUrlPrefix} + ${totalPages} +${pageUrlPostfix}}">Last</a>
+                          </li>
 
-		                    </ul>
-	                  </nav>
-	                </div>
+                        </ul>
+                      </nav>
+                    </div>
                   </div>
                 </div>
               </div>
